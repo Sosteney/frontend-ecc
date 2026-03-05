@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitação de Transferência - ECC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/gh/pocketbase/js-sdk@master/dist/pocketbase.umd.js"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Pedido de Transferência ECC</h2>
+        
+        <form id="formPedido" class="space-y-4">
+            <div>
+                <label for="nome_casal" class="block text-sm font-medium text-gray-700">Nome do Casal</label>
+                <input type="text" id="nome_casal" required class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+            </div>
+
+            <div>
+                <label for="celular" class="block text-sm font-medium text-gray-700">Celular (WhatsApp)</label>
+                <input type="tel" id="celular" required maxlength="15" placeholder="(00) 00000-0000" class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+            </div>
+
+            <div>
+                <label for="origem_id" class="block text-sm font-medium text-gray-700">Paróquia de Origem</label>
+                <select id="origem_id" required class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                    <option value="">Carregando paróquias...</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="destino_id" class="block text-sm font-medium text-gray-700">Paróquia de Destino</label>
+                <select id="destino_id" required class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                    <option value="">Carregando paróquias...</option>
+                </select>
+            </div>
+
+            <button type="submit" id="btnSubmit" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                Enviar Solicitação
+            </button>
+        </form>
+        
+        <div id="areaMensagem" class="mt-4 p-3 rounded hidden text-center font-medium"></div>
+    </div>
+
+    <script>
+        const pb = new PocketBase('http://72.61.139.99');
+
+        // --- Máscara Automática para o Celular ---
+        document.getElementById('celular').addEventListener('input', function (e) {
+            let x = e.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,5})(\d{0,4})/);
+            e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+        });
+
+        // --- Carregar Lista de Paróquias ---
+        async function carregarParoquias() {
+            const selectOrigem = document.getElementById('origem_id');
+            const selectDestino = document.getElementById('destino_id');
+
+            try {
+                const records = await pb.collection('paroquias').getFullList({ sort: 'nome' });
+                
+                let options = '<option value="">Selecione uma paróquia</option>';
+                records.forEach(paroquia => {
+                    options += `<option value="${paroquia.id}">${paroquia.nome}</option>`;
+                });
+
+                selectOrigem.innerHTML = options;
+                selectDestino.innerHTML = options;
+            } catch (error) {
+                console.error("Erro ao carregar paróquias", error);
+                const erroOption = '<option value="">Erro ao carregar dados. Recarregue a página.</option>';
+                selectOrigem.innerHTML = erroOption;
+                selectDestino.innerHTML = erroOption;
+            }
+        }
+
+        // --- Envio do Formulário ---
+        document.getElementById('formPedido').addEventListener('submit', async function(e) {
+            e.preventDefault(); 
+            
+            const origemId = document.getElementById('origem_id').value;
+            const destinoId = document.getElementById('destino_id').value;
+            const areaMensagem = document.getElementById('areaMensagem');
+            const btnSubmit = document.getElementById('btnSubmit');
+
+            // Validação: Origem e Destino não podem ser os mesmos
+            if (origemId === destinoId) {
+                mostrarMensagem("A paróquia de destino não pode ser a mesma de origem.", "erro");
+                return;
+            }
+
+            const dados = {
+                nome_casal: document.getElementById('nome_casal').value,
+                celular: document.getElementById('celular').value,
+                origem_paroquia_id: origemId,
+                destino_paroquia_id: destinoId,
+                status: 'Pendente_Setor_Origem'
+            };
+
+            try {
+                // Desativa o botão para evitar envio duplo
+                btnSubmit.disabled = true;
+                btnSubmit.textContent = "Enviando...";
+                btnSubmit.classList.add('opacity-75', 'cursor-not-allowed');
+
+                await pb.collection('pedidos').create(dados);
+                
+                mostrarMensagem("Pedido enviado com sucesso! Aguarde o contato.", "sucesso");
+                document.getElementById('formPedido').reset();
+            } catch (error) {
+                console.error(error);
+                mostrarMensagem("Erro ao enviar pedido. Tente novamente mais tarde.", "erro");
+            } finally {
+                // Reativa o botão sempre no final (dando certo ou errado)
+                btnSubmit.disabled = false;
+                btnSubmit.textContent = "Enviar Solicitação";
+                btnSubmit.classList.remove('opacity-75', 'cursor-not-allowed');
+            }
+        });
+
+        // --- Função Auxiliar para Mostrar Mensagens na Tela ---
+        function mostrarMensagem(texto, tipo) {
+            const div = document.getElementById('areaMensagem');
+            div.textContent = texto;
+            div.classList.remove('hidden', 'bg-red-100', 'text-red-700', 'bg-green-100', 'text-green-700');
+            
+            if (tipo === 'erro') {
+                div.classList.add('bg-red-100', 'text-red-700');
+            } else {
+                div.classList.add('bg-green-100', 'text-green-700');
+            }
+        }
+
+        // Executa ao abrir a página
+        carregarParoquias();
+    </script>
+</body>
+</html>
