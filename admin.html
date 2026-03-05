@@ -41,7 +41,7 @@
             <div class="flex border-b border-gray-300 mb-6 overflow-x-auto">
                 <button onclick="mudarAba('abaPedidos'); buscarPedidosPendentes()" class="whitespace-nowrap py-2 px-4 border-b-2 border-blue-600 font-semibold text-blue-600 focus:outline-none transition">Pedidos Pendentes</button>
                 <button onclick="mudarAba('abaConcluidos'); buscarPedidosConcluidos()" class="whitespace-nowrap py-2 px-4 border-b-2 border-transparent text-gray-500 hover:text-blue-600 focus:outline-none transition">Pedidos Concluídos</button>
-                <button onclick="mudarAba('abaCadastros'); carregarSetoresParaCadastro()" class="whitespace-nowrap py-2 px-4 border-b-2 border-transparent text-gray-500 hover:text-blue-600 focus:outline-none transition">Cadastros Base</button>
+                <button onclick="mudarAba('abaCadastros'); carregarListasCadastros()" class="whitespace-nowrap py-2 px-4 border-b-2 border-transparent text-gray-500 hover:text-blue-600 focus:outline-none transition">Cadastros Base</button>
             </div>
 
             <div id="abaPedidos" class="aba-conteudo">
@@ -57,9 +57,7 @@
                             </tr>
                         </thead>
                         <tbody id="listaPedidos">
-                            <tr>
-                                <td colspan="4" class="py-4 text-center text-gray-500">Buscando pedidos...</td>
-                            </tr>
+                            <tr><td colspan="4" class="py-4 text-center text-gray-500">Buscando pedidos...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -78,9 +76,7 @@
                             </tr>
                         </thead>
                         <tbody id="listaConcluidos">
-                            <tr>
-                                <td colspan="4" class="py-4 text-center text-gray-500">Clique na aba para buscar...</td>
-                            </tr>
+                            <tr><td colspan="4" class="py-4 text-center text-gray-500">Clique na aba para buscar...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -90,7 +86,6 @@
                 <h2 class="text-xl font-bold mb-6 text-gray-800">Gerenciar Cadastros Base</h2>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    
                     <div class="bg-white rounded-lg shadow-md p-6 border-t-4 border-blue-600">
                         <h3 class="text-lg font-semibold mb-4 text-gray-700">Cadastrar Novo Setor</h3>
                         <form id="formNovoSetor" class="space-y-4">
@@ -98,10 +93,8 @@
                                 <label class="block text-sm font-medium text-gray-700">Nome do Setor</label>
                                 <input type="text" id="nome_setor" required placeholder="Ex: Setor Sul" class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none">
                             </div>
-                            <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition shadow">
-                                Salvar Setor
-                            </button>
-                            <p id="msgSetor" class="text-sm mt-2 hidden text-center font-medium"></p>
+                            <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition shadow">Salvar Setor</button>
+                            <p id="msgSetor" class="text-sm mt-2 hidden text-center font-bold"></p>
                         </form>
                     </div>
 
@@ -118,16 +111,50 @@
                                     <option value="">Carregando setores...</option>
                                 </select>
                             </div>
-                            <button type="submit" class="w-full bg-green-600 text-white font-bold py-2 px-4 rounded hover:bg-green-700 transition shadow">
-                                Salvar Paróquia
-                            </button>
-                            <p id="msgParoquia" class="text-sm mt-2 hidden text-center font-medium"></p>
+                            <button type="submit" class="w-full bg-green-600 text-white font-bold py-2 px-4 rounded hover:bg-green-700 transition shadow">Salvar Paróquia</button>
+                            <p id="msgParoquia" class="text-sm mt-2 hidden text-center font-bold"></p>
                         </form>
                     </div>
-
                 </div>
-            </div>
 
+                <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-700">Setores Cadastrados</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead>
+                                    <tr class="border-b-2 border-gray-200">
+                                        <th class="pb-2 text-gray-600">Nome</th>
+                                        <th class="pb-2 text-gray-600 text-right">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="listaSetoresAdmin">
+                                    <tr><td colspan="2" class="py-4 text-center text-gray-500">Carregando...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-700">Paróquias Cadastradas</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead>
+                                    <tr class="border-b-2 border-gray-200">
+                                        <th class="pb-2 text-gray-600">Nome</th>
+                                        <th class="pb-2 text-gray-600">Pertence ao</th>
+                                        <th class="pb-2 text-gray-600 text-right">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="listaParoquiasAdmin">
+                                    <tr><td colspan="3" class="py-4 text-center text-gray-500">Carregando...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 
@@ -140,364 +167,12 @@
                 
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Justificativa / Mensagem</label>
-                    <textarea id="mensagem_texto" required rows="3" class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none" placeholder="Digite sua confirmação ou motivo..."></textarea>
+                    <textarea id="mensagem_texto" required rows="3" class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none"></textarea>
                 </div>
-
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Anexar Comprovante</label>
-                    <span class="text-xs text-gray-500 block mb-1">Opcional na Origem, <b>Obrigatório no Destino</b>. (PDF ou Imagem)</span>
+                    <span class="text-xs text-gray-500 block mb-1">Opcional na Origem, <b>Obrigatório no Destino</b>.</span>
                     <input type="file" id="arquivo_anexo" accept="image/*,.pdf" class="mt-1 w-full p-2 border border-gray-300 rounded-md cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                 </div>
-
                 <div class="flex justify-end space-x-3 mt-6">
-                    <button type="button" onclick="fecharModal()" class="bg-gray-400 text-white px-4 py-2 rounded font-medium hover:bg-gray-500 transition">Cancelar</button>
-                    <button type="submit" id="btnConfirmar" class="bg-blue-600 text-white px-4 py-2 rounded font-bold shadow hover:opacity-90 transition">Confirmar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-<script>
-    // Conectando ao banco de dados PocketBase
-    const pb = new PocketBase('https://ecc-transferencias-pocketbase.wrillz.easypanel.host');
-
-    // --- Lógica de Login e Logout ---
-    document.getElementById('formLogin').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const email = document.getElementById('email').value;
-        const senha = document.getElementById('senha').value;
-        const btnLogin = e.target.querySelector('button');
-        
-        btnLogin.textContent = "Acessando...";
-        btnLogin.disabled = true;
-
-        try {
-            const authData = await pb.collection('users').authWithPassword(email, senha);
-            iniciarPainel(authData.record);
-        } catch (error) {
-            document.getElementById('erroLogin').classList.remove('hidden');
-            btnLogin.textContent = "Entrar";
-            btnLogin.disabled = false;
-        }
-    });
-
-    document.getElementById('btnSair').addEventListener('click', () => {
-        pb.authStore.clear();
-        window.location.reload();
-    });
-
-    if (pb.authStore.isValid) {
-        iniciarPainel(pb.authStore.model);
-    }
-
-  function iniciarPainel(usuario) {
-        document.getElementById('telaLogin').classList.add('hidden');
-        document.getElementById('telaPainel').classList.remove('hidden');
-        
-        // Tratamento seguro para o nome e o papel
-        const nomeCasal = usuario.nome_casal || 'Administrador';
-        
-        // Garante que o papel é um texto e existe antes de usar o replace
-        let papelFormatado = '';
-        if (usuario.papel) {
-            papelFormatado = String(usuario.papel).replace(/_/g, ' ');
-        }
-
-        document.getElementById('nomeUsuarioLogado').textContent = `Olá, ${nomeCasal} (${papelFormatado})`;
-        
-        // Continua o fluxo normal
-        buscarPedidosPendentes();
-    }
-
-    function mudarAba(idAba) {
-        // Remove a cor azul de todos os botões do menu
-        const botoes = document.querySelectorAll('.flex.border-b button');
-        botoes.forEach(btn => {
-            btn.classList.remove('border-blue-600', 'text-blue-600');
-            btn.classList.add('border-transparent', 'text-gray-500');
-        });
-
-        // Adiciona a cor azul no botão clicado (identificado pelo onclick)
-        const botaoAtivo = Array.from(botoes).find(btn => btn.getAttribute('onclick').includes(idAba));
-        if (botaoAtivo) {
-            botaoAtivo.classList.remove('border-transparent', 'text-gray-500');
-            botaoAtivo.classList.add('border-blue-600', 'text-blue-600');
-        }
-
-        // Esconde e mostra os conteúdos das abas
-        document.querySelectorAll('.aba-conteudo').forEach(el => el.classList.add('hidden'));
-        document.getElementById(idAba).classList.remove('hidden');
-    }
-
-    // --- FUNÇÃO: Buscar Pedidos Pendentes ---
-    async function buscarPedidosPendentes() {
-        const usuario = pb.authStore.model;
-        let filtro = '';
-
-        if (usuario.papel === 'Admin_Setor') {
-            filtro = `(origem_paroquia_id.setor_id = "${usuario.setor_id}" && status = "Pendente_Setor_Origem") || (destino_paroquia_id.setor_id = "${usuario.setor_id}" && status = "Pendente_Setor_Destino")`;
-        } else {
-            filtro = `id = "null"`; // Admin de paróquia não aprova mais
-        }
-
-        try {
-            const records = await pb.collection('pedidos').getFullList({
-                filter: filtro,
-                expand: 'origem_paroquia_id, destino_paroquia_id',
-                sort: '-created'
-            });
-
-            const tbody = document.getElementById('listaPedidos');
-            tbody.innerHTML = ''; 
-
-            if (records.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" class="py-6 text-center text-gray-500 italic">Nenhum pedido pendente para você neste momento.</td></tr>';
-                return;
-            }
-
-            records.forEach(pedido => {
-                const paroquiaOrigem = pedido.expand?.origem_paroquia_id?.nome || 'N/A';
-                const paroquiaDestino = pedido.expand?.destino_paroquia_id?.nome || 'N/A';
-
-                const tr = document.createElement('tr');
-                tr.className = 'border-b hover:bg-gray-50 transition';
-                tr.innerHTML = `
-                    <td class="py-3 px-2 font-medium text-gray-800">${pedido.nome_casal}</td>
-                    <td class="py-3 px-2 text-sm text-gray-600">${paroquiaOrigem} <br><span class="text-blue-600">➔</span> ${paroquiaDestino}</td>
-                    <td class="py-3 px-2"><span class="bg-yellow-100 text-yellow-800 font-semibold text-xs px-3 py-1 rounded-full border border-yellow-200">${pedido.status.replace(/_/g, ' ')}</span></td>
-                    <td class="py-3 px-2 space-x-2 whitespace-nowrap">
-                        <button onclick="abrirModal('${pedido.id}', 'Aceitar')" class="bg-green-600 text-white text-xs px-3 py-1.5 rounded hover:bg-green-700 shadow transition font-medium">Aceitar</button>
-                        <button onclick="abrirModal('${pedido.id}', 'Rejeitar')" class="bg-red-600 text-white text-xs px-3 py-1.5 rounded hover:bg-red-700 shadow transition font-medium">Rejeitar</button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        } catch (error) {
-            console.error("Erro ao buscar pedidos:", error);
-            document.getElementById('listaPedidos').innerHTML = '<tr><td colspan="4" class="py-6 text-center text-red-500 font-medium">Erro de conexão ao carregar os pedidos.</td></tr>';
-        }
-    }
-
-    // --- FUNÇÃO: Buscar Pedidos Concluídos ---
-    async function buscarPedidosConcluidos() {
-        const usuario = pb.authStore.model;
-        let filtro = 'status = "Concluido"';
-
-        if (usuario.papel === 'Admin_Paroquia') {
-            filtro += ` && (origem_paroquia_id = "${usuario.paroquia_id}" || destino_paroquia_id = "${usuario.paroquia_id}")`;
-        } else if (usuario.papel === 'Admin_Setor') {
-            filtro += ` && (origem_paroquia_id.setor_id = "${usuario.setor_id}" || destino_paroquia_id.setor_id = "${usuario.setor_id}")`;
-        }
-
-        try {
-            const records = await pb.collection('pedidos').getFullList({
-                filter: filtro,
-                expand: 'origem_paroquia_id, destino_paroquia_id',
-                sort: '-updated' 
-            });
-
-            const tbody = document.getElementById('listaConcluidos');
-            tbody.innerHTML = '';
-
-            if (records.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" class="py-6 text-center text-gray-500 italic">Nenhuma transferência concluída encontrada.</td></tr>';
-                return;
-            }
-
-            records.forEach(pedido => {
-                const paroquiaOrigem = pedido.expand?.origem_paroquia_id?.nome || 'N/A';
-                const paroquiaDestino = pedido.expand?.destino_paroquia_id?.nome || 'N/A';
-
-                const tr = document.createElement('tr');
-                tr.className = 'border-b hover:bg-gray-50 transition';
-                tr.innerHTML = `
-                    <td class="py-3 px-2 font-medium text-gray-800">${pedido.nome_casal}</td>
-                    <td class="py-3 px-2 text-sm text-gray-600">${paroquiaOrigem} <br><span class="text-blue-600">➔</span> ${paroquiaDestino}</td>
-                    <td class="py-3 px-2"><span class="bg-green-100 text-green-800 font-semibold text-xs px-3 py-1 rounded-full border border-green-200">Concluído</span></td>
-                    <td class="py-3 px-2">
-                        <button onclick="buscarComprovante('${pedido.id}')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded hover:bg-blue-700 shadow transition font-medium flex items-center">
-                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
-                            Ver Comprovante
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        } catch (error) {
-            console.error("Erro ao buscar concluídos:", error);
-        }
-    }
-
-    // --- FUNÇÃO: Buscar e Abrir Comprovante ---
-    async function buscarComprovante(pedidoId) {
-        try {
-            const records = await pb.collection('historico').getFullList({
-                filter: `pedido_id = "${pedidoId}" && anexo != ""`,
-                sort: '-created' 
-            });
-
-            if (records.length > 0) {
-                const registroHistorico = records[0];
-                const fileUrl = pb.files.getUrl(registroHistorico, registroHistorico.anexo);
-                window.open(fileUrl, '_blank');
-            } else {
-                alert("Nenhum comprovante foi encontrado para este pedido.");
-            }
-        } catch (error) {
-            console.error("Erro ao abrir comprovante:", error);
-            alert("Ocorreu um erro ao tentar abrir o arquivo.");
-        }
-    }
-
-    // --- LÓGICA DO MODAL ---
-    function abrirModal(pedidoId, acao) {
-        document.getElementById('pedido_id_modal').value = pedidoId;
-        document.getElementById('tipo_acao_modal').value = acao;
-        
-        document.getElementById('tituloModal').textContent = acao === 'Aceitar' ? 'Aceitar Pedido de Transferência' : 'Rejeitar Pedido de Transferência';
-        
-        const btnConfirmar = document.getElementById('btnConfirmar');
-        btnConfirmar.className = acao === 'Aceitar' 
-            ? 'bg-green-600 text-white px-5 py-2 rounded font-bold shadow hover:bg-green-700 transition' 
-            : 'bg-red-600 text-white px-5 py-2 rounded font-bold shadow hover:bg-red-700 transition';
-
-        document.getElementById('modalAcao').classList.remove('hidden');
-    }
-
-    function fecharModal() {
-        document.getElementById('modalAcao').classList.add('hidden');
-        document.getElementById('formAcao').reset();
-    }
-
-    document.getElementById('formAcao').addEventListener('submit', async function(e) {
-        e.preventDefault(); 
-        
-        const pedidoId = document.getElementById('pedido_id_modal').value;
-        const acao = document.getElementById('tipo_acao_modal').value; 
-        const mensagem = document.getElementById('mensagem_texto').value;
-        const arquivoInput = document.getElementById('arquivo_anexo');
-        const usuarioLogado = pb.authStore.model;
-        const btnConfirmar = document.getElementById('btnConfirmar');
-
-        const pedidoAtual = await pb.collection('pedidos').getOne(pedidoId);
-        let novoStatus = '';
-
-        if (acao === 'Rejeitar') {
-            novoStatus = 'Rejeitado';
-        } else if (acao === 'Aceitar') {
-            if (pedidoAtual.status === 'Pendente_Setor_Origem') {
-                novoStatus = 'Pendente_Setor_Destino';
-            } else if (pedidoAtual.status === 'Pendente_Setor_Destino') {
-                if (arquivoInput.files.length === 0) {
-                    alert("Atenção: Para aceitar no Setor de Destino, é OBRIGATÓRIO anexar o arquivo do comprovante!");
-                    return; 
-                }
-                novoStatus = 'Concluido';
-            }
-        }
-
-        try {
-            const formData = new FormData();
-            formData.append('pedido_id', pedidoId);
-            formData.append('usuario_id', usuarioLogado.id);
-            formData.append('acao', acao);
-            formData.append('mensagem_texto', mensagem);
-            
-            if (arquivoInput.files.length > 0) {
-                formData.append('anexo', arquivoInput.files[0]);
-            }
-
-            btnConfirmar.disabled = true;
-            btnConfirmar.textContent = 'Processando...';
-            btnConfirmar.classList.add('opacity-75', 'cursor-not-allowed');
-
-            await pb.collection('historico').create(formData);
-            await pb.collection('pedidos').update(pedidoId, { status: novoStatus });
-
-            alert(`Ação registrada com sucesso!`);
-            
-            fecharModal();
-            buscarPedidosPendentes();
-
-        } catch (error) {
-            console.error("Erro ao salvar a ação:", error);
-            alert("Erro ao processar. Verifique o tamanho do arquivo (máx. 5MB) ou a conexão.");
-        } finally {
-            btnConfirmar.disabled = false;
-            btnConfirmar.textContent = 'Confirmar';
-            btnConfirmar.classList.remove('opacity-75', 'cursor-not-allowed');
-        }
-    });
-
-    // --- FUNÇÕES DE CADASTROS BASE (Setor e Paróquia) ---
-    async function carregarSetoresParaCadastro() {
-        const select = document.getElementById('select_setor_paroquia');
-        select.innerHTML = '<option value="">Carregando...</option>';
-        try {
-            const records = await pb.collection('setores').getFullList({ sort: 'nome' });
-            let options = '<option value="">Selecione um Setor</option>';
-            records.forEach(setor => {
-                options += `<option value="${setor.id}">${setor.nome}</option>`;
-            });
-            select.innerHTML = options;
-        } catch (error) {
-            console.error("Erro ao carregar setores:", error);
-            select.innerHTML = '<option value="">Erro ao carregar</option>';
-        }
-    }
-
-    // Cadastro de Setor
-    document.getElementById('formNovoSetor').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const nome = document.getElementById('nome_setor').value;
-        const msg = document.getElementById('msgSetor');
-        const btn = e.target.querySelector('button');
-        
-        btn.disabled = true;
-        btn.textContent = "Salvando...";
-
-        try {
-            await pb.collection('setores').create({ nome: nome });
-            msg.textContent = "Setor cadastrado com sucesso!";
-            msg.className = "text-sm mt-2 text-green-600 block text-center font-bold";
-            document.getElementById('formNovoSetor').reset();
-            carregarSetoresParaCadastro(); // Atualiza a lista no formulário ao lado
-        } catch (error) {
-            msg.textContent = "Erro ao cadastrar setor.";
-            msg.className = "text-sm mt-2 text-red-600 block text-center font-bold";
-        } finally {
-            btn.disabled = false;
-            btn.textContent = "Salvar Setor";
-            setTimeout(() => msg.classList.add('hidden'), 4000);
-        }
-    });
-
-    // Cadastro de Paróquia
-    document.getElementById('formNovaParoquia').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const nome = document.getElementById('nome_paroquia').value;
-        const setorId = document.getElementById('select_setor_paroquia').value;
-        const msg = document.getElementById('msgParoquia');
-        const btn = e.target.querySelector('button');
-        
-        btn.disabled = true;
-        btn.textContent = "Salvando...";
-
-        try {
-            await pb.collection('paroquias').create({ nome: nome, setor_id: setorId });
-            msg.textContent = "Paróquia cadastrada com sucesso!";
-            msg.className = "text-sm mt-2 text-green-600 block text-center font-bold";
-            document.getElementById('formNovaParoquia').reset();
-        } catch (error) {
-            msg.textContent = "Erro ao cadastrar paróquia.";
-            msg.className = "text-sm mt-2 text-red-600 block text-center font-bold";
-        } finally {
-            btn.disabled = false;
-            btn.textContent = "Salvar Paróquia";
-            setTimeout(() => msg.classList.add('hidden'), 4000);
-        }
-    });
-
-</script>
-</body>
-</html>
+                    <button type="button" onclick="fecharModal
