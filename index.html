@@ -15,29 +15,35 @@
         <form id="formPedido" class="space-y-4">
             <div>
                 <label for="nome_casal" class="block text-sm font-medium text-gray-700">Nome do Casal</label>
-                <input type="text" id="nome_casal" required class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                <input type="text" id="nome_casal" required class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none">
             </div>
 
             <div>
                 <label for="celular" class="block text-sm font-medium text-gray-700">Celular (WhatsApp)</label>
-                <input type="tel" id="celular" required maxlength="15" placeholder="(00) 00000-0000" class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                <input type="tel" id="celular" required maxlength="15" placeholder="(00) 00000-0000" class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none">
             </div>
 
             <div>
                 <label for="origem_id" class="block text-sm font-medium text-gray-700">Paróquia de Origem</label>
-                <select id="origem_id" required class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                <select id="origem_id" required class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none">
                     <option value="">Carregando paróquias...</option>
                 </select>
             </div>
 
             <div>
                 <label for="destino_id" class="block text-sm font-medium text-gray-700">Paróquia de Destino</label>
-                <select id="destino_id" required class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                <select id="destino_id" required class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none">
                     <option value="">Carregando paróquias...</option>
                 </select>
             </div>
 
-            <button type="submit" id="btnSubmit" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+            <div>
+                <label for="anexo_pedido" class="block text-sm font-medium text-gray-700">Anexar Documento (Opcional)</label>
+                <span class="text-xs text-gray-500 block mb-1">Envie carta do pároco ou comprovante (PDF/Imagem).</span>
+                <input type="file" id="anexo_pedido" accept="image/*,.pdf" class="mt-1 w-full p-2 border border-gray-300 rounded-md cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+            </div>
+
+            <button type="submit" id="btnSubmit" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition shadow">
                 Enviar Solicitação
             </button>
         </form>
@@ -48,93 +54,74 @@
     <script>
         const pb = new PocketBase('https://pb.eccnatal.com.br');
 
-        // --- Máscara Automática para o Celular ---
+        // Máscara Automática para o Celular
         document.getElementById('celular').addEventListener('input', function (e) {
             let x = e.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,5})(\d{0,4})/);
             e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
         });
 
-        // --- Carregar Lista de Paróquias ---
+        // Carregar Paróquias
         async function carregarParoquias() {
             const selectOrigem = document.getElementById('origem_id');
             const selectDestino = document.getElementById('destino_id');
-
             try {
                 const records = await pb.collection('paroquias').getFullList({ sort: 'nome' });
-                
                 let options = '<option value="">Selecione uma paróquia</option>';
-                records.forEach(paroquia => {
-                    options += `<option value="${paroquia.id}">${paroquia.nome}</option>`;
-                });
-
-                selectOrigem.innerHTML = options;
-                selectDestino.innerHTML = options;
+                records.forEach(paroquia => { options += `<option value="${paroquia.id}">${paroquia.nome}</option>`; });
+                selectOrigem.innerHTML = options; selectDestino.innerHTML = options;
             } catch (error) {
-                console.error("Erro ao carregar paróquias", error);
-                const erroOption = '<option value="">Erro ao carregar dados. Recarregue a página.</option>';
-                selectOrigem.innerHTML = erroOption;
-                selectDestino.innerHTML = erroOption;
+                console.error(error);
+                selectOrigem.innerHTML = '<option value="">Erro ao carregar.</option>'; selectDestino.innerHTML = '<option value="">Erro ao carregar.</option>';
             }
         }
 
-        // --- Envio do Formulário ---
+        // Envio do Formulário com Upload
         document.getElementById('formPedido').addEventListener('submit', async function(e) {
             e.preventDefault(); 
             
             const origemId = document.getElementById('origem_id').value;
             const destinoId = document.getElementById('destino_id').value;
-            const areaMensagem = document.getElementById('areaMensagem');
             const btnSubmit = document.getElementById('btnSubmit');
+            const arquivoInput = document.getElementById('anexo_pedido');
 
-            // Validação: Origem e Destino não podem ser os mesmos
             if (origemId === destinoId) {
-                mostrarMensagem("A paróquia de destino não pode ser a mesma de origem.", "erro");
-                return;
+                mostrarMensagem("A paróquia de destino não pode ser a mesma de origem.", "erro"); return;
             }
 
-            const dados = {
-                nome_casal: document.getElementById('nome_casal').value,
-                celular: document.getElementById('celular').value,
-                origem_paroquia_id: origemId,
-                destino_paroquia_id: destinoId,
-                status: 'Pendente_Setor_Origem'
-            };
-
             try {
-                // Desativa o botão para evitar envio duplo
-                btnSubmit.disabled = true;
-                btnSubmit.textContent = "Enviando...";
+                btnSubmit.disabled = true; btnSubmit.textContent = "Enviando... Aguarde...";
                 btnSubmit.classList.add('opacity-75', 'cursor-not-allowed');
 
-                await pb.collection('pedidos').create(dados);
+                // Usando FormData para enviar textos e arquivos juntos
+                const formData = new FormData();
+                formData.append('nome_casal', document.getElementById('nome_casal').value);
+                formData.append('celular', document.getElementById('celular').value);
+                formData.append('origem_paroquia_id', origemId);
+                formData.append('destino_paroquia_id', destinoId);
+                formData.append('status', 'Pendente_Setor_Origem');
+
+                if (arquivoInput.files.length > 0) {
+                    formData.append('anexo', arquivoInput.files[0]);
+                }
+
+                await pb.collection('pedidos').create(formData);
                 
-                mostrarMensagem("Pedido enviado com sucesso! Aguarde o contato.", "sucesso");
+                mostrarMensagem("Pedido enviado com sucesso! Aguarde o contato do seu Setor.", "sucesso");
                 document.getElementById('formPedido').reset();
             } catch (error) {
-                console.error(error);
-                mostrarMensagem("Erro ao enviar pedido. Tente novamente mais tarde.", "erro");
+                console.error(error); mostrarMensagem("Erro ao enviar pedido. Verifique o tamanho do arquivo ou a conexão.", "erro");
             } finally {
-                // Reativa o botão sempre no final (dando certo ou errado)
-                btnSubmit.disabled = false;
-                btnSubmit.textContent = "Enviar Solicitação";
+                btnSubmit.disabled = false; btnSubmit.textContent = "Enviar Solicitação";
                 btnSubmit.classList.remove('opacity-75', 'cursor-not-allowed');
             }
         });
 
-        // --- Função Auxiliar para Mostrar Mensagens na Tela ---
         function mostrarMensagem(texto, tipo) {
             const div = document.getElementById('areaMensagem');
-            div.textContent = texto;
-            div.classList.remove('hidden', 'bg-red-100', 'text-red-700', 'bg-green-100', 'text-green-700');
-            
-            if (tipo === 'erro') {
-                div.classList.add('bg-red-100', 'text-red-700');
-            } else {
-                div.classList.add('bg-green-100', 'text-green-700');
-            }
+            div.textContent = texto; div.classList.remove('hidden', 'bg-red-100', 'text-red-700', 'bg-green-100', 'text-green-700');
+            if (tipo === 'erro') div.classList.add('bg-red-100', 'text-red-700'); else div.classList.add('bg-green-100', 'text-green-700');
         }
 
-        // Executa ao abrir a página
         carregarParoquias();
     </script>
 </body>
