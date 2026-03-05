@@ -190,10 +190,22 @@
         iniciarPainel(pb.authStore.model);
     }
 
-    function iniciarPainel(usuario) {
+  function iniciarPainel(usuario) {
         document.getElementById('telaLogin').classList.add('hidden');
         document.getElementById('telaPainel').classList.remove('hidden');
-        document.getElementById('nomeUsuarioLogado').textContent = `Olá, ${usuario.nome_casal} (${usuario.papel.replace('_', ' ')})`;
+        
+        // Tratamento seguro para o nome e o papel
+        const nomeCasal = usuario.nome_casal || 'Administrador';
+        
+        // Garante que o papel é um texto e existe antes de usar o replace
+        let papelFormatado = '';
+        if (usuario.papel) {
+            papelFormatado = String(usuario.papel).replace(/_/g, ' ');
+        }
+
+        document.getElementById('nomeUsuarioLogado').textContent = `Olá, ${nomeCasal} (${papelFormatado})`;
+        
+        // Continua o fluxo normal
         buscarPedidosPendentes();
     }
 
