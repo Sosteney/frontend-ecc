@@ -200,8 +200,7 @@
         document.querySelectorAll('.aba-conteudo').forEach(el => el.classList.add('hidden'));
         document.getElementById(idAba).classList.remove('hidden');
     }
-
-    // --- PEDIDOS ---
+// --- PEDIDOS ---
     async function buscarPedidosPendentes() {
         const usuario = pb.authStore.model; 
         const papel = usuario.papel;
@@ -226,19 +225,28 @@
             records.forEach(p => {
                 const o = p.expand?.origem_paroquia_id?.nome || 'N/A'; const d = p.expand?.destino_paroquia_id?.nome || 'N/A';
                 
+                // NOVO: Verifica se o casal enviou um arquivo no pedido
+                let linkAnexo = '';
+                if (p.anexo) {
+                    const urlArquivo = pb.files.getUrl(p, p.anexo);
+                    linkAnexo = `<br><a href="${urlArquivo}" target="_blank" class="inline-flex items-center mt-1 text-xs text-blue-600 font-semibold hover:underline bg-blue-50 px-2 py-1 rounded">📎 Ver Anexo do Casal</a>`;
+                }
+                
                 let botoesHtml = '';
                 if(mostrarAcoes) {
                     botoesHtml = `<td class="py-3 px-2 space-x-2"><button onclick="abrirModal('${p.id}', 'Aceitar')" class="bg-green-600 text-white text-xs px-3 py-1 rounded">Aceitar</button><button onclick="abrirModal('${p.id}', 'Rejeitar')" class="bg-red-600 text-white text-xs px-3 py-1 rounded">Rejeitar</button></td>`;
                 }
 
                 tbody.innerHTML += `<tr class="border-b hover:bg-gray-50">
-                    <td class="py-3 px-2">${p.nome_casal}</td><td class="py-3 px-2 text-sm">${o} ➔ ${d}</td>
+                    <td class="py-3 px-2">${p.nome_casal} ${linkAnexo}</td>
+                    <td class="py-3 px-2 text-sm">${o} ➔ ${d}</td>
                     <td class="py-3 px-2"><span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">${p.status.replace(/_/g, ' ')}</span></td>
                     ${botoesHtml}
                 </tr>`;
             });
         } catch (e) { document.getElementById('listaPedidos').innerHTML = '<tr><td colspan="4" class="text-center text-red-500">Erro.</td></tr>'; }
     }
+   
 
     async function buscarPedidosConcluidos() {
         const usuario = pb.authStore.model; const papel = usuario.papel;
