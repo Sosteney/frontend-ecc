@@ -145,8 +145,13 @@
     </div>
 
 <script>
-    // Conexão HTTPS com o PocketBase
     const pb = new PocketBase('https://pb.eccnatal.com.br'); 
+
+    // Função auxiliar para forçar o papel a ser um texto simples
+    function getPapelSeguro(usuario) {
+        // Pega a caixinha ["Master"] e transforma em "Master" limpo
+        return String(usuario.papel || '').replace(/,/g, ''); 
+    }
 
     // --- LÓGICA DE LOGIN E INÍCIO ---
     document.getElementById('formLogin').addEventListener('submit', async function(e) {
@@ -170,14 +175,14 @@
         document.getElementById('telaLogin').classList.add('hidden'); 
         document.getElementById('telaPainel').classList.remove('hidden');
         
-        // MOSTRA O MENU DO TOPO COM O NOME
+        const papel = getPapelSeguro(usuario); // <--- AQUI ESTÁ A CORREÇÃO
+        
         document.getElementById('menuUsuarioTop').classList.remove('hidden');
         const nomeCasal = usuario.nome_casal || 'Admin';
-        let papelFormatado = usuario.papel ? String(usuario.papel).replace(/_/g, ' ') : '';
+        let papelFormatado = papel ? papel.replace(/_/g, ' ') : '';
         document.getElementById('nomeUsuarioLogado').textContent = `${nomeCasal} (${papelFormatado})`;
 
-        const papel = usuario.papel;
-        
+        // Libera as abas de acordo com o texto limpo
         if(papel === 'Master' || papel === 'Arquidiocesano' || papel === 'Admin_Setor') document.getElementById('btnAbaPedidos').classList.remove('hidden');
         document.getElementById('btnAbaConcluidos').classList.remove('hidden'); 
         if(papel === 'Master' || papel === 'Arquidiocesano') document.getElementById('btnAbaCadastros').classList.remove('hidden');
@@ -198,7 +203,10 @@
 
     // --- PEDIDOS ---
     async function buscarPedidosPendentes() {
-        const usuario = pb.authStore.model; const papel = usuario.papel; let filtro = '';
+        const usuario = pb.authStore.model; 
+        const papel = getPapelSeguro(usuario); // <--- AQUI ESTÁ A CORREÇÃO
+        let filtro = '';
+        
         if (papel === 'Master' || papel === 'Arquidiocesano') filtro = `status != "Concluido" && status != "Rejeitado"`;
         else if (papel === 'Admin_Setor') filtro = `(origem_paroquia_id.setor_id = "${usuario.setor_id}" && status = "Pendente_Setor_Origem") || (destino_paroquia_id.setor_id = "${usuario.setor_id}" && status = "Pendente_Setor_Destino")`;
 
@@ -226,7 +234,10 @@
     }
 
     async function buscarPedidosConcluidos() {
-        const usuario = pb.authStore.model; const papel = usuario.papel; let filtro = 'status = "Concluido"';
+        const usuario = pb.authStore.model; 
+        const papel = getPapelSeguro(usuario); // <--- AQUI ESTÁ A CORREÇÃO
+        let filtro = 'status = "Concluido"';
+        
         if (papel === 'Admin_Paroquia') filtro += ` && (origem_paroquia_id = "${usuario.paroquia_id}" || destino_paroquia_id = "${usuario.paroquia_id}")`;
         else if (papel === 'Admin_Setor') filtro += ` && (origem_paroquia_id.setor_id = "${usuario.setor_id}" || destino_paroquia_id.setor_id = "${usuario.setor_id}")`;
         try {
@@ -276,7 +287,9 @@
 
     // --- CADASTROS BASE ---
     async function carregarListasCadastros() {
-        const isMaster = (pb.authStore.model.papel === 'Master');
+        const papel = getPapelSeguro(pb.authStore.model); // <--- AQUI ESTÁ A CORREÇÃO
+        const isMaster = (papel === 'Master');
+        
         if (isMaster) document.getElementById('areaFormulariosBase').classList.remove('hidden'); else document.getElementById('areaFormulariosBase').classList.add('hidden');
         try {
             const setores = await pb.collection('setores').getFullList({ sort: 'nome' });
@@ -299,39 +312,62 @@
 
     // --- ADMINISTRADORES ---
     async function inicializarAbaAdmins() {
-        const usuario = pb.authStore.model; const selectPapel = document.getElementById('admin_papel');
-        if (usuario.papel === 'Master') { selectPapel.innerHTML = `<option value="">Selecione...</option><option value="Master">Master</option><option value="Arquidiocesano">Arquidiocesano</option><option value="Admin_Setor">Admin. de Setor</option><option value="Admin_Paroquia">Admin. de Paróquia</option>`; document.getElementById('thAcoesAdmin').style.display = ''; } 
-        else if (usuario.papel === 'Admin_Setor') { selectPapel.innerHTML = `<option value="Admin_Paroquia" selected>Administrador de Paróquia</option>`; document.getElementById('thAcoesAdmin').style.display = 'none'; }
+        const usuario = pb.authStore.model; 
+        const papel = getPapelSeguro(usuario); // <--- AQUI ESTÁ A CORREÇÃO
+        const selectPapel = document.getElementById('admin_papel');
+        
+        if (papel === 'Master') { selectPapel.innerHTML = `<option value="">Selecione...</option><option value="Master">Master</option><option value="Arquidiocesano">Arquidiocesano</option><option value="Admin_Setor">Admin. de Setor</option><option value="Admin_Paroquia">Admin. de Paróquia</option>`; document.getElementById('thAcoesAdmin').style.display = ''; } 
+        else if (papel === 'Admin_Setor') { selectPapel.innerHTML = `<option value="Admin_Paroquia" selected>Administrador de Paróquia</option>`; document.getElementById('thAcoesAdmin').style.display = 'none'; }
+        
         try {
             const setores = await pb.collection('setores').getFullList({ sort: 'nome' }); let optSetor = '<option value="">Selecione o Setor</option>'; setores.forEach(s => optSetor += `<option value="${s.id}">${s.nome}</option>`); document.getElementById('admin_setor_id').innerHTML = optSetor;
-            let filtroParoquias = usuario.papel === 'Admin_Setor' ? `setor_id = "${usuario.setor_id}"` : ''; const paroquias = await pb.collection('paroquias').getFullList({ filter: filtroParoquias, sort: 'nome' }); let optParoquia = '<option value="">Selecione a Paróquia</option>'; paroquias.forEach(p => optParoquia += `<option value="${p.id}">${p.nome}</option>`); document.getElementById('admin_paroquia_id').innerHTML = optParoquia;
+            let filtroParoquias = papel === 'Admin_Setor' ? `setor_id = "${usuario.setor_id}"` : ''; const paroquias = await pb.collection('paroquias').getFullList({ filter: filtroParoquias, sort: 'nome' }); let optParoquia = '<option value="">Selecione a Paróquia</option>'; paroquias.forEach(p => optParoquia += `<option value="${p.id}">${p.nome}</option>`); document.getElementById('admin_paroquia_id').innerHTML = optParoquia;
         } catch (error) {}
+        
         alternarCamposAdmin(); carregarTabelaAdmins();
     }
 
     function alternarCamposAdmin() {
-        const papel = document.getElementById('admin_papel').value; const divSetor = document.getElementById('div_admin_setor'); const divParoquia = document.getElementById('div_admin_paroquia');
-        divSetor.classList.add('hidden'); divParoquia.classList.add('hidden'); document.getElementById('admin_setor_id').required = false; document.getElementById('admin_paroquia_id').required = false;
-        if (papel === 'Admin_Setor') { divSetor.classList.remove('hidden'); document.getElementById('admin_setor_id').required = true; } else if (papel === 'Admin_Paroquia') { divParoquia.classList.remove('hidden'); document.getElementById('admin_paroquia_id').required = true; }
+        const papelSelecionado = document.getElementById('admin_papel').value; 
+        const divSetor = document.getElementById('div_admin_setor'); const divParoquia = document.getElementById('div_admin_paroquia');
+        
+        divSetor.classList.add('hidden'); divParoquia.classList.add('hidden'); 
+        document.getElementById('admin_setor_id').required = false; document.getElementById('admin_paroquia_id').required = false;
+        
+        if (papelSelecionado === 'Admin_Setor') { divSetor.classList.remove('hidden'); document.getElementById('admin_setor_id').required = true; } 
+        else if (papelSelecionado === 'Admin_Paroquia') { divParoquia.classList.remove('hidden'); document.getElementById('admin_paroquia_id').required = true; }
     }
 
     document.getElementById('formNovoAdmin').addEventListener('submit', async function(e) {
         e.preventDefault(); const btn = document.getElementById('btnSalvarAdmin'); btn.disabled = true; btn.textContent = "Salvando...";
-        const criador = pb.authStore.model; let setorIdAEnviar = document.getElementById('admin_setor_id').value || null; if (criador.papel === 'Admin_Setor') setorIdAEnviar = criador.setor_id; 
+        const criador = pb.authStore.model; 
+        const papelCriador = getPapelSeguro(criador); // <--- AQUI ESTÁ A CORREÇÃO
+        
+        let setorIdAEnviar = document.getElementById('admin_setor_id').value || null; 
+        if (papelCriador === 'Admin_Setor') setorIdAEnviar = criador.setor_id; 
+        
         const dados = { nome_casal: document.getElementById('admin_nome').value, email: document.getElementById('admin_email').value, password: document.getElementById('admin_senha').value, passwordConfirm: document.getElementById('admin_senha').value, papel: document.getElementById('admin_papel').value, setor_id: setorIdAEnviar, paroquia_id: document.getElementById('admin_paroquia_id').value || null };
         try { await pb.collection('users').create(dados); alert("Usuário cadastrado!"); document.getElementById('formNovoAdmin').reset(); alternarCamposAdmin(); carregarTabelaAdmins(); } catch (e) { alert("Erro ao cadastrar. E-mail pode já existir."); } finally { btn.disabled = false; btn.textContent = "Cadastrar Acesso"; }
     });
 
     async function carregarTabelaAdmins() {
-        const usuarioLogado = pb.authStore.model; let filtro = ''; if (usuarioLogado.papel === 'Admin_Setor') filtro = `setor_id = "${usuarioLogado.setor_id}" || paroquia_id.setor_id = "${usuarioLogado.setor_id}"`;
+        const usuarioLogado = pb.authStore.model; 
+        const papelLogado = getPapelSeguro(usuarioLogado); // <--- AQUI ESTÁ A CORREÇÃO
+        
+        let filtro = ''; 
+        if (papelLogado === 'Admin_Setor') filtro = `setor_id = "${usuarioLogado.setor_id}" || paroquia_id.setor_id = "${usuarioLogado.setor_id}"`;
         try {
             const users = await pb.collection('users').getFullList({ filter: filtro, sort: '-created', expand: 'setor_id, paroquia_id' });
             const tbody = document.getElementById('listaUsuariosAdmin'); tbody.innerHTML = '';
             if (users.length === 0) tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-gray-500 italic">Nenhum usuário encontrado.</td></tr>';
             users.forEach(u => {
-                let local = '-'; if (u.papel === 'Admin_Setor') local = u.expand?.setor_id?.nome || '-'; if (u.papel === 'Admin_Paroquia') local = u.expand?.paroquia_id?.nome || '-';
-                const btnExcluir = usuarioLogado.papel === 'Master' ? `<td class="py-3 px-2 text-right"><button onclick="excluirAdmin('${u.id}')" class="text-red-600 font-bold text-sm hover:underline">Excluir</button></td>` : '';
-                tbody.innerHTML += `<tr class="border-b hover:bg-gray-50"><td class="py-3 px-2 font-medium text-gray-800">${u.nome_casal || '-'}</td><td class="py-3 px-2 text-gray-600">${u.email}</td><td class="py-3 px-2"><span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">${String(u.papel).replace(/_/g, ' ')}</span></td><td class="py-3 px-2 text-gray-600">${local}</td>${btnExcluir}</tr>`;
+                const papelLido = getPapelSeguro(u); // Trata o papel na tabela também
+                let local = '-'; 
+                if (papelLido === 'Admin_Setor') local = u.expand?.setor_id?.nome || '-'; 
+                if (papelLido === 'Admin_Paroquia') local = u.expand?.paroquia_id?.nome || '-';
+                
+                const btnExcluir = papelLogado === 'Master' ? `<td class="py-3 px-2 text-right"><button onclick="excluirAdmin('${u.id}')" class="text-red-600 font-bold text-sm hover:underline">Excluir</button></td>` : '';
+                tbody.innerHTML += `<tr class="border-b hover:bg-gray-50"><td class="py-3 px-2 font-medium text-gray-800">${u.nome_casal || '-'}</td><td class="py-3 px-2 text-gray-600">${u.email}</td><td class="py-3 px-2"><span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">${papelLido.replace(/_/g, ' ')}</span></td><td class="py-3 px-2 text-gray-600">${local}</td>${btnExcluir}</tr>`;
             });
         } catch (e) {}
     }
