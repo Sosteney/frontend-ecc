@@ -42,6 +42,7 @@
                 <button onclick="mudarAba('abaPedidos'); buscarPedidosPendentes()" class="whitespace-nowrap py-2 px-4 border-b-2 border-blue-600 font-semibold text-blue-600 focus:outline-none transition">Pedidos Pendentes</button>
                 <button onclick="mudarAba('abaConcluidos'); buscarPedidosConcluidos()" class="whitespace-nowrap py-2 px-4 border-b-2 border-transparent text-gray-500 hover:text-blue-600 focus:outline-none transition">Pedidos Concluídos</button>
                 <button onclick="mudarAba('abaCadastros'); carregarListasCadastros()" class="whitespace-nowrap py-2 px-4 border-b-2 border-transparent text-gray-500 hover:text-blue-600 focus:outline-none transition">Cadastros Base</button>
+                <button onclick="mudarAba('abaAdmins'); inicializarAbaAdmins()" class="whitespace-nowrap py-2 px-4 border-b-2 border-transparent text-gray-500 hover:text-blue-600 focus:outline-none transition">Administradores</button>
             </div>
 
             <div id="abaPedidos" class="aba-conteudo">
@@ -56,9 +57,7 @@
                                 <th class="pb-2 text-gray-600">Ações</th>
                             </tr>
                         </thead>
-                        <tbody id="listaPedidos">
-                            <tr><td colspan="4" class="py-4 text-center text-gray-500">Buscando pedidos...</td></tr>
-                        </tbody>
+                        <tbody id="listaPedidos"><tr><td colspan="4" class="py-4 text-center text-gray-500">Buscando pedidos...</td></tr></tbody>
                     </table>
                 </div>
             </div>
@@ -75,86 +74,114 @@
                                 <th class="pb-2 text-gray-600">Ações</th>
                             </tr>
                         </thead>
-                        <tbody id="listaConcluidos">
-                            <tr><td colspan="4" class="py-4 text-center text-gray-500">Clique na aba para buscar...</td></tr>
-                        </tbody>
+                        <tbody id="listaConcluidos"><tr><td colspan="4" class="py-4 text-center text-gray-500">Clique na aba para buscar...</td></tr></tbody>
                     </table>
                 </div>
             </div>
 
             <div id="abaCadastros" class="aba-conteudo hidden">
                 <h2 class="text-xl font-bold mb-6 text-gray-800">Gerenciar Cadastros Base</h2>
-                
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="bg-white rounded-lg shadow-md p-6 border-t-4 border-blue-600">
                         <h3 class="text-lg font-semibold mb-4 text-gray-700">Cadastrar Novo Setor</h3>
                         <form id="formNovoSetor" class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">Nome do Setor</label>
-                                <input type="text" id="nome_setor" required placeholder="Ex: Setor Sul" class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none">
-                            </div>
-                            <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition shadow">Salvar Setor</button>
+                            <div><label class="block text-sm font-medium text-gray-700">Nome do Setor</label><input type="text" id="nome_setor" required class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none"></div>
+                            <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition">Salvar Setor</button>
                             <p id="msgSetor" class="text-sm mt-2 hidden text-center font-bold"></p>
                         </form>
                     </div>
-
                     <div class="bg-white rounded-lg shadow-md p-6 border-t-4 border-green-600">
                         <h3 class="text-lg font-semibold mb-4 text-gray-700">Cadastrar Nova Paróquia</h3>
                         <form id="formNovaParoquia" class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">Nome da Paróquia</label>
-                                <input type="text" id="nome_paroquia" required placeholder="Ex: Paróquia São José" class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500 outline-none">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">Setor a qual pertence</label>
-                                <select id="select_setor_paroquia" required class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500 outline-none">
-                                    <option value="">Carregando setores...</option>
-                                </select>
-                            </div>
-                            <button type="submit" class="w-full bg-green-600 text-white font-bold py-2 px-4 rounded hover:bg-green-700 transition shadow">Salvar Paróquia</button>
+                            <div><label class="block text-sm font-medium text-gray-700">Nome da Paróquia</label><input type="text" id="nome_paroquia" required class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none"></div>
+                            <div><label class="block text-sm font-medium text-gray-700">Setor a qual pertence</label><select id="select_setor_paroquia" required class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none"><option value="">Carregando...</option></select></div>
+                            <button type="submit" class="w-full bg-green-600 text-white font-bold py-2 px-4 rounded hover:bg-green-700 transition">Salvar Paróquia</button>
                             <p id="msgParoquia" class="text-sm mt-2 hidden text-center font-bold"></p>
                         </form>
                     </div>
                 </div>
-
                 <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="bg-white rounded-lg shadow-md p-6">
                         <h3 class="text-lg font-semibold mb-4 text-gray-700">Setores Cadastrados</h3>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left text-sm">
-                                <thead>
-                                    <tr class="border-b-2 border-gray-200">
-                                        <th class="pb-2 text-gray-600">Nome</th>
-                                        <th class="pb-2 text-gray-600 text-right">Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="listaSetoresAdmin">
-                                    <tr><td colspan="2" class="py-4 text-center text-gray-500">Carregando...</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <table class="w-full text-left text-sm">
+                            <tbody id="listaSetoresAdmin"><tr><td class="py-4 text-center">Carregando...</td></tr></tbody>
+                        </table>
                     </div>
-
                     <div class="bg-white rounded-lg shadow-md p-6">
                         <h3 class="text-lg font-semibold mb-4 text-gray-700">Paróquias Cadastradas</h3>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left text-sm">
-                                <thead>
-                                    <tr class="border-b-2 border-gray-200">
-                                        <th class="pb-2 text-gray-600">Nome</th>
-                                        <th class="pb-2 text-gray-600">Pertence ao</th>
-                                        <th class="pb-2 text-gray-600 text-right">Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="listaParoquiasAdmin">
-                                    <tr><td colspan="3" class="py-4 text-center text-gray-500">Carregando...</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <table class="w-full text-left text-sm">
+                            <tbody id="listaParoquiasAdmin"><tr><td class="py-4 text-center">Carregando...</td></tr></tbody>
+                        </table>
                     </div>
                 </div>
-
             </div>
+
+            <div id="abaAdmins" class="aba-conteudo hidden">
+                <h2 class="text-xl font-bold mb-6 text-gray-800">Gerenciar Administradores</h2>
+                
+                <div class="bg-white rounded-lg shadow-md p-6 border-t-4 border-purple-600 mb-8 max-w-2xl">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-700">Cadastrar Novo Administrador</h3>
+                    <form id="formNovoAdmin" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Nome do Casal</label>
+                                <input type="text" id="admin_nome" required placeholder="Ex: João e Maria" class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">E-mail (Login)</label>
+                                <input type="email" id="admin_email" required class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Senha (mínimo 8 caracteres)</label>
+                                <input type="password" id="admin_senha" required minlength="8" class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Papel de Atuação</label>
+                                <select id="admin_papel" required onchange="alternarCamposAdmin()" class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none">
+                                    <option value="">Selecione o Papel...</option>
+                                    <option value="Admin_Setor">Administrador de Setor</option>
+                                    <option value="Admin_Paroquia">Administrador de Paróquia</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div id="div_admin_setor" class="hidden">
+                            <label class="block text-sm font-medium text-gray-700">Qual Setor eles vão administrar?</label>
+                            <select id="admin_setor_id" class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none">
+                                <option value="">Carregando setores...</option>
+                            </select>
+                        </div>
+
+                        <div id="div_admin_paroquia" class="hidden">
+                            <label class="block text-sm font-medium text-gray-700">Qual Paróquia eles vão administrar?</label>
+                            <select id="admin_paroquia_id" class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none">
+                                <option value="">Carregando paróquias...</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" id="btnSalvarAdmin" class="w-full bg-purple-600 text-white font-bold py-2 px-4 rounded hover:bg-purple-700 transition shadow">Cadastrar Casal</button>
+                    </form>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-md p-6 overflow-x-auto">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-700">Casais Administradores Cadastrados</h3>
+                    <table class="w-full text-left text-sm min-w-max">
+                        <thead>
+                            <tr class="border-b-2 border-gray-200">
+                                <th class="pb-2 text-gray-600">Casal</th>
+                                <th class="pb-2 text-gray-600">E-mail</th>
+                                <th class="pb-2 text-gray-600">Papel</th>
+                                <th class="pb-2 text-gray-600">Local de Atuação</th>
+                                <th class="pb-2 text-gray-600 text-right">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listaUsuariosAdmin">
+                            <tr><td colspan="5" class="py-4 text-center text-gray-500">Carregando usuários...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -164,392 +191,275 @@
             <form id="formAcao" class="space-y-4">
                 <input type="hidden" id="pedido_id_modal">
                 <input type="hidden" id="tipo_acao_modal">
-                
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Justificativa / Mensagem</label>
-                    <textarea id="mensagem_texto" required rows="3" class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none"></textarea>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Anexar Comprovante</label>
-                    <span class="text-xs text-gray-500 block mb-1">Opcional na Origem, <b>Obrigatório no Destino</b>.</span>
-                    <input type="file" id="arquivo_anexo" accept="image/*,.pdf" class="mt-1 w-full p-2 border border-gray-300 rounded-md cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                </div>
+                <div><label class="block text-sm font-medium text-gray-700">Mensagem</label><textarea id="mensagem_texto" required rows="3" class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none"></textarea></div>
+                <div><label class="block text-sm font-medium text-gray-700">Anexar Comprovante (Obrigatório no Destino)</label><input type="file" id="arquivo_anexo" accept="image/*,.pdf" class="mt-1 w-full p-2 border border-gray-300 rounded-md"></div>
                 <div class="flex justify-end space-x-3 mt-6">
-                    <button type="button" onclick="fecharModal()" class="bg-gray-400 text-white px-4 py-2 rounded font-medium hover:bg-gray-500 transition">Cancelar</button>
-                    <button type="submit" id="btnConfirmar" class="bg-blue-600 text-white px-4 py-2 rounded font-bold shadow hover:opacity-90 transition">Confirmar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div id="modalEdicao" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-sm m-4">
-            <h3 id="tituloModalEdicao" class="text-xl font-bold mb-4 text-gray-800">Editar</h3>
-            <form id="formEdicao" class="space-y-4">
-                <input type="hidden" id="edit_id">
-                <input type="hidden" id="edit_tipo"> <div>
-                    <label class="block text-sm font-medium text-gray-700">Nome</label>
-                    <input type="text" id="edit_nome" required class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none">
-                </div>
-
-                <div id="div_edit_setor" class="hidden">
-                    <label class="block text-sm font-medium text-gray-700">Setor a qual pertence</label>
-                    <select id="edit_setor_id" class="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none">
-                        </select>
-                </div>
-
-                <div class="flex justify-end space-x-3 mt-6">
-                    <button type="button" onclick="fecharModalEdicao()" class="bg-gray-400 text-white px-4 py-2 rounded font-medium hover:bg-gray-500 transition">Cancelar</button>
-                    <button type="submit" id="btnSalvarEdicao" class="bg-blue-600 text-white px-4 py-2 rounded font-bold shadow hover:opacity-90 transition">Salvar Alterações</button>
+                    <button type="button" onclick="fecharModal()" class="bg-gray-400 text-white px-4 py-2 rounded">Cancelar</button>
+                    <button type="submit" id="btnConfirmar" class="bg-blue-600 text-white px-4 py-2 rounded font-bold">Confirmar</button>
                 </div>
             </form>
         </div>
     </div>
 
 <script>
-    const pb = new PocketBase('https://ecc-transferencias-pocketbase.wrillz.easypanel.host'); // Lembre-se de mudar para https://api.eccnatal.com.br depois
+    // Conexão HTTPS com o PocketBase
+    const pb = new PocketBase('https://api.eccnatal.com.br'); 
 
-    // --- LÓGICA DE LOGIN ---
+    // --- LÓGICA DE LOGIN E INÍCIO ---
     document.getElementById('formLogin').addEventListener('submit', async function(e) {
         e.preventDefault();
-        const email = document.getElementById('email').value;
-        const senha = document.getElementById('senha').value;
         const btnLogin = e.target.querySelector('button');
-        
-        btnLogin.textContent = "Acessando...";
-        btnLogin.disabled = true;
-
+        btnLogin.textContent = "Acessando..."; btnLogin.disabled = true;
         try {
-            const authData = await pb.collection('users').authWithPassword(email, senha);
+            const authData = await pb.collection('users').authWithPassword(document.getElementById('email').value, document.getElementById('senha').value);
             iniciarPainel(authData.record);
         } catch (error) {
             document.getElementById('erroLogin').classList.remove('hidden');
-            btnLogin.textContent = "Entrar";
-            btnLogin.disabled = false;
+            btnLogin.textContent = "Entrar"; btnLogin.disabled = false;
         }
     });
 
-    document.getElementById('btnSair').addEventListener('click', () => {
-        pb.authStore.clear();
-        window.location.reload();
-    });
+    document.getElementById('btnSair').addEventListener('click', () => { pb.authStore.clear(); window.location.reload(); });
 
-    if (pb.authStore.isValid) {
-        iniciarPainel(pb.authStore.model);
-    }
+    if (pb.authStore.isValid) iniciarPainel(pb.authStore.model);
 
     function iniciarPainel(usuario) {
-        document.getElementById('telaLogin').classList.add('hidden');
-        document.getElementById('telaPainel').classList.remove('hidden');
-        
+        document.getElementById('telaLogin').classList.add('hidden'); document.getElementById('telaPainel').classList.remove('hidden');
         const nomeCasal = usuario.nome_casal || 'Administrador';
-        let papelFormatado = '';
-        if (usuario.papel) {
-            papelFormatado = String(usuario.papel).replace(/_/g, ' ');
-        }
+        let papelFormatado = usuario.papel ? String(usuario.papel).replace(/_/g, ' ') : '';
         document.getElementById('nomeUsuarioLogado').textContent = `Olá, ${nomeCasal} (${papelFormatado})`;
         buscarPedidosPendentes();
     }
 
     function mudarAba(idAba) {
         const botoes = document.querySelectorAll('.flex.border-b button');
-        botoes.forEach(btn => {
-            btn.classList.remove('border-blue-600', 'text-blue-600');
-            btn.classList.add('border-transparent', 'text-gray-500');
-        });
+        botoes.forEach(btn => { btn.classList.remove('border-blue-600', 'text-blue-600'); btn.classList.add('border-transparent', 'text-gray-500'); });
         const botaoAtivo = Array.from(botoes).find(btn => btn.getAttribute('onclick').includes(idAba));
-        if (botaoAtivo) {
-            botaoAtivo.classList.remove('border-transparent', 'text-gray-500');
-            botaoAtivo.classList.add('border-blue-600', 'text-blue-600');
-        }
+        if (botaoAtivo) { botaoAtivo.classList.remove('border-transparent', 'text-gray-500'); botaoAtivo.classList.add('border-blue-600', 'text-blue-600'); }
         document.querySelectorAll('.aba-conteudo').forEach(el => el.classList.add('hidden'));
         document.getElementById(idAba).classList.remove('hidden');
     }
 
-    // --- PEDIDOS (Pendentes e Concluídos) ---
+    // --- PEDIDOS ---
     async function buscarPedidosPendentes() {
-        // [Mantido igual a versão anterior - não alterado para poupar espaço]
-        const usuario = pb.authStore.model;
-        let filtro = '';
-        if (usuario.papel === 'Admin_Setor') {
-            filtro = `(origem_paroquia_id.setor_id = "${usuario.setor_id}" && status = "Pendente_Setor_Origem") || (destino_paroquia_id.setor_id = "${usuario.setor_id}" && status = "Pendente_Setor_Destino")`;
-        } else { filtro = `id = "null"`; }
-
+        // [Código dos pedidos mantido]
+        const usuario = pb.authStore.model; let filtro = '';
+        if (usuario.papel === 'Admin_Setor') filtro = `(origem_paroquia_id.setor_id = "${usuario.setor_id}" && status = "Pendente_Setor_Origem") || (destino_paroquia_id.setor_id = "${usuario.setor_id}" && status = "Pendente_Setor_Destino")`;
+        else filtro = `id = "null"`;
         try {
             const records = await pb.collection('pedidos').getFullList({ filter: filtro, expand: 'origem_paroquia_id, destino_paroquia_id', sort: '-created' });
-            const tbody = document.getElementById('listaPedidos');
-            tbody.innerHTML = ''; 
-            if (records.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" class="py-6 text-center text-gray-500 italic">Nenhum pedido pendente.</td></tr>'; return;
-            }
-            records.forEach(pedido => {
-                const pOrigem = pedido.expand?.origem_paroquia_id?.nome || 'N/A';
-                const pDestino = pedido.expand?.destino_paroquia_id?.nome || 'N/A';
-                tbody.innerHTML += `
-                    <tr class="border-b hover:bg-gray-50 transition">
-                        <td class="py-3 px-2 font-medium text-gray-800">${pedido.nome_casal}</td>
-                        <td class="py-3 px-2 text-sm text-gray-600">${pOrigem} <span class="text-blue-600">➔</span> ${pDestino}</td>
-                        <td class="py-3 px-2"><span class="bg-yellow-100 text-yellow-800 font-semibold text-xs px-3 py-1 rounded-full border border-yellow-200">${pedido.status.replace(/_/g, ' ')}</span></td>
-                        <td class="py-3 px-2 space-x-2 whitespace-nowrap">
-                            <button onclick="abrirModal('${pedido.id}', 'Aceitar')" class="bg-green-600 text-white text-xs px-3 py-1.5 rounded hover:bg-green-700 font-medium">Aceitar</button>
-                            <button onclick="abrirModal('${pedido.id}', 'Rejeitar')" class="bg-red-600 text-white text-xs px-3 py-1.5 rounded hover:bg-red-700 font-medium">Rejeitar</button>
-                        </td>
-                    </tr>`;
+            const tbody = document.getElementById('listaPedidos'); tbody.innerHTML = ''; 
+            if (records.length === 0) { tbody.innerHTML = '<tr><td colspan="4" class="py-6 text-center text-gray-500 italic">Nenhum pedido pendente.</td></tr>'; return; }
+            records.forEach(p => {
+                const o = p.expand?.origem_paroquia_id?.nome || 'N/A'; const d = p.expand?.destino_paroquia_id?.nome || 'N/A';
+                tbody.innerHTML += `<tr class="border-b hover:bg-gray-50">
+                    <td class="py-3 px-2">${p.nome_casal}</td><td class="py-3 px-2 text-sm">${o} ➔ ${d}</td>
+                    <td class="py-3 px-2"><span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">${p.status.replace(/_/g, ' ')}</span></td>
+                    <td class="py-3 px-2 space-x-2"><button onclick="abrirModal('${p.id}', 'Aceitar')" class="bg-green-600 text-white text-xs px-3 py-1 rounded">Aceitar</button><button onclick="abrirModal('${p.id}', 'Rejeitar')" class="bg-red-600 text-white text-xs px-3 py-1 rounded">Rejeitar</button></td>
+                </tr>`;
             });
-        } catch (error) { document.getElementById('listaPedidos').innerHTML = '<tr><td colspan="4" class="text-center text-red-500">Erro.</td></tr>'; }
+        } catch (e) { document.getElementById('listaPedidos').innerHTML = '<tr><td colspan="4" class="text-center text-red-500">Erro.</td></tr>'; }
     }
 
     async function buscarPedidosConcluidos() {
-         // [Mantido igual a versão anterior]
-        const usuario = pb.authStore.model;
-        let filtro = 'status = "Concluido"';
-        if (usuario.papel === 'Admin_Paroquia') {
-            filtro += ` && (origem_paroquia_id = "${usuario.paroquia_id}" || destino_paroquia_id = "${usuario.paroquia_id}")`;
-        } else if (usuario.papel === 'Admin_Setor') {
-            filtro += ` && (origem_paroquia_id.setor_id = "${usuario.setor_id}" || destino_paroquia_id.setor_id = "${usuario.setor_id}")`;
-        }
+        const usuario = pb.authStore.model; let filtro = 'status = "Concluido"';
+        if (usuario.papel === 'Admin_Paroquia') filtro += ` && (origem_paroquia_id = "${usuario.paroquia_id}" || destino_paroquia_id = "${usuario.paroquia_id}")`;
+        else if (usuario.papel === 'Admin_Setor') filtro += ` && (origem_paroquia_id.setor_id = "${usuario.setor_id}" || destino_paroquia_id.setor_id = "${usuario.setor_id}")`;
         try {
             const records = await pb.collection('pedidos').getFullList({ filter: filtro, expand: 'origem_paroquia_id, destino_paroquia_id', sort: '-updated' });
-            const tbody = document.getElementById('listaConcluidos');
-            tbody.innerHTML = '';
-            if (records.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" class="py-6 text-center text-gray-500 italic">Nenhum pedido concluído.</td></tr>'; return;
-            }
-            records.forEach(pedido => {
-                const pOrigem = pedido.expand?.origem_paroquia_id?.nome || 'N/A';
-                const pDestino = pedido.expand?.destino_paroquia_id?.nome || 'N/A';
-                tbody.innerHTML += `
-                    <tr class="border-b hover:bg-gray-50 transition">
-                        <td class="py-3 px-2 font-medium text-gray-800">${pedido.nome_casal}</td>
-                        <td class="py-3 px-2 text-sm text-gray-600">${pOrigem} <span class="text-blue-600">➔</span> ${pDestino}</td>
-                        <td class="py-3 px-2"><span class="bg-green-100 text-green-800 font-semibold text-xs px-3 py-1 rounded-full border border-green-200">Concluído</span></td>
-                        <td class="py-3 px-2"><button onclick="buscarComprovante('${pedido.id}')" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded hover:bg-blue-700 font-medium">Ver Comprovante</button></td>
-                    </tr>`;
+            const tbody = document.getElementById('listaConcluidos'); tbody.innerHTML = '';
+            if (records.length === 0) { tbody.innerHTML = '<tr><td colspan="4" class="py-6 text-center text-gray-500 italic">Nenhum concluído.</td></tr>'; return; }
+            records.forEach(p => {
+                const o = p.expand?.origem_paroquia_id?.nome || 'N/A'; const d = p.expand?.destino_paroquia_id?.nome || 'N/A';
+                tbody.innerHTML += `<tr class="border-b hover:bg-gray-50">
+                    <td class="py-3 px-2">${p.nome_casal}</td><td class="py-3 px-2 text-sm">${o} ➔ ${d}</td>
+                    <td class="py-3 px-2"><span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Concluído</span></td>
+                    <td class="py-3 px-2"><button onclick="buscarComprovante('${p.id}')" class="bg-blue-600 text-white text-xs px-3 py-1 rounded">Ver Comprovante</button></td>
+                </tr>`;
             });
         } catch (e) {}
     }
 
     async function buscarComprovante(pedidoId) {
-        try {
-            const records = await pb.collection('historico').getFullList({ filter: `pedido_id = "${pedidoId}" && anexo != ""`, sort: '-created' });
-            if (records.length > 0) {
-                const r = records[0]; window.open(pb.files.getUrl(r, r.anexo), '_blank');
-            } else { alert("Nenhum comprovante encontrado."); }
+        try { const records = await pb.collection('historico').getFullList({ filter: `pedido_id = "${pedidoId}" && anexo != ""`, sort: '-created' });
+            if (records.length > 0) { const r = records[0]; window.open(pb.files.getUrl(r, r.anexo), '_blank'); } else alert("Sem comprovante.");
         } catch (e) { alert("Erro ao abrir."); }
     }
 
-    // --- MODAL AÇÃO PEDIDOS ---
-    function abrirModal(pedidoId, acao) {
-        document.getElementById('pedido_id_modal').value = pedidoId; document.getElementById('tipo_acao_modal').value = acao;
-        document.getElementById('tituloModal').textContent = acao === 'Aceitar' ? 'Aceitar Transferência' : 'Rejeitar Transferência';
-        const btn = document.getElementById('btnConfirmar');
-        btn.className = acao === 'Aceitar' ? 'bg-green-600 text-white px-5 py-2 rounded font-bold hover:bg-green-700' : 'bg-red-600 text-white px-5 py-2 rounded font-bold hover:bg-red-700';
+    function abrirModal(pId, acao) {
+        document.getElementById('pedido_id_modal').value = pId; document.getElementById('tipo_acao_modal').value = acao;
         document.getElementById('modalAcao').classList.remove('hidden');
     }
     function fecharModal() { document.getElementById('modalAcao').classList.add('hidden'); document.getElementById('formAcao').reset(); }
 
     document.getElementById('formAcao').addEventListener('submit', async function(e) {
         e.preventDefault();
-        const pedidoId = document.getElementById('pedido_id_modal').value;
-        const acao = document.getElementById('tipo_acao_modal').value;
-        const arquivoInput = document.getElementById('arquivo_anexo');
-        const btnConfirmar = document.getElementById('btnConfirmar');
-        
-        const pedidoAtual = await pb.collection('pedidos').getOne(pedidoId);
+        const pId = document.getElementById('pedido_id_modal').value; const acao = document.getElementById('tipo_acao_modal').value;
+        const arq = document.getElementById('arquivo_anexo'); const pAtual = await pb.collection('pedidos').getOne(pId);
         let novoStatus = '';
-
         if (acao === 'Rejeitar') novoStatus = 'Rejeitado';
         else if (acao === 'Aceitar') {
-            if (pedidoAtual.status === 'Pendente_Setor_Origem') novoStatus = 'Pendente_Setor_Destino';
-            else if (pedidoAtual.status === 'Pendente_Setor_Destino') {
-                if (arquivoInput.files.length === 0) { alert("OBRIGATÓRIO anexar o comprovante no destino!"); return; }
-                novoStatus = 'Concluido';
-            }
+            if (pAtual.status === 'Pendente_Setor_Origem') novoStatus = 'Pendente_Setor_Destino';
+            else if (pAtual.status === 'Pendente_Setor_Destino') { if (arq.files.length === 0) { alert("Anexe o comprovante!"); return; } novoStatus = 'Concluido'; }
         }
         try {
-            const formData = new FormData();
-            formData.append('pedido_id', pedidoId); formData.append('usuario_id', pb.authStore.model.id);
+            const formData = new FormData(); formData.append('pedido_id', pId); formData.append('usuario_id', pb.authStore.model.id);
             formData.append('acao', acao); formData.append('mensagem_texto', document.getElementById('mensagem_texto').value);
-            if (arquivoInput.files.length > 0) formData.append('anexo', arquivoInput.files[0]);
-
-            btnConfirmar.disabled = true; btnConfirmar.textContent = 'Processando...';
-            await pb.collection('historico').create(formData);
-            await pb.collection('pedidos').update(pedidoId, { status: novoStatus });
+            if (arq.files.length > 0) formData.append('anexo', arq.files[0]);
+            await pb.collection('historico').create(formData); await pb.collection('pedidos').update(pId, { status: novoStatus });
             alert(`Ação registrada!`); fecharModal(); buscarPedidosPendentes();
-        } catch (e) { alert("Erro ao processar."); } finally { btnConfirmar.disabled = false; btnConfirmar.textContent = 'Confirmar'; }
+        } catch (e) {}
     });
 
-
-    // ======================================================================
-    // --- NOVO: LÓGICA DE CADASTROS, LISTAGEM, EDIÇÃO E EXCLUSÃO ---
-    // ======================================================================
-
+    // --- CADASTROS BASE ---
     async function carregarListasCadastros() {
-        // 1. Carregar Setores (Para a tabela e para o select de nova paróquia)
         try {
             const setores = await pb.collection('setores').getFullList({ sort: 'nome' });
-            
-            // Preenche o Select do form de criar Paróquia
-            const selectNovo = document.getElementById('select_setor_paroquia');
-            let optionsSetor = '<option value="">Selecione um Setor</option>';
-            setores.forEach(s => optionsSetor += `<option value="${s.id}">${s.nome}</option>`);
-            selectNovo.innerHTML = optionsSetor;
-
-            // Preenche o Select do modal de Edição de Paróquia
-            document.getElementById('edit_setor_id').innerHTML = optionsSetor;
-
-            // Preenche a Tabela de Setores
-            const tbodySetores = document.getElementById('listaSetoresAdmin');
-            tbodySetores.innerHTML = '';
-            if (setores.length === 0) tbodySetores.innerHTML = '<tr><td colspan="2" class="py-4 text-center text-gray-500">Nenhum setor cadastrado.</td></tr>';
-            
-            setores.forEach(s => {
-                tbodySetores.innerHTML += `
-                    <tr class="border-b hover:bg-gray-50 transition">
-                        <td class="py-2 text-gray-800 font-medium">${s.nome}</td>
-                        <td class="py-2 text-right space-x-3">
-                            <button onclick="abrirModalEdicao('setor', '${s.id}', '${s.nome}')" class="text-blue-600 hover:text-blue-800 font-bold text-sm">Editar</button>
-                            <button onclick="excluirRegistro('setores', '${s.id}')" class="text-red-600 hover:text-red-800 font-bold text-sm">Excluir</button>
-                        </td>
-                    </tr>`;
-            });
-        } catch (error) { console.error("Erro ao listar setores", error); }
-
-        // 2. Carregar Paróquias (Para a tabela)
+            let opt = '<option value="">Selecione um Setor</option>'; setores.forEach(s => opt += `<option value="${s.id}">${s.nome}</option>`);
+            document.getElementById('select_setor_paroquia').innerHTML = opt;
+            const tSetores = document.getElementById('listaSetoresAdmin'); tSetores.innerHTML = '';
+            setores.forEach(s => tSetores.innerHTML += `<tr class="border-b"><td class="py-2">${s.nome}</td><td class="py-2 text-right"><button onclick="excluirBase('setores', '${s.id}')" class="text-red-600 text-sm">Excluir</button></td></tr>`);
+        } catch (e) {}
         try {
             const paroquias = await pb.collection('paroquias').getFullList({ sort: 'nome', expand: 'setor_id' });
-            const tbodyParoquias = document.getElementById('listaParoquiasAdmin');
-            tbodyParoquias.innerHTML = '';
-            
-            if (paroquias.length === 0) tbodyParoquias.innerHTML = '<tr><td colspan="3" class="py-4 text-center text-gray-500">Nenhuma paróquia cadastrada.</td></tr>';
-            
-            paroquias.forEach(p => {
-                const nomeDoSetor = p.expand?.setor_id?.nome || 'Sem Setor';
-                tbodyParoquias.innerHTML += `
-                    <tr class="border-b hover:bg-gray-50 transition">
-                        <td class="py-2 text-gray-800 font-medium">${p.nome}</td>
-                        <td class="py-2 text-gray-500 text-sm">${nomeDoSetor}</td>
-                        <td class="py-2 text-right space-x-3">
-                            <button onclick="abrirModalEdicao('paroquia', '${p.id}', '${p.nome}', '${p.setor_id}')" class="text-blue-600 hover:text-blue-800 font-bold text-sm">Editar</button>
-                            <button onclick="excluirRegistro('paroquias', '${p.id}')" class="text-red-600 hover:text-red-800 font-bold text-sm">Excluir</button>
-                        </td>
-                    </tr>`;
-            });
-        } catch (error) { console.error("Erro ao listar paroquias", error); }
+            const tParoquias = document.getElementById('listaParoquiasAdmin'); tParoquias.innerHTML = '';
+            paroquias.forEach(p => tParoquias.innerHTML += `<tr class="border-b"><td class="py-2">${p.nome}</td><td class="py-2"><button onclick="excluirBase('paroquias', '${p.id}')" class="text-red-600 text-sm">Excluir</button></td></tr>`);
+        } catch (e) {}
     }
 
-    // --- CADASTRAR NOVOS ---
     document.getElementById('formNovoSetor').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const nome = document.getElementById('nome_setor').value;
-        const msg = document.getElementById('msgSetor');
-        const btn = e.target.querySelector('button');
-        btn.disabled = true; btn.textContent = "Salvando...";
-        try {
-            await pb.collection('setores').create({ nome: nome });
-            msg.textContent = "Sucesso!"; msg.className = "text-sm mt-2 text-green-600 block text-center font-bold";
-            document.getElementById('formNovoSetor').reset();
-            carregarListasCadastros(); // Atualiza tabelas instantaneamente
-        } catch (error) {
-            msg.textContent = "Erro ao cadastrar."; msg.className = "text-sm mt-2 text-red-600 block text-center font-bold";
-        } finally {
-            btn.disabled = false; btn.textContent = "Salvar Setor";
-            setTimeout(() => { msg.classList.add('hidden'); msg.classList.remove('block'); }, 3000);
-        }
+        e.preventDefault(); try { await pb.collection('setores').create({ nome: document.getElementById('nome_setor').value }); document.getElementById('formNovoSetor').reset(); carregarListasCadastros(); alert("Salvo!"); } catch (e) { alert("Erro"); }
     });
-
     document.getElementById('formNovaParoquia').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const nome = document.getElementById('nome_paroquia').value;
-        const setorId = document.getElementById('select_setor_paroquia').value;
-        const msg = document.getElementById('msgParoquia');
-        const btn = e.target.querySelector('button');
-        btn.disabled = true; btn.textContent = "Salvando...";
+        e.preventDefault(); try { await pb.collection('paroquias').create({ nome: document.getElementById('nome_paroquia').value, setor_id: document.getElementById('select_setor_paroquia').value }); document.getElementById('formNovaParoquia').reset(); carregarListasCadastros(); alert("Salvo!"); } catch (e) { alert("Erro"); }
+    });
+    async function excluirBase(col, id) { if(confirm("Tem certeza?")) { try { await pb.collection(col).delete(id); carregarListasCadastros(); } catch(e) { alert("Erro ao excluir."); } } }
+
+
+    // ==========================================
+    // --- NOVA LÓGICA: GESTÃO DE ADMINISTRADORES
+    // ==========================================
+
+    async function inicializarAbaAdmins() {
+        // Carrega opções para os selects de setor e paróquia
         try {
-            await pb.collection('paroquias').create({ nome: nome, setor_id: setorId });
-            msg.textContent = "Sucesso!"; msg.className = "text-sm mt-2 text-green-600 block text-center font-bold";
-            document.getElementById('formNovaParoquia').reset();
-            carregarListasCadastros(); // Atualiza tabelas
+            const setores = await pb.collection('setores').getFullList({ sort: 'nome' });
+            let optSetor = '<option value="">Selecione o Setor</option>';
+            setores.forEach(s => optSetor += `<option value="${s.id}">${s.nome}</option>`);
+            document.getElementById('admin_setor_id').innerHTML = optSetor;
+
+            const paroquias = await pb.collection('paroquias').getFullList({ sort: 'nome' });
+            let optParoquia = '<option value="">Selecione a Paróquia</option>';
+            paroquias.forEach(p => optParoquia += `<option value="${p.id}">${p.nome}</option>`);
+            document.getElementById('admin_paroquia_id').innerHTML = optParoquia;
+        } catch (error) { console.error("Erro ao carregar selects do admin:", error); }
+
+        // Carrega a tabela de usuários
+        carregarTabelaAdmins();
+    }
+
+    function alternarCamposAdmin() {
+        const papel = document.getElementById('admin_papel').value;
+        const divSetor = document.getElementById('div_admin_setor');
+        const divParoquia = document.getElementById('div_admin_paroquia');
+        const selectSetor = document.getElementById('admin_setor_id');
+        const selectParoquia = document.getElementById('admin_paroquia_id');
+
+        if (papel === 'Admin_Setor') {
+            divSetor.classList.remove('hidden'); divParoquia.classList.add('hidden');
+            selectSetor.required = true; selectParoquia.required = false;
+            selectParoquia.value = ""; // Limpa o outro
+        } else if (papel === 'Admin_Paroquia') {
+            divParoquia.classList.remove('hidden'); divSetor.classList.add('hidden');
+            selectParoquia.required = true; selectSetor.required = false;
+            selectSetor.value = ""; // Limpa o outro
+        } else {
+            divSetor.classList.add('hidden'); divParoquia.classList.add('hidden');
+            selectSetor.required = false; selectParoquia.required = false;
+        }
+    }
+
+    // Criar Novo Administrador
+    document.getElementById('formNovoAdmin').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('btnSalvarAdmin');
+        btn.disabled = true; btn.textContent = "Salvando...";
+
+        const dados = {
+            nome_casal: document.getElementById('admin_nome').value,
+            email: document.getElementById('admin_email').value,
+            password: document.getElementById('admin_senha').value,
+            passwordConfirm: document.getElementById('admin_senha').value, // Pocketbase exige confirmação igual
+            papel: document.getElementById('admin_papel').value,
+            setor_id: document.getElementById('admin_setor_id').value || null,
+            paroquia_id: document.getElementById('admin_paroquia_id').value || null
+        };
+
+        try {
+            await pb.collection('users').create(dados);
+            alert("Administrador cadastrado com sucesso!");
+            document.getElementById('formNovoAdmin').reset();
+            alternarCamposAdmin(); // Esconde os selects novamente
+            carregarTabelaAdmins(); // Atualiza a tabela
         } catch (error) {
-            msg.textContent = "Erro ao cadastrar."; msg.className = "text-sm mt-2 text-red-600 block text-center font-bold";
+            console.error(error);
+            alert("Erro ao cadastrar administrador. Verifique se o e-mail já existe ou se a senha tem menos de 8 caracteres.");
         } finally {
-            btn.disabled = false; btn.textContent = "Salvar Paróquia";
-            setTimeout(() => { msg.classList.add('hidden'); msg.classList.remove('block'); }, 3000);
+            btn.disabled = false; btn.textContent = "Cadastrar Casal";
         }
     });
 
-    // --- EXCLUIR (Com confirmação nativa) ---
-    async function excluirRegistro(colecao, id) {
-        const item = colecao === 'setores' ? 'este Setor' : 'esta Paróquia';
-        // A função confirm() do navegador já pausa a tela e exige "OK" ou "Cancelar"
-        const confirmacao = confirm(`ATENÇÃO: Tem certeza que deseja excluir ${item}?\n\nEsta ação apagará o registro e não pode ser desfeita.`);
-        
-        if (confirmacao) {
+    // Listar Administradores
+    async function carregarTabelaAdmins() {
+        try {
+            const users = await pb.collection('users').getFullList({ sort: '-created', expand: 'setor_id, paroquia_id' });
+            const tbody = document.getElementById('listaUsuariosAdmin');
+            tbody.innerHTML = '';
+
+            if(users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center">Nenhum administrador encontrado.</td></tr>';
+                return;
+            }
+
+            users.forEach(u => {
+                let localAtuacao = '-';
+                if (u.papel === 'Admin_Setor') localAtuacao = u.expand?.setor_id?.nome || 'Setor não definido';
+                if (u.papel === 'Admin_Paroquia') localAtuacao = u.expand?.paroquia_id?.nome || 'Paróquia não definida';
+
+                tbody.innerHTML += `
+                    <tr class="border-b hover:bg-gray-50">
+                        <td class="py-3 px-2 font-medium">${u.nome_casal || '-'}</td>
+                        <td class="py-3 px-2 text-gray-600">${u.email}</td>
+                        <td class="py-3 px-2"><span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">${String(u.papel).replace(/_/g, ' ')}</span></td>
+                        <td class="py-3 px-2 text-gray-600">${localAtuacao}</td>
+                        <td class="py-3 px-2 text-right">
+                            <button onclick="excluirAdmin('${u.id}')" class="text-red-600 font-bold text-sm hover:underline">Excluir</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    // Excluir Administrador
+    async function excluirAdmin(id) {
+        if(confirm("ATENÇÃO: Deseja realmente excluir este administrador do sistema? Ele não poderá mais fazer login.")) {
             try {
-                await pb.collection(colecao).delete(id);
-                alert('Excluído com sucesso!');
-                carregarListasCadastros(); // Recarrega as tabelas para sumir o item
-            } catch(error) {
-                console.error("Erro exclusão:", error);
-                alert('Erro ao excluir. Pode haver pedidos ou usuários vinculados a este registro protegendo a exclusão.');
+                // Impede que o usuário exclua a si mesmo acidentalmente
+                if (id === pb.authStore.model.id) {
+                    alert("Você não pode excluir a sua própria conta enquanto estiver logado nela!");
+                    return;
+                }
+                await pb.collection('users').delete(id);
+                alert("Usuário excluído com sucesso.");
+                carregarTabelaAdmins();
+            } catch (error) {
+                alert("Erro ao excluir usuário.");
             }
         }
     }
-
-    // --- EDITAR (Modal) ---
-    function abrirModalEdicao(tipo, id, nome, setorId = '') {
-        document.getElementById('edit_id').value = id;
-        document.getElementById('edit_tipo').value = tipo;
-        document.getElementById('edit_nome').value = nome;
-        
-        if (tipo === 'paroquia') {
-            document.getElementById('tituloModalEdicao').textContent = 'Editar Paróquia';
-            document.getElementById('div_edit_setor').classList.remove('hidden');
-            document.getElementById('edit_setor_id').value = setorId;
-            document.getElementById('edit_setor_id').required = true;
-        } else {
-            document.getElementById('tituloModalEdicao').textContent = 'Editar Setor';
-            document.getElementById('div_edit_setor').classList.add('hidden');
-            document.getElementById('edit_setor_id').required = false;
-        }
-        document.getElementById('modalEdicao').classList.remove('hidden');
-    }
-
-    function fecharModalEdicao() {
-        document.getElementById('modalEdicao').classList.add('hidden');
-        document.getElementById('formEdicao').reset();
-    }
-
-    document.getElementById('formEdicao').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const id = document.getElementById('edit_id').value;
-        const tipo = document.getElementById('edit_tipo').value;
-        const nome = document.getElementById('edit_nome').value;
-        const btn = document.getElementById('btnSalvarEdicao');
-        
-        const dadosAtualizados = { nome: nome };
-        const colecao = tipo === 'setor' ? 'setores' : 'paroquias';
-
-        // Se for paróquia, atualiza também a qual setor ela pertence
-        if (tipo === 'paroquia') {
-            dadosAtualizados.setor_id = document.getElementById('edit_setor_id').value;
-        }
-
-        btn.disabled = true; btn.textContent = 'Salvando...';
-
-        try {
-            await pb.collection(colecao).update(id, dadosAtualizados);
-            alert('Alteração salva com sucesso!');
-            fecharModalEdicao();
-            carregarListasCadastros(); // Recarrega as tabelas com os nomes novos
-        } catch(error) {
-            console.error("Erro na edição:", error);
-            alert('Erro ao salvar alteração. Tente novamente.');
-        } finally {
-            btn.disabled = false; btn.textContent = 'Salvar Alterações';
-        }
-    });
-
 </script>
 </body>
 </html>
