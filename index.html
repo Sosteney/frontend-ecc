@@ -7,49 +7,72 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/gh/pocketbase/js-sdk@master/dist/pocketbase.umd.js"></script>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+<body class="bg-gray-100 flex flex-col min-h-screen">
 
-    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Pedido de Transferência ECC</h2>
-        
-        <form id="formPedido" class="space-y-4">
-            <div>
-                <label for="nome_casal" class="block text-sm font-medium text-gray-700">Nome do Casal</label>
-                <input type="text" id="nome_casal" required class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none">
+    <header class="bg-blue-800 text-white shadow-md">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 bg-white text-blue-800 rounded-full flex items-center justify-center font-bold">
+                    ECC
+                </div>
+                <h1 class="text-xl font-bold tracking-wide hidden sm:block">Sistema de Transferências</h1>
+                <h1 class="text-xl font-bold tracking-wide sm:hidden">Transferências</h1>
             </div>
+            <a href="admin.html" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm font-bold shadow transition flex items-center">
+                <svg class="w-4 h-4 mr-2 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                Acesso Admin
+            </a>
+        </div>
+    </header>
 
-            <div>
-                <label for="celular" class="block text-sm font-medium text-gray-700">Celular (WhatsApp)</label>
-                <input type="tel" id="celular" required maxlength="15" placeholder="(00) 00000-0000" class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none">
-            </div>
+    <main class="flex-grow flex items-center justify-center p-4">
+        <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md border-t-4 border-blue-600">
+            <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Novo Pedido</h2>
+            
+            <form id="formPedido" class="space-y-4">
+                <div>
+                    <label for="nome_casal" class="block text-sm font-medium text-gray-700">Nome do Casal</label>
+                    <input type="text" id="nome_casal" required class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
+                </div>
 
-            <div>
-                <label for="origem_id" class="block text-sm font-medium text-gray-700">Paróquia de Origem</label>
-                <select id="origem_id" required class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none">
-                    <option value="">Carregando paróquias...</option>
-                </select>
-            </div>
+                <div>
+                    <label for="celular" class="block text-sm font-medium text-gray-700">Celular (WhatsApp)</label>
+                    <input type="tel" id="celular" required maxlength="15" placeholder="(00) 00000-0000" class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
+                </div>
 
-            <div>
-                <label for="destino_id" class="block text-sm font-medium text-gray-700">Paróquia de Destino</label>
-                <select id="destino_id" required class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none">
-                    <option value="">Carregando paróquias...</option>
-                </select>
-            </div>
+                <div>
+                    <label for="origem_id" class="block text-sm font-medium text-gray-700">Paróquia de Origem</label>
+                    <select id="origem_id" required class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
+                        <option value="">Carregando paróquias...</option>
+                    </select>
+                </div>
 
-            <div>
-                <label for="anexo_pedido" class="block text-sm font-medium text-gray-700">Anexar Documento (Opcional)</label>
-                <span class="text-xs text-gray-500 block mb-1">Envie carta do pároco ou comprovante (PDF/Imagem).</span>
-                <input type="file" id="anexo_pedido" accept="image/*,.pdf" class="mt-1 w-full p-2 border border-gray-300 rounded-md cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-            </div>
+                <div>
+                    <label for="destino_id" class="block text-sm font-medium text-gray-700">Paróquia de Destino</label>
+                    <select id="destino_id" required class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
+                        <option value="">Carregando paróquias...</option>
+                    </select>
+                </div>
 
-            <button type="submit" id="btnSubmit" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition shadow">
-                Enviar Solicitação
-            </button>
-        </form>
-        
-        <div id="areaMensagem" class="mt-4 p-3 rounded hidden text-center font-medium"></div>
-    </div>
+                <div>
+                    <label for="anexo_pedido" class="block text-sm font-medium text-gray-700">Anexar Documento (Opcional)</label>
+                    <span class="text-xs text-gray-500 block mb-1">Envie carta do pároco ou comprovante (PDF/Imagem).</span>
+                    <input type="file" id="anexo_pedido" accept="image/*,.pdf" class="mt-1 w-full p-2 border border-gray-300 rounded-md cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                </div>
+
+                <button type="submit" id="btnSubmit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded hover:bg-blue-700 transition shadow-md mt-2">
+                    Enviar Solicitação
+                </button>
+            </form>
+            
+            <div id="areaMensagem" class="mt-4 p-3 rounded hidden text-center font-medium"></div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-gray-300 py-6 text-center text-sm">
+        <p>&copy; 2026 Encontro de Casais com Cristo (ECC) - Arquidiocese de Natal</p>
+        <p class="text-gray-500 mt-1 text-xs">Sistema de Gestão de Transferências</p>
+    </footer>
 
     <script>
         const pb = new PocketBase('https://pb.eccnatal.com.br');
@@ -92,7 +115,6 @@
                 btnSubmit.disabled = true; btnSubmit.textContent = "Enviando... Aguarde...";
                 btnSubmit.classList.add('opacity-75', 'cursor-not-allowed');
 
-                // Usando FormData para enviar textos e arquivos juntos
                 const formData = new FormData();
                 formData.append('nome_casal', document.getElementById('nome_casal').value);
                 formData.append('celular', document.getElementById('celular').value);
@@ -100,16 +122,14 @@
                 formData.append('destino_paroquia_id', destinoId);
                 formData.append('status', 'Pendente_Setor_Origem');
 
-                if (arquivoInput.files.length > 0) {
-                    formData.append('anexo', arquivoInput.files[0]);
-                }
+                if (arquivoInput.files.length > 0) formData.append('anexo', arquivoInput.files[0]);
 
                 await pb.collection('pedidos').create(formData);
                 
-                mostrarMensagem("Pedido enviado com sucesso! Aguarde o contato do seu Setor.", "sucesso");
+                mostrarMensagem("Pedido enviado com sucesso! Aguarde o contato.", "sucesso");
                 document.getElementById('formPedido').reset();
             } catch (error) {
-                console.error(error); mostrarMensagem("Erro ao enviar pedido. Verifique o tamanho do arquivo ou a conexão.", "erro");
+                console.error(error); mostrarMensagem("Erro ao enviar pedido. Verifique o tamanho do arquivo.", "erro");
             } finally {
                 btnSubmit.disabled = false; btnSubmit.textContent = "Enviar Solicitação";
                 btnSubmit.classList.remove('opacity-75', 'cursor-not-allowed');
