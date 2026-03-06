@@ -121,7 +121,7 @@
                             <div class="overflow-x-auto rounded-xl border border-slate-200">
                                 <table class="w-full text-left text-sm min-w-max">
                                     <thead class="bg-slate-100 text-slate-600 uppercase tracking-wider text-xs font-bold">
-                                        <tr><th class="py-4 px-5">Casal</th><th class="py-4 px-5">Origem ➔ Destino</th><th class="py-4 px-5">Status Atual</th><th id="thAcoesPedidos" class="py-4 px-5 text-right">Ações</th></tr>
+                                        <tr><th class="py-4 px-5">Casal / Documento</th><th class="py-4 px-5">Origem ➔ Destino</th><th class="py-4 px-5">Status Atual</th><th id="thAcoesPedidos" class="py-4 px-5 text-right">Ações</th></tr>
                                     </thead>
                                     <tbody id="listaPedidos" class="divide-y divide-slate-100">
                                         <tr><td colspan="4" class="py-8 text-center text-slate-500 italic">Buscando pedidos...</td></tr>
@@ -365,7 +365,7 @@
         mudarAbaPrincipal('visao');
     }
 
-    // Navegação Principal Estável com Pílula
+    // Navegação Principal Estável
     function mudarAbaPrincipal(idAba) {
         document.querySelectorAll('#menuAbas button').forEach(btn => { 
             btn.classList.remove('bg-white', 'shadow-sm', 'text-blue-800', 'font-bold'); 
@@ -386,7 +386,7 @@
         else if (idAba === 'admins') inicializarAbaAdmins();
     }
 
-    // Navegação Secundária (Sub-Abas) Estável
+    // Navegação Secundária Estável
     function mudarSubAbaPedidos(aba) {
         subAbaPedidosAtual = aba;
         document.querySelectorAll('.sub-aba-pedidos').forEach(el => el.classList.add('hidden'));
@@ -423,7 +423,6 @@
         }
     }
 
-
     // --- DASHBOARD BLINDADO ---
     async function carregarDashboard() {
         const usuario = pb.authStore.model; const papel = getPapelSeguro(usuario);
@@ -449,7 +448,6 @@
             });
         } catch (e) {}
     }
-
 
     // --- FILTROS DE PEDIDOS ---
     async function inicializarFiltros() {
@@ -488,9 +486,12 @@
             if (records.length === 0) { tbody.innerHTML = '<tr><td colspan="4" class="py-8 text-center text-slate-500 italic">Nenhum pedido encontrado com este filtro.</td></tr>'; return; }
             records.forEach(p => {
                 const o = p.expand?.origem_paroquia_id?.nome || 'N/A'; const d = p.expand?.destino_paroquia_id?.nome || 'N/A';
-                let linkAnexo = p.anexo ? `<br><a href="${pb.files.getUrl(p, p.anexo)}" target="_blank" class="inline-flex items-center mt-1 text-xs text-blue-600 font-bold hover:underline bg-blue-50 px-2 py-1 rounded">📎 Ver Anexo</a>` : '';
-                let botoesHtml = mostrarAcoes ? `<td class="py-4 px-5 space-x-2 whitespace-nowrap text-right"><button onclick="abrirModal('${p.id}', 'Aceitar')" class="bg-green-600 text-white text-xs px-3 py-1.5 rounded-md hover:bg-green-700 transition shadow font-bold">Aceitar</button><button onclick="abrirModal('${p.id}', 'Rejeitar')" class="bg-red-600 text-white text-xs px-3 py-1.5 rounded-md hover:bg-red-700 transition shadow font-bold">Rejeitar</button></td>` : '';
-                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition-colors"><td class="py-4 px-5 font-bold text-slate-800">${p.nome_casal} ${linkAnexo}</td><td class="py-4 px-5 text-sm text-slate-600">${o} <span class="text-blue-600 font-bold mx-1">➔</span> ${d}</td><td class="py-4 px-5"><span class="bg-amber-100 text-amber-800 font-bold text-xs px-3 py-1 rounded-full">${p.status.replace(/_/g, ' ')}</span></td>${botoesHtml}</tr>`;
+                
+                // NOVO CÓDIGO DO BOTÃO DE ANEXO BLINDADO
+                let linkAnexo = (p.anexo && p.anexo.length > 0) ? `<div class="mt-2.5"><a href="${pb.files.getUrl(p, p.anexo)}" target="_blank" class="inline-flex items-center justify-center bg-slate-200 text-slate-700 text-xs px-3 py-1.5 rounded-md hover:bg-slate-300 transition-colors shadow-sm font-bold border border-slate-300"><svg class="w-3.5 h-3.5 mr-1.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>Ver Documento</a></div>` : '';
+                
+                let botoesHtml = mostrarAcoes ? `<td class="py-4 px-5 space-x-2 whitespace-nowrap text-right align-top"><button onclick="abrirModal('${p.id}', 'Aceitar')" class="bg-green-600 text-white text-xs px-3 py-1.5 rounded-md hover:bg-green-700 transition shadow font-bold">Aceitar</button><button onclick="abrirModal('${p.id}', 'Rejeitar')" class="bg-red-600 text-white text-xs px-3 py-1.5 rounded-md hover:bg-red-700 transition shadow font-bold">Rejeitar</button></td>` : '';
+                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition-colors"><td class="py-4 px-5 font-bold text-slate-800 align-top">${p.nome_casal} ${linkAnexo}</td><td class="py-4 px-5 text-sm text-slate-600 align-top">${o} <span class="text-blue-600 font-bold mx-1">➔</span> ${d}</td><td class="py-4 px-5 align-top"><span class="bg-amber-100 text-amber-800 font-bold text-xs px-3 py-1 rounded-full">${p.status.replace(/_/g, ' ')}</span></td>${botoesHtml}</tr>`;
             });
         } catch (e) { document.getElementById('listaPedidos').innerHTML = '<tr><td colspan="4" class="py-8 text-center text-red-500 font-bold">Erro de conexão com a base de dados.</td></tr>'; }
     }
