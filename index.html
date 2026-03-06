@@ -158,7 +158,11 @@
                 if (paroquias.length === 0) {
                     options = '<option value="">Nenhuma paróquia neste setor</option>';
                 } else {
-                    paroquias.forEach(p => { options += `<option value="${p.id}">${p.nome}</option>`; });
+                    paroquias.forEach(p => { 
+                        // Se houver cidade cadastrada, anexa com um traço
+                        const infoCidade = p.cidade ? ` - ${p.cidade}` : '';
+                        options += `<option value="${p.id}">${p.nome}${infoCidade}</option>`; 
+                    });
                     selectParoquia.disabled = false;
                     selectParoquia.classList.remove('bg-gray-100', 'cursor-not-allowed');
                     selectParoquia.classList.add('bg-white');
@@ -189,7 +193,11 @@
                 if (paroquias.length === 0) {
                     options = '<option value="">Nenhuma paróquia neste setor</option>';
                 } else {
-                    paroquias.forEach(p => { options += `<option value="${p.id}">${p.nome}</option>`; });
+                    paroquias.forEach(p => { 
+                        // Se houver cidade cadastrada, anexa com um traço
+                        const infoCidade = p.cidade ? ` - ${p.cidade}` : '';
+                        options += `<option value="${p.id}">${p.nome}${infoCidade}</option>`; 
+                    });
                     selectParoquia.disabled = false;
                     selectParoquia.classList.remove('bg-gray-100', 'cursor-not-allowed');
                     selectParoquia.classList.add('bg-white');
