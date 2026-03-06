@@ -339,8 +339,33 @@
 
     document.getElementById('formNovoSetor').addEventListener('submit', async function(e) { e.preventDefault(); try { await pb.collection('setores').create({ nome: document.getElementById('nome_setor').value }); document.getElementById('formNovoSetor').reset(); carregarListasCadastros(); alert("Setor salvo!"); } catch (e) { alert("Erro ao salvar."); } });
     document.getElementById('formNovaParoquia').addEventListener('submit', async function(e) { e.preventDefault(); try { await pb.collection('paroquias').create({ nome: document.getElementById('nome_paroquia').value, setor_id: document.getElementById('select_setor_paroquia').value }); document.getElementById('formNovaParoquia').reset(); carregarListasCadastros(); alert("Paróquia salva!"); } catch (e) { alert("Erro ao salvar."); } });
-    async function excluirBase(col, id) { if(confirm("Tem certeza que deseja excluir?")) { try { await pb.collection(col).delete(id); carregarListasCadastros(); } catch(e) { alert("Erro ao excluir. Pode haver registros vinculados."); } } }
+   // --- FUNÇÃO DE EXCLUSÃO COM TRAVA DE SEGURANÇA ---
+    async function excluirBase(col, id) { 
+        if(confirm("Tem certeza que deseja excluir este item?")) { 
+            try { 
+                // Trava de segurança: Se for um Setor, verifica se há paróquias órfãs
+                if (col === 'setores') {
+                    // Busca apenas 1 registro para ver se existe algum vinculado
+                    const paroquiasVinculadas = await pb.collection('paroquias').getList(1, 1, {
+                        filter: `setor_id = "${id}"`
+                    });
+                    
+                    if (paroquiasVinculadas.totalItems > 0) {
+                        alert(`⛔ Operação bloqueada!\n\nVocê não pode excluir este Setor porque existem paróquias vinculadas a ele.\n\nPor favor, mude o setor dessas paróquias ou exclua-as primeiro.`);
+                        return; // Para o código aqui e não deleta
+                    }
+                }
 
+                // Se passou pela trava (ou se for paróquia), deleta normalmente
+                await pb.collection(col).delete(id); 
+                carregarListasCadastros(); 
+                alert("Excluído com sucesso!");
+
+            } catch(e) { 
+                alert("Erro ao tentar excluir o registro da base de dados."); 
+            } 
+        } 
+    }
     // Modal de Edição de Cadastros Base
     function abrirModalEdicao(tipo, id, nome, setorId = '') {
         document.getElementById('edit_id').value = id; document.getElementById('edit_tipo').value = tipo; document.getElementById('edit_nome').value = nome;
