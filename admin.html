@@ -87,7 +87,7 @@
                             </div>
                         </div>
 
-                        <div class="bg-slate-50 rounded-2xl border border-slate-100 p-6 max-w-4xl mx-auto shadow-inner">
+                        <div class="bg-slate-50 rounded-2xl border border-slate-100 p-6 w-full mx-auto shadow-inner">
                             <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-6 text-center">Proporção de Status dos Pedidos</h3>
                             <div class="relative h-72 w-full flex justify-center">
                                 <canvas id="graficoStatus"></canvas>
@@ -102,7 +102,7 @@
                             <button id="btnSubAbaConcluidos" onclick="mudarSubAbaPedidos('concluidos')" class="btn-sub-pedidos pb-3 border-b-2 text-sm uppercase tracking-wide font-bold focus:outline-none transition-colors">Concluídas</button>
                         </div>
 
-                        <div id="areaFiltrosPedidos" class="bg-slate-50 p-5 rounded-xl border border-slate-200 mb-6 flex flex-col md:flex-row gap-4 items-end">
+                        <div id="areaFiltrosPedidos" class="bg-slate-50 p-5 rounded-xl border border-slate-200 mb-6 flex flex-col md:flex-row gap-4 items-end w-full">
                             <div id="boxFiltroSetor" class="flex-1 w-full">
                                 <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Filtrar por Setor</label>
                                 <select id="filtro_setor" onchange="aoMudarFiltroSetor()" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 transition-shadow text-sm font-medium">
@@ -117,8 +117,8 @@
                             </div>
                         </div>
 
-                        <div id="subAbaAndamento" class="sub-aba-pedidos">
-                            <div class="overflow-x-auto rounded-xl border border-slate-200">
+                        <div id="subAbaAndamento" class="sub-aba-pedidos w-full">
+                            <div class="overflow-x-auto rounded-xl border border-slate-200 w-full">
                                 <table class="w-full text-left text-sm min-w-max">
                                     <thead class="bg-slate-100 text-slate-600 uppercase tracking-wider text-xs font-bold">
                                         <tr><th class="py-4 px-5">Casal / Documento</th><th class="py-4 px-5">Origem ➔ Destino</th><th class="py-4 px-5">Status Atual</th><th id="thAcoesPedidos" class="py-4 px-5 text-right">Ações</th></tr>
@@ -130,8 +130,8 @@
                             </div>
                         </div>
 
-                        <div id="subAbaConcluidos" class="sub-aba-pedidos hidden">
-                            <div class="overflow-x-auto rounded-xl border border-slate-200">
+                        <div id="subAbaConcluidos" class="sub-aba-pedidos hidden w-full">
+                            <div class="overflow-x-auto rounded-xl border border-slate-200 w-full">
                                 <table class="w-full text-left text-sm min-w-max">
                                     <thead class="bg-slate-100 text-slate-600 uppercase tracking-wider text-xs font-bold">
                                         <tr><th class="py-4 px-5">Casal</th><th class="py-4 px-5">Origem ➔ Destino</th><th class="py-4 px-5">Status Final</th><th class="py-4 px-5 text-right">Comprovante</th></tr>
@@ -144,23 +144,23 @@
                         </div>
                     </div>
 
-                    <div id="abaPrincipalCadastros" class="aba-principal hidden">
+                    <div id="abaPrincipalCadastros" class="aba-principal hidden w-full">
                         
                         <div class="flex border-b border-slate-200 mb-6 space-x-6 px-2">
                             <button id="btnSubAbaSetores" onclick="mudarSubAbaLocais('setores')" class="btn-sub-locais pb-3 border-b-2 text-sm uppercase tracking-wide font-bold focus:outline-none transition-colors">Setores</button>
                             <button id="btnSubAbaParoquias" onclick="mudarSubAbaLocais('paroquias')" class="btn-sub-locais pb-3 border-b-2 text-sm uppercase tracking-wide font-bold focus:outline-none transition-colors">Paróquias</button>
                         </div>
 
-                        <div id="subAbaSetores" class="sub-aba-locais">
-                            <div id="divFormNovoSetor" class="bg-slate-50 rounded-xl border border-slate-200 p-6 mb-8 max-w-xl hidden">
+                        <div id="subAbaSetores" class="sub-aba-locais w-full">
+                            <div id="divFormNovoSetor" class="bg-slate-50 rounded-xl border border-slate-200 p-6 mb-8 w-full hidden">
                                 <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Cadastrar Novo Setor</h3>
                                 <form id="formNovoSetor" class="flex gap-4">
                                     <input type="text" id="nome_setor" required placeholder="Ex: Setor Sul" class="flex-1 p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow">
-                                    <button type="submit" class="bg-blue-600 text-white font-bold py-2.5 px-6 rounded-lg hover:bg-blue-700 transition shadow">Salvar</button>
+                                    <button type="submit" class="bg-blue-600 text-white font-bold py-2.5 px-8 rounded-lg hover:bg-blue-700 transition shadow">Salvar Setor</button>
                                 </form>
                             </div>
-                            <div class="overflow-hidden rounded-xl border border-slate-200 max-w-3xl">
-                                <table class="w-full text-left text-sm">
+                            <div class="overflow-x-auto rounded-xl border border-slate-200 w-full">
+                                <table class="w-full text-left text-sm min-w-max">
                                     <thead class="bg-slate-100 text-slate-600 uppercase tracking-wider text-xs font-bold">
                                         <tr><th class="py-4 px-5">Nome do Setor</th><th class="py-4 px-5 text-right">Ações</th></tr>
                                     </thead>
@@ -169,8 +169,8 @@
                             </div>
                         </div>
 
-                        <div id="subAbaParoquias" class="sub-aba-locais hidden">
-                            <div id="divFormNovaParoquia" class="bg-slate-50 rounded-xl border border-slate-200 p-6 mb-8 max-w-4xl hidden">
+                        <div id="subAbaParoquias" class="sub-aba-locais hidden w-full">
+                            <div id="divFormNovaParoquia" class="bg-slate-50 rounded-xl border border-slate-200 p-6 mb-8 w-full hidden">
                                 <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Cadastrar Nova Paróquia</h3>
                                 <form id="formNovaParoquia" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
                                     <div class="md:col-span-2">
@@ -191,8 +191,8 @@
                                 </form>
                             </div>
 
-                            <div class="overflow-hidden rounded-xl border border-slate-200 max-w-5xl">
-                                <table class="w-full text-left text-sm">
+                            <div class="overflow-x-auto rounded-xl border border-slate-200 w-full">
+                                <table class="w-full text-left text-sm min-w-max">
                                     <thead class="bg-slate-100 text-slate-600 uppercase tracking-wider text-xs font-bold">
                                         <tr>
                                             <th class="py-4 px-5">Nome da Paróquia</th>
@@ -207,8 +207,8 @@
                         </div>
                     </div>
 
-                    <div id="abaPrincipalAdmins" class="aba-principal hidden">
-                        <div class="bg-slate-50 rounded-xl border border-slate-200 p-6 mb-8 max-w-4xl">
+                    <div id="abaPrincipalAdmins" class="aba-principal hidden w-full">
+                        <div class="bg-slate-50 rounded-xl border border-slate-200 p-6 mb-8 w-full">
                             <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-5">Conceder Novo Acesso</h3>
                             <form id="formNovoAdmin" class="space-y-4">
                                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -223,7 +223,7 @@
                             </form>
                         </div>
                         
-                        <div class="overflow-x-auto rounded-xl border border-slate-200">
+                        <div class="overflow-x-auto rounded-xl border border-slate-200 w-full">
                             <table class="w-full text-left text-sm min-w-max">
                                 <thead class="bg-slate-100 text-slate-600 uppercase tracking-wider text-xs font-bold">
                                     <tr><th class="py-4 px-5">Casal</th><th class="py-4 px-5">E-mail</th><th class="py-4 px-5">Nível de Acesso</th><th class="py-4 px-5">Local Vinculado</th><th id="thAcoesAdmin" class="py-4 px-5 text-right">Ações</th></tr>
@@ -233,10 +233,10 @@
                         </div>
                     </div>
 
-                    <div id="abaPrincipalExportacao" class="aba-principal hidden">
+                    <div id="abaPrincipalExportacao" class="aba-principal hidden w-full">
                         <h2 class="text-xl font-extrabold text-slate-800 mb-6 border-b border-slate-100 pb-4">Exportação de Dados (CSV / Excel)</h2>
                         
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mt-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full mt-6">
                             <div class="bg-slate-50 rounded-2xl border border-slate-200 p-8 flex flex-col justify-between shadow-sm">
                                 <div>
                                     <h3 class="text-lg font-bold text-slate-800 mb-2">Todas as Transferências</h3>
@@ -265,7 +265,7 @@
         </div>
     </main>
 
-    <footer class="bg-slate-900 text-slate-400 py-8 text-center text-sm mt-auto shadow-inner">
+    <footer class="bg-slate-900 text-slate-400 py-8 text-center text-sm mt-auto shadow-inner w-full">
         <p>&copy; 2026 Encontro de Casais com Cristo (ECC) - Arquidiocese de Natal</p>
         <p class="text-slate-500 mt-2 text-xs font-semibold tracking-wider uppercase">Área Administrativa Restrita</p>
     </footer>
@@ -365,7 +365,6 @@
         mudarAbaPrincipal('visao');
     }
 
-    // Navegação Principal Estável
     function mudarAbaPrincipal(idAba) {
         document.querySelectorAll('#menuAbas button').forEach(btn => { 
             btn.classList.remove('bg-white', 'shadow-sm', 'text-blue-800', 'font-bold'); 
@@ -386,7 +385,6 @@
         else if (idAba === 'admins') inicializarAbaAdmins();
     }
 
-    // Navegação Secundária Estável
     function mudarSubAbaPedidos(aba) {
         subAbaPedidosAtual = aba;
         document.querySelectorAll('.sub-aba-pedidos').forEach(el => el.classList.add('hidden'));
@@ -423,7 +421,8 @@
         }
     }
 
-    // --- DASHBOARD BLINDADO ---
+
+    // --- DASHBOARD ---
     async function carregarDashboard() {
         const usuario = pb.authStore.model; const papel = getPapelSeguro(usuario);
         let fParoquias = ''; let fPedidos = '';
@@ -448,6 +447,7 @@
             });
         } catch (e) {}
     }
+
 
     // --- FILTROS DE PEDIDOS ---
     async function inicializarFiltros() {
@@ -487,7 +487,6 @@
             records.forEach(p => {
                 const o = p.expand?.origem_paroquia_id?.nome || 'N/A'; const d = p.expand?.destino_paroquia_id?.nome || 'N/A';
                 
-                // NOVO CÓDIGO DO BOTÃO DE ANEXO BLINDADO
                 let linkAnexo = (p.anexo && p.anexo.length > 0) ? `<div class="mt-2.5"><a href="${pb.files.getUrl(p, p.anexo)}" target="_blank" class="inline-flex items-center justify-center bg-slate-200 text-slate-700 text-xs px-3 py-1.5 rounded-md hover:bg-slate-300 transition-colors shadow-sm font-bold border border-slate-300"><svg class="w-3.5 h-3.5 mr-1.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>Ver Documento</a></div>` : '';
                 
                 let botoesHtml = mostrarAcoes ? `<td class="py-4 px-5 space-x-2 whitespace-nowrap text-right align-top"><button onclick="abrirModal('${p.id}', 'Aceitar')" class="bg-green-600 text-white text-xs px-3 py-1.5 rounded-md hover:bg-green-700 transition shadow font-bold">Aceitar</button><button onclick="abrirModal('${p.id}', 'Rejeitar')" class="bg-red-600 text-white text-xs px-3 py-1.5 rounded-md hover:bg-red-700 transition shadow font-bold">Rejeitar</button></td>` : '';
@@ -518,7 +517,7 @@
     function fecharModal() { document.getElementById('modalAcao').classList.add('hidden'); document.getElementById('formAcao').reset(); }
     document.getElementById('formAcao').addEventListener('submit', async function(e) { e.preventDefault(); const pId = document.getElementById('pedido_id_modal').value; const acao = document.getElementById('tipo_acao_modal').value; const arq = document.getElementById('arquivo_anexo'); const pAtual = await pb.collection('pedidos').getOne(pId); let novoStatus = ''; if (acao === 'Rejeitar') novoStatus = 'Rejeitado'; else if (acao === 'Aceitar') { if (pAtual.status === 'Pendente_Setor_Origem') novoStatus = 'Pendente_Setor_Destino'; else if (pAtual.status === 'Pendente_Setor_Destino') { if (arq.files.length === 0) { alert("ATENÇÃO: É OBRIGATÓRIO anexar o comprovante na paróquia de destino!"); return; } novoStatus = 'Concluido'; } } try { const formData = new FormData(); formData.append('pedido_id', pId); formData.append('usuario_id', pb.authStore.model.id); formData.append('acao', acao); formData.append('mensagem_texto', document.getElementById('mensagem_texto').value); if (arq.files.length > 0) formData.append('anexo', arq.files[0]); await pb.collection('historico').create(formData); await pb.collection('pedidos').update(pId, { status: novoStatus }); fecharModal(); buscarPedidosPendentes(); carregarDashboard(); } catch (e) {} });
 
-    // --- LOCAIS BASE (COM CIDADE) ---
+    // --- LOCAIS BASE (AGORA COM LARGURA 100%) ---
     async function carregarListasCadastros() {
         const isMaster = (getPapelSeguro(pb.authStore.model) === 'Master');
         if (isMaster) { document.getElementById('divFormNovoSetor').classList.remove('hidden'); document.getElementById('divFormNovaParoquia').classList.remove('hidden'); } 
