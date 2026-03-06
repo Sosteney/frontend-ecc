@@ -7,18 +7,18 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/gh/pocketbase/js-sdk@master/dist/pocketbase.umd.js"></script>
 </head>
-<body class="bg-gray-50 flex flex-col min-h-screen overflow-y-scroll">
+<body class="bg-slate-100 flex flex-col min-h-screen overflow-y-scroll font-sans text-slate-800">
 
-    <header class="bg-blue-800 text-white shadow-md">
-        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+    <header class="bg-gradient-to-r from-blue-900 to-blue-800 text-white shadow-md relative z-10">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center max-w-7xl">
             <div class="flex items-center space-x-4">
-                <img src="brasao.png" alt="Brasão ECC" class="w-12 h-12 object-contain">
+                <img src="brasao.png" alt="Brasão ECC" class="w-12 h-12 object-contain drop-shadow-sm">
                 <div>
                     <h1 class="text-xl font-bold tracking-wide">Sistema de Transferências</h1>
-                    <p class="text-xs text-blue-200 -mt-1 hidden sm:block">Encontro de Casais com Cristo</p>
+                    <p class="text-xs text-blue-200 -mt-0.5 hidden sm:block font-medium">Encontro de Casais com Cristo</p>
                 </div>
             </div>
-            <a href="admin.html" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm font-bold shadow transition flex items-center">
+            <a href="admin.html" class="bg-blue-950/50 hover:bg-blue-900 border border-blue-700/50 px-4 py-2 rounded-full text-sm font-bold shadow transition-all flex items-center text-blue-50">
                 <svg class="w-4 h-4 mr-2 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                 Acesso Admin
             </a>
@@ -26,86 +26,90 @@
     </header>
 
     <main class="flex-grow flex items-center justify-center p-4">
-        <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-xl border-t-4 border-blue-600 my-8">
-            <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Novo Pedido de Transferência</h2>
+        <div class="bg-white p-8 md:p-10 rounded-3xl shadow-xl w-full max-w-2xl border-t-4 border-blue-600 my-8">
             
-            <form id="formPedido" class="space-y-6">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-extrabold text-slate-800">Novo Pedido de Transferência</h2>
+                <p class="text-slate-500 mt-2 font-medium">Preencha os dados do casal abaixo para iniciar o processo.</p>
+            </div>
+            
+            <form id="formPedido" class="space-y-8">
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div>
-                        <label for="nome_casal" class="block text-sm font-bold text-gray-700">Nome do Casal</label>
-                        <input type="text" id="nome_casal" required placeholder="Ex: João e Maria" class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
+                        <label for="nome_casal" class="block text-sm font-bold text-slate-600 mb-1.5 uppercase tracking-wide">Nome do Casal</label>
+                        <input type="text" id="nome_casal" required placeholder="Ex: João e Maria" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl outline-none focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-slate-700 font-medium">
                     </div>
                     <div>
-                        <label for="celular" class="block text-sm font-bold text-gray-700">Celular (WhatsApp)</label>
-                        <input type="tel" id="celular" required maxlength="15" placeholder="(00) 00000-0000" class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
+                        <label for="celular" class="block text-sm font-bold text-slate-600 mb-1.5 uppercase tracking-wide">Celular (WhatsApp)</label>
+                        <input type="tel" id="celular" required maxlength="15" placeholder="(00) 00000-0000" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl outline-none focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-slate-700 font-medium">
                     </div>
                 </div>
 
-                <hr class="border-gray-200">
+                <hr class="border-slate-100">
 
-                <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
-                    <h3 class="text-blue-800 font-bold mb-3 flex items-center">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                <div class="bg-blue-50/50 p-6 rounded-2xl border border-blue-100 shadow-sm">
+                    <h3 class="text-blue-700 font-extrabold mb-4 flex items-center text-lg">
+                        <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                         Paróquia de Origem (Saída)
                     </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">1. Selecione o Setor</label>
-                            <select id="setor_origem" onchange="carregarParoquiasOrigem()" required class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition bg-white">
+                            <label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase tracking-wide">1. Selecione o Setor</label>
+                            <select id="setor_origem" onchange="carregarParoquiasOrigem()" required class="w-full p-3 bg-white border border-slate-300 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition-shadow text-slate-700 font-medium">
                                 <option value="">Carregando setores...</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">2. Selecione a Paróquia</label>
-                            <select id="origem_id" required disabled class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition bg-gray-100 cursor-not-allowed">
+                            <label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase tracking-wide">2. Selecione a Paróquia</label>
+                            <select id="origem_id" required disabled class="w-full p-3 bg-slate-100 text-slate-400 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition-all cursor-not-allowed font-medium">
                                 <option value="">Escolha um setor primeiro...</option>
                             </select>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-green-50 p-4 rounded-lg border border-green-100">
-                    <h3 class="text-green-800 font-bold mb-3 flex items-center">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                <div class="bg-emerald-50/50 p-6 rounded-2xl border border-emerald-100 shadow-sm">
+                    <h3 class="text-emerald-700 font-extrabold mb-4 flex items-center text-lg">
+                        <svg class="w-5 h-5 mr-2 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                         Paróquia de Destino (Chegada)
                     </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">1. Selecione o Setor</label>
-                            <select id="setor_destino" onchange="carregarParoquiasDestino()" required class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition bg-white">
+                            <label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase tracking-wide">1. Selecione o Setor</label>
+                            <select id="setor_destino" onchange="carregarParoquiasDestino()" required class="w-full p-3 bg-white border border-slate-300 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 transition-shadow text-slate-700 font-medium">
                                 <option value="">Carregando setores...</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">2. Selecione a Paróquia</label>
-                            <select id="destino_id" required disabled class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition bg-gray-100 cursor-not-allowed">
+                            <label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase tracking-wide">2. Selecione a Paróquia</label>
+                            <select id="destino_id" required disabled class="w-full p-3 bg-slate-100 text-slate-400 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 transition-all cursor-not-allowed font-medium">
                                 <option value="">Escolha um setor primeiro...</option>
                             </select>
                         </div>
                     </div>
                 </div>
 
-                <hr class="border-gray-200">
+                <hr class="border-slate-100">
 
                 <div>
-                    <label for="anexo_pedido" class="block text-sm font-bold text-gray-700">Anexar Documento (Opcional)</label>
-                    <span class="text-xs text-gray-500 block mb-2">Envie carta do pároco, justificativa ou comprovante (Apenas PDF ou Imagem).</span>
-                    <input type="file" id="anexo_pedido" accept="image/*,.pdf" class="w-full p-2 border border-gray-300 rounded-md cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-bold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200 transition bg-white">
+                    <label for="anexo_pedido" class="block text-sm font-bold text-slate-600 mb-1.5 uppercase tracking-wide">Anexar Documento (Opcional)</label>
+                    <span class="text-sm text-slate-500 block mb-3">Envie carta do pároco, justificativa ou comprovante (PDF ou Imagem).</span>
+                    <input type="file" id="anexo_pedido" accept="image/*,.pdf" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200 transition-all text-slate-600">
                 </div>
 
-                <button type="submit" id="btnSubmit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded hover:bg-blue-700 transition shadow-lg text-lg">
+                <button type="submit" id="btnSubmit" class="w-full bg-blue-700 text-white font-extrabold py-4 px-4 rounded-xl hover:bg-blue-800 transition-all shadow-md hover:shadow-lg text-lg transform hover:-translate-y-0.5">
                     Enviar Solicitação
                 </button>
             </form>
             
-            <div id="areaMensagem" class="mt-6 p-4 rounded hidden text-center font-bold text-lg shadow-sm"></div>
+            <div id="areaMensagem" class="mt-6 p-4 rounded-xl hidden text-center font-bold text-lg shadow-sm border"></div>
         </div>
     </main>
 
-    <footer class="bg-gray-800 text-gray-300 py-6 text-center text-sm mt-auto">
+    <footer class="bg-slate-900 text-slate-400 py-8 text-center text-sm mt-auto shadow-inner">
         <p>&copy; 2026 Encontro de Casais com Cristo (ECC) - Arquidiocese de Natal</p>
-        <p class="text-gray-500 mt-1 text-xs">Sistema de Gestão de Transferências</p>
+        <p class="text-slate-500 mt-2 text-xs font-semibold tracking-wider uppercase">Sistema de Gestão de Transferências</p>
     </footer>
 
     <script>
@@ -144,11 +148,12 @@
             if (!setorId) {
                 selectParoquia.innerHTML = '<option value="">Escolha um setor primeiro...</option>';
                 selectParoquia.disabled = true;
-                selectParoquia.classList.add('bg-gray-100', 'cursor-not-allowed');
+                selectParoquia.classList.add('bg-slate-100', 'text-slate-400', 'cursor-not-allowed', 'border-slate-200');
+                selectParoquia.classList.remove('bg-white', 'text-slate-700', 'border-slate-300');
                 return;
             }
 
-            selectParoquia.innerHTML = '<option value="">Buscando...</option>';
+            selectParoquia.innerHTML = '<option value="">Buscando paróquias...</option>';
             selectParoquia.disabled = true;
 
             try {
@@ -159,13 +164,12 @@
                     options = '<option value="">Nenhuma paróquia neste setor</option>';
                 } else {
                     paroquias.forEach(p => { 
-                        // Se houver cidade cadastrada, anexa com um traço
                         const infoCidade = p.cidade ? ` - ${p.cidade}` : '';
                         options += `<option value="${p.id}">${p.nome}${infoCidade}</option>`; 
                     });
                     selectParoquia.disabled = false;
-                    selectParoquia.classList.remove('bg-gray-100', 'cursor-not-allowed');
-                    selectParoquia.classList.add('bg-white');
+                    selectParoquia.classList.remove('bg-slate-100', 'text-slate-400', 'cursor-not-allowed', 'border-slate-200');
+                    selectParoquia.classList.add('bg-white', 'text-slate-700', 'border-slate-300');
                 }
                 selectParoquia.innerHTML = options;
             } catch (error) { selectParoquia.innerHTML = '<option value="">Erro ao buscar</option>'; }
@@ -179,11 +183,12 @@
             if (!setorId) {
                 selectParoquia.innerHTML = '<option value="">Escolha um setor primeiro...</option>';
                 selectParoquia.disabled = true;
-                selectParoquia.classList.add('bg-gray-100', 'cursor-not-allowed');
+                selectParoquia.classList.add('bg-slate-100', 'text-slate-400', 'cursor-not-allowed', 'border-slate-200');
+                selectParoquia.classList.remove('bg-white', 'text-slate-700', 'border-slate-300');
                 return;
             }
 
-            selectParoquia.innerHTML = '<option value="">Buscando...</option>';
+            selectParoquia.innerHTML = '<option value="">Buscando paróquias...</option>';
             selectParoquia.disabled = true;
 
             try {
@@ -194,13 +199,12 @@
                     options = '<option value="">Nenhuma paróquia neste setor</option>';
                 } else {
                     paroquias.forEach(p => { 
-                        // Se houver cidade cadastrada, anexa com um traço
                         const infoCidade = p.cidade ? ` - ${p.cidade}` : '';
                         options += `<option value="${p.id}">${p.nome}${infoCidade}</option>`; 
                     });
                     selectParoquia.disabled = false;
-                    selectParoquia.classList.remove('bg-gray-100', 'cursor-not-allowed');
-                    selectParoquia.classList.add('bg-white');
+                    selectParoquia.classList.remove('bg-slate-100', 'text-slate-400', 'cursor-not-allowed', 'border-slate-200');
+                    selectParoquia.classList.add('bg-white', 'text-slate-700', 'border-slate-300');
                 }
                 selectParoquia.innerHTML = options;
             } catch (error) { selectParoquia.innerHTML = '<option value="">Erro ao buscar</option>'; }
@@ -225,8 +229,9 @@
             }
 
             try {
-                btnSubmit.disabled = true; btnSubmit.textContent = "Enviando... Por favor, aguarde.";
-                btnSubmit.classList.add('opacity-75', 'cursor-not-allowed');
+                btnSubmit.disabled = true; 
+                btnSubmit.textContent = "Enviando... Por favor, aguarde.";
+                btnSubmit.classList.add('opacity-75', 'cursor-not-allowed', 'transform-none');
 
                 const formData = new FormData();
                 formData.append('nome_casal', document.getElementById('nome_casal').value);
@@ -243,25 +248,38 @@
                 
                 // Reseta o formulário e bloqueia as paróquias novamente
                 document.getElementById('formPedido').reset();
-                document.getElementById('origem_id').innerHTML = '<option value="">Escolha um setor primeiro...</option>';
-                document.getElementById('origem_id').disabled = true;
-                document.getElementById('origem_id').classList.add('bg-gray-100', 'cursor-not-allowed');
-                document.getElementById('destino_id').innerHTML = '<option value="">Escolha um setor primeiro...</option>';
-                document.getElementById('destino_id').disabled = true;
-                document.getElementById('destino_id').classList.add('bg-gray-100', 'cursor-not-allowed');
+                
+                const selectOrigem = document.getElementById('origem_id');
+                selectOrigem.innerHTML = '<option value="">Escolha um setor primeiro...</option>';
+                selectOrigem.disabled = true;
+                selectOrigem.classList.add('bg-slate-100', 'text-slate-400', 'cursor-not-allowed', 'border-slate-200');
+                selectOrigem.classList.remove('bg-white', 'text-slate-700', 'border-slate-300');
+                
+                const selectDestino = document.getElementById('destino_id');
+                selectDestino.innerHTML = '<option value="">Escolha um setor primeiro...</option>';
+                selectDestino.disabled = true;
+                selectDestino.classList.add('bg-slate-100', 'text-slate-400', 'cursor-not-allowed', 'border-slate-200');
+                selectDestino.classList.remove('bg-white', 'text-slate-700', 'border-slate-300');
 
             } catch (error) {
                 console.error(error); mostrarMensagem("Erro ao enviar pedido. Verifique a sua conexão ou o tamanho do arquivo anexo.", "erro");
             } finally {
-                btnSubmit.disabled = false; btnSubmit.textContent = "Enviar Solicitação";
-                btnSubmit.classList.remove('opacity-75', 'cursor-not-allowed');
+                btnSubmit.disabled = false; 
+                btnSubmit.textContent = "Enviar Solicitação";
+                btnSubmit.classList.remove('opacity-75', 'cursor-not-allowed', 'transform-none');
             }
         });
 
         function mostrarMensagem(texto, tipo) {
             const div = document.getElementById('areaMensagem');
-            div.textContent = texto; div.classList.remove('hidden', 'bg-red-100', 'text-red-800', 'bg-green-100', 'text-green-800');
-            if (tipo === 'erro') div.classList.add('bg-red-100', 'text-red-800'); else div.classList.add('bg-green-100', 'text-green-800');
+            div.textContent = texto; 
+            div.classList.remove('hidden', 'bg-red-50', 'text-red-800', 'border-red-200', 'bg-emerald-50', 'text-emerald-800', 'border-emerald-200');
+            
+            if (tipo === 'erro') {
+                div.classList.add('bg-red-50', 'text-red-800', 'border-red-200'); 
+            } else {
+                div.classList.add('bg-emerald-50', 'text-emerald-800', 'border-emerald-200');
+            }
             
             // Rola a tela para a mensagem
             div.scrollIntoView({ behavior: 'smooth', block: 'center' });
