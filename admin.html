@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - ECC Transferências</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/pocketbase/js-sdk@master/dist/pocketbase.umd.js"></script>
 </head>
 <body class="bg-gray-50 flex flex-col min-h-screen overflow-y-scroll">
@@ -35,7 +35,7 @@
                 <form id="formLogin" class="space-y-4">
                     <div><label class="block text-sm font-medium text-gray-700">E-mail</label><input type="email" id="email" required class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></div>
                     <div><label class="block text-sm font-medium text-gray-700">Senha</label><input type="password" id="senha" required class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></div>
-                    <button type="submit" class="w-full bg-blue-800 text-white font-bold py-2 px-4 rounded hover:bg-blue-900 shadow transition mt-2">Entrar</button>
+                    <button type="submit" class="w-full bg-blue-800 text-white font-bold py-2 px-4 rounded hover:bg-blue-900 shadow transition mt-2 w-full">Entrar</button>
                     <p id="erroLogin" class="text-red-500 text-sm hidden font-medium text-center mt-2">Credenciais inválidas.</p>
                 </form>
             </div>
@@ -57,19 +57,19 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                         <div class="bg-white rounded-lg shadow-sm border-l-4 border-yellow-400 p-5">
                             <p class="text-sm font-bold text-gray-500 uppercase">Transferências Pendentes</p>
-                            <p id="dashPendentes" class="text-3xl font-extrabold text-gray-800 mt-2">0</p>
+                            <p id="dashPendentes" class="text-3xl font-extrabold text-gray-800 mt-2">⏳</p>
                         </div>
                         <div class="bg-white rounded-lg shadow-sm border-l-4 border-green-500 p-5">
                             <p class="text-sm font-bold text-gray-500 uppercase">Transferências Concluídas</p>
-                            <p id="dashConcluidas" class="text-3xl font-extrabold text-gray-800 mt-2">0</p>
+                            <p id="dashConcluidas" class="text-3xl font-extrabold text-gray-800 mt-2">⏳</p>
                         </div>
                         <div class="bg-white rounded-lg shadow-sm border-l-4 border-blue-500 p-5">
                             <p class="text-sm font-bold text-gray-500 uppercase">Paróquias Cadastradas</p>
-                            <p id="dashParoquias" class="text-3xl font-extrabold text-gray-800 mt-2">0</p>
+                            <p id="dashParoquias" class="text-3xl font-extrabold text-gray-800 mt-2">⏳</p>
                         </div>
                         <div class="bg-white rounded-lg shadow-sm border-l-4 border-purple-500 p-5">
                             <p class="text-sm font-bold text-gray-500 uppercase">Setores Ativos</p>
-                            <p id="dashSetores" class="text-3xl font-extrabold text-gray-800 mt-2">0</p>
+                            <p id="dashSetores" class="text-3xl font-extrabold text-gray-800 mt-2">⏳</p>
                         </div>
                     </div>
 
@@ -329,40 +329,6 @@
         else if (idAba === 'admins') inicializarAbaAdmins();
     }
 
-    // DASHBOARD INTELIGENTE
-    async function carregarDashboard() {
-        const usuario = pb.authStore.model; const papel = getPapelSeguro(usuario);
-        let fParoquias = ''; let fPedidos = '';
-        if (papel === 'Admin_Setor') { fParoquias = `setor_id = "${usuario.setor_id}"`; fPedidos = `(origem_paroquia_id.setor_id = "${usuario.setor_id}" || destino_paroquia_id.setor_id = "${usuario.setor_id}")`; } 
-        else if (papel === 'Admin_Paroquia') { fParoquias = `id = "${usuario.paroquia_id}"`; fPedidos = `(origem_paroquia_id = "${usuario.paroquia_id}" || destino_paroquia_id = "${usuario.paroquia_id}")`; }
-
-        try {
-            const optParoquias = fParoquias ? { filter: fParoquias } : {};
-            const optPendentes = { filter: (fPedidos ? `${fPedidos} && ` : '') + `(status="Pendente_Setor_Origem" || status="Pendente_Setor_Destino")` };
-            const optConcluidos = { filter: (fPedidos ? `${fPedidos} && ` : '') + `status="Concluido"` };
-            const optRejeitados = { filter: (fPedidos ? `${fPedidos} && ` : '') + `status="Rejeitado"` };
-
-            const promessasBusca = [
-                pb.collection('paroquias').getList(1, 1, optParoquias),
-                pb.collection('setores').getList(1, 1),
-                pb.collection('pedidos').getList(1, 1, optPendentes),
-                pb.collection('pedidos').getList(1, 1, optConcluidos),
-                pb.collection('pedidos').getList(1, 1, optRejeitados)
-            ];
-
-            const [resultParoquias, resultSetores, resultPendentes, resultConcluidos, resultRejeitados] = await Promise.all(promessasBusca);
-
-            document.getElementById('dashParoquias').textContent = resultParoquias.totalItems;
-            document.getElementById('dashSetores').textContent = (papel === 'Master' || papel === 'Arquidiocesano') ? resultSetores.totalItems : '1';
-            document.getElementById('dashPendentes').textContent = resultPendentes.totalItems;
-            document.getElementById('dashConcluidas').textContent = resultConcluidos.totalItems;
-
-            const ctx = document.getElementById('graficoStatus').getContext('2d');
-            if (graficoStatus) graficoStatus.destroy(); 
-            graficoStatus = new Chart(ctx, { type: 'doughnut', data: { labels: ['Pendentes', 'Concluídas', 'Rejeitadas'], datasets: [{ data: [resultPendentes.totalItems, resultConcluidos.totalItems, resultRejeitados.totalItems], backgroundColor: ['#FBBF24', '#22C55E', '#EF4444'], borderWidth: 2 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { font: { size: 14 } } }, tooltip: { callbacks: { label: function(context) { return ' ' + context.label + ': ' + context.raw + ' pedido(s)'; } } } } } });
-        } catch (e) { console.error("Erro dashboard:", e); }
-    }
-
     function mudarSubAbaPedidos(aba) {
         subAbaPedidosAtual = aba;
         document.querySelectorAll('.sub-aba-pedidos').forEach(el => el.classList.add('hidden'));
@@ -379,7 +345,96 @@
         else { document.getElementById('subAbaParoquias').classList.remove('hidden'); document.getElementById('btnSubAbaParoquias').classList.add('border-blue-600', 'text-blue-600'); }
     }
 
-    // FILTROS
+
+    // --- DASHBOARD BLINDADO (NOVO) ---
+    async function carregarDashboard() {
+        const usuario = pb.authStore.model; 
+        const papel = getPapelSeguro(usuario);
+        
+        let fParoquias = ''; let fPedidos = '';
+        if (papel === 'Admin_Setor') { 
+            fParoquias = `setor_id = '${usuario.setor_id}'`; 
+            fPedidos = `(origem_paroquia_id.setor_id = '${usuario.setor_id}' || destino_paroquia_id.setor_id = '${usuario.setor_id}')`; 
+        } else if (papel === 'Admin_Paroquia') { 
+            fParoquias = `id = '${usuario.paroquia_id}'`; 
+            fPedidos = `(origem_paroquia_id = '${usuario.paroquia_id}' || destino_paroquia_id = '${usuario.paroquia_id}')`; 
+        }
+
+        let totParoquias = 0, totSetores = 0, totPendentes = 0, totConcluidos = 0, totRejeitados = 0;
+
+        // 1. Paróquias
+        try {
+            const resParoquias = await pb.collection('paroquias').getList(1, 1, fParoquias ? { filter: fParoquias } : {});
+            totParoquias = resParoquias.totalItems;
+            document.getElementById('dashParoquias').textContent = totParoquias;
+        } catch (e) { document.getElementById('dashParoquias').textContent = 'Erro'; }
+
+        // 2. Setores
+        try {
+            if (papel === 'Master' || papel === 'Arquidiocesano') {
+                const resSetores = await pb.collection('setores').getList(1, 1);
+                totSetores = resSetores.totalItems;
+            } else { totSetores = 1; }
+            document.getElementById('dashSetores').textContent = totSetores;
+        } catch (e) { document.getElementById('dashSetores').textContent = 'Erro'; }
+
+        // 3. Pendentes
+        try {
+            let filterPendentes = `(status='Pendente_Setor_Origem' || status='Pendente_Setor_Destino')`;
+            if (fPedidos) filterPendentes = `${fPedidos} && ${filterPendentes}`;
+            const resPendentes = await pb.collection('pedidos').getList(1, 1, { filter: filterPendentes });
+            totPendentes = resPendentes.totalItems;
+            document.getElementById('dashPendentes').textContent = totPendentes;
+        } catch (e) { document.getElementById('dashPendentes').textContent = 'Erro'; }
+
+        // 4. Concluídas
+        try {
+            let filterConcluidos = `status='Concluido'`;
+            if (fPedidos) filterConcluidos = `${fPedidos} && ${filterConcluidos}`;
+            const resConcluidos = await pb.collection('pedidos').getList(1, 1, { filter: filterConcluidos });
+            totConcluidos = resConcluidos.totalItems;
+            document.getElementById('dashConcluidas').textContent = totConcluidos;
+        } catch (e) { document.getElementById('dashConcluidas').textContent = 'Erro'; }
+
+        // 5. Rejeitadas (Apenas pro gráfico)
+        try {
+            let filterRejeitados = `status='Rejeitado'`;
+            if (fPedidos) filterRejeitados = `${fPedidos} && ${filterRejeitados}`;
+            const resRejeitados = await pb.collection('pedidos').getList(1, 1, { filter: filterRejeitados });
+            totRejeitados = resRejeitados.totalItems;
+        } catch (e) {}
+
+        // Renderiza Gráfico
+        try {
+            if (typeof Chart === 'undefined') {
+                console.error("Gráfico não foi carregado. Verifique a conexão com a internet.");
+                return;
+            }
+            const ctx = document.getElementById('graficoStatus').getContext('2d');
+            if (graficoStatus) graficoStatus.destroy();
+            graficoStatus = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Pendentes', 'Concluídas', 'Rejeitadas'],
+                    datasets: [{
+                        data: [totPendentes, totConcluidos, totRejeitados],
+                        backgroundColor: ['#FBBF24', '#22C55E', '#EF4444'],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { font: { size: 14 } } }
+                    }
+                }
+            });
+        } catch (e) { console.error("Erro ao renderizar gráfico", e); }
+    }
+
+
+    // --- FILTROS DE PEDIDOS ---
     async function inicializarFiltros() {
         const papel = getPapelSeguro(pb.authStore.model); const selSetor = document.getElementById('filtro_setor');
         if (papel === 'Master' || papel === 'Arquidiocesano') {
@@ -401,13 +456,15 @@
         if (fSetor) return ` && (origem_paroquia_id.setor_id = "${fSetor}" || destino_paroquia_id.setor_id = "${fSetor}")`; return '';
     }
 
-    // BUSCA PEDIDOS
+    // --- BUSCA PEDIDOS ---
     async function buscarPedidosPendentes() {
         const usuario = pb.authStore.model; const papel = getPapelSeguro(usuario); let filtroBase = '';
         if (papel === 'Master' || papel === 'Arquidiocesano') filtroBase = `(status != "Concluido" && status != "Rejeitado")`;
         else if (papel === 'Admin_Setor') filtroBase = `((origem_paroquia_id.setor_id = "${usuario.setor_id}" && status = "Pendente_Setor_Origem") || (destino_paroquia_id.setor_id = "${usuario.setor_id}" && status = "Pendente_Setor_Destino"))`;
+
         const filtroFinal = filtroBase + gerarStringFiltroDinamico();
         const mostrarAcoes = papel !== 'Arquidiocesano'; document.getElementById('thAcoesPedidos').style.display = mostrarAcoes ? '' : 'none';
+
         try {
             const records = await pb.collection('pedidos').getFullList({ filter: filtroFinal, expand: 'origem_paroquia_id, destino_paroquia_id', sort: '-created' });
             const tbody = document.getElementById('listaPedidos'); tbody.innerHTML = ''; 
@@ -425,6 +482,7 @@
         const usuario = pb.authStore.model; const papel = getPapelSeguro(usuario); let filtroBase = '(status = "Concluido")';
         if (papel === 'Admin_Paroquia') filtroBase = `(status = "Concluido" && (origem_paroquia_id = "${usuario.paroquia_id}" || destino_paroquia_id = "${usuario.paroquia_id}"))`;
         else if (papel === 'Admin_Setor') filtroBase = `(status = "Concluido" && (origem_paroquia_id.setor_id = "${usuario.setor_id}" || destino_paroquia_id.setor_id = "${usuario.setor_id}"))`;
+
         const filtroFinal = filtroBase + (papel !== 'Admin_Paroquia' ? gerarStringFiltroDinamico() : '');
         try {
             const records = await pb.collection('pedidos').getFullList({ filter: filtroFinal, expand: 'origem_paroquia_id, destino_paroquia_id', sort: '-updated' });
@@ -438,11 +496,12 @@
     }
 
     async function buscarComprovante(pedidoId) { try { const r = await pb.collection('historico').getFullList({ filter: `pedido_id = "${pedidoId}" && anexo != ""`, sort: '-created' }); if (r.length > 0) window.open(pb.files.getUrl(r[0], r[0].anexo), '_blank'); else alert("Nenhum comprovante."); } catch (e) { alert("Erro ao abrir."); } }
+
     function abrirModal(pId, acao) { document.getElementById('pedido_id_modal').value = pId; document.getElementById('tipo_acao_modal').value = acao; document.getElementById('tituloModal').textContent = acao === 'Aceitar' ? 'Aprovar' : 'Rejeitar'; const btn = document.getElementById('btnConfirmar'); btn.className = acao === 'Aceitar' ? 'bg-green-600 text-white px-5 py-2 rounded font-bold hover:bg-green-700 transition' : 'bg-red-600 text-white px-5 py-2 rounded font-bold hover:bg-red-700 transition'; document.getElementById('modalAcao').classList.remove('hidden'); }
     function fecharModal() { document.getElementById('modalAcao').classList.add('hidden'); document.getElementById('formAcao').reset(); }
     document.getElementById('formAcao').addEventListener('submit', async function(e) { e.preventDefault(); const pId = document.getElementById('pedido_id_modal').value; const acao = document.getElementById('tipo_acao_modal').value; const arq = document.getElementById('arquivo_anexo'); const pAtual = await pb.collection('pedidos').getOne(pId); let novoStatus = ''; if (acao === 'Rejeitar') novoStatus = 'Rejeitado'; else if (acao === 'Aceitar') { if (pAtual.status === 'Pendente_Setor_Origem') novoStatus = 'Pendente_Setor_Destino'; else if (pAtual.status === 'Pendente_Setor_Destino') { if (arq.files.length === 0) { alert("OBRIGATÓRIO anexar comprovante!"); return; } novoStatus = 'Concluido'; } } try { const formData = new FormData(); formData.append('pedido_id', pId); formData.append('usuario_id', pb.authStore.model.id); formData.append('acao', acao); formData.append('mensagem_texto', document.getElementById('mensagem_texto').value); if (arq.files.length > 0) formData.append('anexo', arq.files[0]); await pb.collection('historico').create(formData); await pb.collection('pedidos').update(pId, { status: novoStatus }); alert(`Registrado!`); fecharModal(); buscarPedidosPendentes(); carregarDashboard(); } catch (e) {} });
 
-    // LOCAIS BASE
+    // --- LOCAIS BASE ---
     async function carregarListasCadastros() {
         const isMaster = (getPapelSeguro(pb.authStore.model) === 'Master');
         if (isMaster) { document.getElementById('divFormNovoSetor').classList.remove('hidden'); document.getElementById('divFormNovaParoquia').classList.remove('hidden'); } 
@@ -464,11 +523,12 @@
     document.getElementById('formNovoSetor').addEventListener('submit', async function(e) { e.preventDefault(); try { await pb.collection('setores').create({ nome: document.getElementById('nome_setor').value }); document.getElementById('formNovoSetor').reset(); carregarListasCadastros(); inicializarFiltros(); carregarDashboard(); } catch (e) { alert("Erro ao salvar."); } });
     document.getElementById('formNovaParoquia').addEventListener('submit', async function(e) { e.preventDefault(); try { await pb.collection('paroquias').create({ nome: document.getElementById('nome_paroquia').value, setor_id: document.getElementById('select_setor_paroquia').value }); document.getElementById('formNovaParoquia').reset(); carregarListasCadastros(); inicializarFiltros(); carregarDashboard(); } catch (e) { alert("Erro ao salvar."); } });
     async function excluirBase(col, id) { if(confirm("Tem certeza que deseja excluir?")) { try { if (col === 'setores') { const paroquiasVinculadas = await pb.collection('paroquias').getList(1, 1, { filter: `setor_id = "${id}"` }); if (paroquiasVinculadas.totalItems > 0) { alert(`⛔ Bloqueado!\nExistem paróquias neste Setor.`); return; } } await pb.collection(col).delete(id); carregarListasCadastros(); inicializarFiltros(); carregarDashboard(); } catch(e) { alert("Erro ao tentar excluir."); } } }
+
     function abrirModalEdicao(tipo, id, nome, setorId = '') { document.getElementById('edit_id').value = id; document.getElementById('edit_tipo').value = tipo; document.getElementById('edit_nome').value = nome; if (tipo === 'paroquia') { document.getElementById('tituloModalEdicao').textContent = 'Editar Paróquia'; document.getElementById('div_edit_setor').classList.remove('hidden'); document.getElementById('edit_setor_id').innerHTML = document.getElementById('select_setor_paroquia').innerHTML; document.getElementById('edit_setor_id').value = setorId; document.getElementById('edit_setor_id').required = true; } else { document.getElementById('tituloModalEdicao').textContent = 'Editar Setor'; document.getElementById('div_edit_setor').classList.add('hidden'); document.getElementById('edit_setor_id').required = false; } document.getElementById('modalEdicao').classList.remove('hidden'); }
     function fecharModalEdicao() { document.getElementById('modalEdicao').classList.add('hidden'); document.getElementById('formEdicao').reset(); }
     document.getElementById('formEdicao').addEventListener('submit', async function(e) { e.preventDefault(); const id = document.getElementById('edit_id').value; const tipo = document.getElementById('edit_tipo').value; const btn = document.getElementById('btnSalvarEdicao'); const dados = { nome: document.getElementById('edit_nome').value }; if (tipo === 'paroquia') dados.setor_id = document.getElementById('edit_setor_id').value; const colecao = tipo === 'setor' ? 'setores' : 'paroquias'; btn.disabled = true; btn.textContent = 'Salvando...'; try { await pb.collection(colecao).update(id, dados); fecharModalEdicao(); carregarListasCadastros(); inicializarFiltros(); } catch(error) { alert('Erro ao salvar.'); } finally { btn.disabled = false; btn.textContent = 'Salvar Alterações'; } });
 
-    // ACESSOS (ADMINS)
+    // --- ACESSOS (ADMINS) ---
     async function inicializarAbaAdmins() {
         const papel = getPapelSeguro(pb.authStore.model); const selectPapel = document.getElementById('admin_papel');
         if (papel === 'Master') { selectPapel.innerHTML = `<option value="">Selecione...</option><option value="Master">Master</option><option value="Arquidiocesano">Arquidiocesano</option><option value="Admin_Setor">Admin. de Setor</option><option value="Admin_Paroquia">Admin. de Paróquia</option>`; document.getElementById('thAcoesAdmin').style.display = ''; } 
@@ -484,7 +544,7 @@
     async function carregarTabelaAdmins() { const u = pb.authStore.model; const pLogado = getPapelSeguro(u); let f = ''; if (pLogado === 'Admin_Setor') f = `setor_id = "${u.setor_id}" || paroquia_id.setor_id = "${u.setor_id}"`; try { const users = await pb.collection('users').getFullList({ filter: f, sort: '-created', expand: 'setor_id, paroquia_id' }); const tb = document.getElementById('listaUsuariosAdmin'); tb.innerHTML = ''; if (users.length === 0) tb.innerHTML = '<tr><td colspan="5" class="py-4 text-center">Nenhum usuário.</td></tr>'; users.forEach(us => { const pLido = getPapelSeguro(us); let l = '-'; if (pLido === 'Admin_Setor') l = us.expand?.setor_id?.nome || '-'; if (pLido === 'Admin_Paroquia') l = us.expand?.paroquia_id?.nome || '-'; const btn = pLogado === 'Master' ? `<td class="py-3 px-4 text-right"><button onclick="excluirAdmin('${us.id}')" class="text-red-600 font-bold text-sm hover:underline">Excluir</button></td>` : ''; tb.innerHTML += `<tr class="border-b border-gray-200 hover:bg-gray-100"><td class="py-3 px-4 font-medium text-gray-800">${us.nome_casal || '-'}</td><td class="py-3 px-4">${us.email}</td><td class="py-3 px-4"><span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">${pLido.replace(/_/g, ' ')}</span></td><td class="py-3 px-4 text-gray-600">${l}</td>${btn}</tr>`; }); } catch (e) {} }
     async function excluirAdmin(id) { if(confirm("Deseja excluir?")) { if (id === pb.authStore.model.id) { alert("Não pode excluir a si mesmo!"); return; } try { await pb.collection('users').delete(id); carregarTabelaAdmins(); } catch (e) {} } }
 
-    // EXPORTAÇÃO CSV
+    // --- EXPORTAÇÃO CSV ---
     function baixarArquivoCSV(conteudoCSV, nomeArquivo) { const blob = new Blob(['\uFEFF' + conteudoCSV], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement("a"); const url = URL.createObjectURL(blob); link.setAttribute("href", url); link.setAttribute("download", nomeArquivo); link.style.visibility = 'hidden'; document.body.appendChild(link); link.click(); document.body.removeChild(link); }
     async function exportarPedidosCSV() { try { const records = await pb.collection('pedidos').getFullList({ expand: 'origem_paroquia_id, destino_paroquia_id', sort: '-created' }); let csv = "Data de Solicitacao,Nome do Casal,Celular,Paroquia Origem,Paroquia Destino,Status\n"; records.forEach(p => { const dataObj = new Date(p.created); const dataFormatada = dataObj.toLocaleDateString('pt-BR') + ' ' + dataObj.toLocaleTimeString('pt-BR'); const origem = p.expand?.origem_paroquia_id?.nome || 'N/A'; const destino = p.expand?.destino_paroquia_id?.nome || 'N/A'; csv += `${dataFormatada},"${p.nome_casal.replace(/"/g, '""')}","${p.celular}","${origem.replace(/"/g, '""')}","${destino.replace(/"/g, '""')}","${p.status.replace(/_/g, ' ')}"\n`; }); baixarArquivoCSV(csv, 'relatorio_transferencias.csv'); } catch (error) { alert("Erro ao exportar pedidos."); } }
     async function exportarParoquiasCSV() { try { const records = await pb.collection('paroquias').getFullList({ expand: 'setor_id', sort: 'nome' }); let csv = "Nome da Paroquia,Setor\n"; records.forEach(p => { const setor = p.expand?.setor_id?.nome || 'N/A'; csv += `"${p.nome.replace(/"/g, '""')}","${setor.replace(/"/g, '""')}"\n`; }); baixarArquivoCSV(csv, 'relatorio_locais.csv'); } catch (error) { alert("Erro ao exportar locais."); } }
