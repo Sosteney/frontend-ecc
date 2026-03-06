@@ -32,9 +32,9 @@
             <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm border-t-4 border-blue-600">
                 <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Acesso Restrito</h2>
                 <form id="formLogin" class="space-y-4">
-                    <div><label class="block text-sm font-medium">E-mail</label><input type="email" id="email" required class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></div>
-                    <div><label class="block text-sm font-medium">Senha</label><input type="password" id="senha" required class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></div>
-                    <button type="submit" class="w-full bg-blue-800 text-white font-bold py-2 px-4 rounded hover:bg-blue-900 shadow transition w-full">Entrar</button>
+                    <div><label class="block text-sm font-medium text-gray-700">E-mail</label><input type="email" id="email" required class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></div>
+                    <div><label class="block text-sm font-medium text-gray-700">Senha</label><input type="password" id="senha" required class="mt-1 w-full p-2 border border-gray-300 rounded-md outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></div>
+                    <button type="submit" class="w-full bg-blue-800 text-white font-bold py-2 px-4 rounded hover:bg-blue-900 shadow transition mt-2">Entrar</button>
                     <p id="erroLogin" class="text-red-500 text-sm hidden font-medium text-center mt-2">Credenciais inválidas.</p>
                 </form>
             </div>
@@ -43,17 +43,18 @@
         <div id="telaPainel" class="hidden flex-grow">
             <div class="container mx-auto p-6">
                 
-                <div id="menuAbas" class="flex border-b-2 border-gray-300 mb-6 overflow-x-auto">
-                    <button id="btnAbaPedidos" onclick="mudarAbaPrincipal('pedidos')" class="whitespace-nowrap py-3 px-6 border-b-4 border-blue-600 text-blue-700 font-extrabold text-lg transition focus:outline-none hidden">Transferências</button>
-                    <button id="btnAbaCadastros" onclick="mudarAbaPrincipal('cadastros')" class="whitespace-nowrap py-3 px-6 border-b-4 border-transparent text-gray-500 hover:text-blue-600 font-semibold text-lg transition focus:outline-none hidden">Locais Base</button>
-                    <button id="btnAbaAdmins" onclick="mudarAbaPrincipal('admins')" class="whitespace-nowrap py-3 px-6 border-b-4 border-transparent text-gray-500 hover:text-blue-600 font-semibold text-lg transition focus:outline-none hidden">Acessos</button>
+                <div id="menuAbas" class="flex border-b-2 border-gray-200 mb-6 overflow-x-auto">
+                    <button id="btnAbaPedidos" onclick="mudarAbaPrincipal('pedidos')" class="whitespace-nowrap py-3 px-6 border-b-4 border-blue-600 text-blue-700 font-bold text-lg transition focus:outline-none hidden">Transferências</button>
+                    <button id="btnAbaCadastros" onclick="mudarAbaPrincipal('cadastros')" class="whitespace-nowrap py-3 px-6 border-b-4 border-transparent text-gray-500 hover:text-blue-700 font-bold text-lg transition focus:outline-none hidden">Paróquias e Setores</button>
+                    <button id="btnAbaAdmins" onclick="mudarAbaPrincipal('admins')" class="whitespace-nowrap py-3 px-6 border-b-4 border-transparent text-gray-500 hover:text-blue-700 font-bold text-lg transition focus:outline-none hidden">Usuários</button>
+                    <button id="btnAbaExportacao" onclick="mudarAbaPrincipal('exportacao')" class="whitespace-nowrap py-3 px-6 border-b-4 border-transparent text-gray-500 hover:text-blue-700 font-bold text-lg transition focus:outline-none hidden">Exportação</button>
                 </div>
 
                 <div id="abaPrincipalPedidos" class="aba-principal">
                     
                     <div class="flex border-b border-gray-200 mb-6">
-                        <button id="btnSubAbaAndamento" onclick="mudarSubAbaPedidos('andamento')" class="btn-sub-pedidos py-2 px-4 border-b-2 border-blue-600 text-blue-600 font-bold focus:outline-none transition">Em Andamento</button>
-                        <button id="btnSubAbaConcluidos" onclick="mudarSubAbaPedidos('concluidos')" class="btn-sub-pedidos py-2 px-4 border-b-2 border-transparent text-gray-500 hover:text-blue-600 focus:outline-none transition">Concluídas</button>
+                        <button id="btnSubAbaAndamento" onclick="mudarSubAbaPedidos('andamento')" class="btn-sub-pedidos py-2 px-5 border-b-2 border-blue-600 text-blue-600 font-semibold focus:outline-none transition">Em Andamento</button>
+                        <button id="btnSubAbaConcluidos" onclick="mudarSubAbaPedidos('concluidos')" class="btn-sub-pedidos py-2 px-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-semibold focus:outline-none transition">Concluídas</button>
                     </div>
 
                     <div id="areaFiltrosPedidos" class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-6 flex flex-col md:flex-row gap-4 items-end">
@@ -93,19 +94,19 @@
                 <div id="abaPrincipalCadastros" class="aba-principal hidden">
                     
                     <div class="flex border-b border-gray-200 mb-6">
-                        <button id="btnSubAbaSetores" onclick="mudarSubAbaLocais('setores')" class="btn-sub-locais py-2 px-4 border-b-2 border-blue-600 text-blue-600 font-bold focus:outline-none transition">Setores</button>
-                        <button id="btnSubAbaParoquias" onclick="mudarSubAbaLocais('paroquias')" class="btn-sub-locais py-2 px-4 border-b-2 border-transparent text-gray-500 hover:text-blue-600 focus:outline-none transition">Paróquias</button>
+                        <button id="btnSubAbaSetores" onclick="mudarSubAbaLocais('setores')" class="btn-sub-locais py-2 px-5 border-b-2 border-blue-600 text-blue-600 font-semibold focus:outline-none transition">Setores</button>
+                        <button id="btnSubAbaParoquias" onclick="mudarSubAbaLocais('paroquias')" class="btn-sub-locais py-2 px-5 border-b-2 border-transparent text-gray-500 hover:text-blue-600 font-semibold focus:outline-none transition">Paróquias</button>
                     </div>
 
                     <div id="subAbaSetores" class="sub-aba-locais">
-                        <div id="divFormNovoSetor" class="bg-white rounded-lg shadow-md p-6 border-t-4 border-blue-600 mb-6 max-w-xl hidden">
+                        <div id="divFormNovoSetor" class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 mb-6 max-w-xl hidden">
                             <h3 class="text-lg font-semibold mb-4 text-gray-700">Cadastrar Novo Setor</h3>
                             <form id="formNovoSetor" class="flex gap-4">
                                 <input type="text" id="nome_setor" required placeholder="Ex: Setor Sul" class="flex-1 p-2 border border-gray-300 rounded-md focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition">
                                 <button type="submit" class="bg-blue-600 text-white font-bold py-2 px-6 rounded hover:bg-blue-700 transition shadow">Salvar</button>
                             </form>
                         </div>
-                        <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 max-w-3xl">
+                        <div class="bg-white rounded-lg shadow overflow-hidden border border-gray-100 max-w-3xl">
                             <table class="w-full text-left text-sm">
                                 <thead><tr class="bg-gray-50 border-b"><th class="py-3 px-4 text-gray-600 font-semibold">Nome do Setor</th><th class="py-3 px-4 text-gray-600 font-semibold text-right">Ações</th></tr></thead>
                                 <tbody id="listaSetoresAdmin"></tbody>
@@ -114,7 +115,7 @@
                     </div>
 
                     <div id="subAbaParoquias" class="sub-aba-locais hidden">
-                        <div id="divFormNovaParoquia" class="bg-white rounded-lg shadow-md p-6 border-t-4 border-green-600 mb-6 max-w-3xl hidden">
+                        <div id="divFormNovaParoquia" class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 mb-6 max-w-3xl hidden">
                             <h3 class="text-lg font-semibold mb-4 text-gray-700">Cadastrar Nova Paróquia</h3>
                             <form id="formNovaParoquia" class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
                                 <div class="md:col-span-1">
@@ -130,7 +131,7 @@
                                 </div>
                             </form>
                         </div>
-                        <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 max-w-4xl">
+                        <div class="bg-white rounded-lg shadow overflow-hidden border border-gray-100 max-w-4xl">
                             <table class="w-full text-left text-sm">
                                 <thead><tr class="bg-gray-50 border-b"><th class="py-3 px-4 text-gray-600 font-semibold">Nome da Paróquia</th><th class="py-3 px-4 text-gray-600 font-semibold">Setor</th><th class="py-3 px-4 text-gray-600 font-semibold text-right">Ações</th></tr></thead>
                                 <tbody id="listaParoquiasAdmin"></tbody>
@@ -140,25 +141,51 @@
                 </div>
 
                 <div id="abaPrincipalAdmins" class="aba-principal hidden">
-                    <div class="bg-white rounded-lg shadow-md p-6 border-t-4 border-purple-600 mb-8 max-w-3xl">
+                    <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 mb-8 max-w-3xl">
                         <h3 class="text-lg font-semibold mb-4 text-gray-700">Conceder Novo Acesso</h3>
                         <form id="formNovoAdmin" class="space-y-4">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div><label class="block text-sm font-medium text-gray-700">Nome do Casal</label><input type="text" id="admin_nome" required class="mt-1 w-full p-2 border rounded border-gray-300 focus:border-purple-500 outline-none transition"></div>
-                                <div><label class="block text-sm font-medium text-gray-700">E-mail</label><input type="email" id="admin_email" required class="mt-1 w-full p-2 border rounded border-gray-300 focus:border-purple-500 outline-none transition"></div>
-                                <div><label class="block text-sm font-medium text-gray-700">Senha (mín 8)</label><input type="password" id="admin_senha" required minlength="8" class="mt-1 w-full p-2 border rounded border-gray-300 focus:border-purple-500 outline-none transition"></div>
-                                <div><label class="block text-sm font-medium text-gray-700">Papel</label><select id="admin_papel" required onchange="alternarCamposAdmin()" class="mt-1 w-full p-2 border rounded border-gray-300 focus:border-purple-500 outline-none transition"></select></div>
+                                <div><label class="block text-sm font-medium text-gray-700">Nome do Casal</label><input type="text" id="admin_nome" required class="mt-1 w-full p-2 border rounded border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition"></div>
+                                <div><label class="block text-sm font-medium text-gray-700">E-mail</label><input type="email" id="admin_email" required class="mt-1 w-full p-2 border rounded border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition"></div>
+                                <div><label class="block text-sm font-medium text-gray-700">Senha (mín 8)</label><input type="password" id="admin_senha" required minlength="8" class="mt-1 w-full p-2 border rounded border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition"></div>
+                                <div><label class="block text-sm font-medium text-gray-700">Papel</label><select id="admin_papel" required onchange="alternarCamposAdmin()" class="mt-1 w-full p-2 border rounded border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition"></select></div>
                             </div>
-                            <div id="div_admin_setor" class="hidden"><label class="block text-sm font-medium text-gray-700">Setor</label><select id="admin_setor_id" class="mt-1 w-full p-2 border rounded border-gray-300 focus:border-purple-500 outline-none transition"></select></div>
-                            <div id="div_admin_paroquia" class="hidden"><label class="block text-sm font-medium text-gray-700">Paróquia</label><select id="admin_paroquia_id" class="mt-1 w-full p-2 border rounded border-gray-300 focus:border-purple-500 outline-none transition"></select></div>
-                            <div class="flex justify-end pt-2"><button type="submit" id="btnSalvarAdmin" class="bg-purple-600 text-white font-bold py-2 px-8 rounded hover:bg-purple-700 transition shadow">Cadastrar Usuário</button></div>
+                            <div id="div_admin_setor" class="hidden"><label class="block text-sm font-medium text-gray-700">Setor</label><select id="admin_setor_id" class="mt-1 w-full p-2 border rounded border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition"></select></div>
+                            <div id="div_admin_paroquia" class="hidden"><label class="block text-sm font-medium text-gray-700">Paróquia</label><select id="admin_paroquia_id" class="mt-1 w-full p-2 border rounded border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition"></select></div>
+                            <div class="flex justify-end pt-2"><button type="submit" id="btnSalvarAdmin" class="bg-blue-600 text-white font-bold py-2 px-8 rounded hover:bg-blue-700 transition shadow">Cadastrar Usuário</button></div>
                         </form>
                     </div>
-                    <div class="bg-white rounded-lg shadow-md overflow-x-auto border border-gray-100">
+                    <div class="bg-white rounded-lg shadow overflow-x-auto border border-gray-100">
                         <table class="w-full text-left text-sm min-w-max">
-                            <thead><tr class="border-b border-gray-200 bg-gray-50"><th class="py-3 px-4 text-gray-600">Casal</th><th class="py-3 px-4 text-gray-600">E-mail</th><th class="py-3 px-4 text-gray-600">Papel</th><th class="py-3 px-4 text-gray-600">Local</th><th id="thAcoesAdmin" class="py-3 px-4 text-gray-600 text-right">Ações</th></tr></thead>
+                            <thead><tr class="border-b border-gray-200 bg-gray-50"><th class="py-3 px-4 text-gray-600 font-semibold">Casal</th><th class="py-3 px-4 text-gray-600 font-semibold">E-mail</th><th class="py-3 px-4 text-gray-600 font-semibold">Papel</th><th class="py-3 px-4 text-gray-600 font-semibold">Local</th><th id="thAcoesAdmin" class="py-3 px-4 text-gray-600 font-semibold text-right">Ações</th></tr></thead>
                             <tbody id="listaUsuariosAdmin"></tbody>
                         </table>
+                    </div>
+                </div>
+
+                <div id="abaPrincipalExportacao" class="aba-principal hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl">
+                        <div class="bg-white rounded-lg shadow p-6 border border-gray-200 flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-800 mb-2">Todas as Transferências</h3>
+                                <p class="text-sm text-gray-600 mb-6">Gere uma planilha completa com todos os pedidos de transferência registrados no sistema, incluindo os casais, as paróquias e o status atual de cada processo.</p>
+                            </div>
+                            <button onclick="exportarPedidosCSV()" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded hover:bg-blue-700 transition shadow flex justify-center items-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                Baixar Planilha de Pedidos
+                            </button>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow p-6 border border-gray-200 flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-800 mb-2">Paróquias e Setores</h3>
+                                <p class="text-sm text-gray-600 mb-6">Gere uma planilha de consulta rápida contendo a relação completa de todas as paróquias cadastradas e a qual setor elas pertencem.</p>
+                            </div>
+                            <button onclick="exportarParoquiasCSV()" class="w-full bg-green-600 text-white font-bold py-3 px-4 rounded hover:bg-green-700 transition shadow flex justify-center items-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                Baixar Planilha de Locais
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -227,12 +254,13 @@
         document.getElementById('menuUsuarioTop').classList.remove('hidden');
         document.getElementById('nomeUsuarioLogado').textContent = `${usuario.nome_casal || 'Admin'} (${papel ? papel.replace(/_/g, ' ') : ''})`;
 
-        // Controle de Abas Principais Visíveis
-        document.getElementById('btnAbaPedidos').classList.remove('hidden'); // Todos veem Pedidos
-        if(papel === 'Master' || papel === 'Arquidiocesano') document.getElementById('btnAbaCadastros').classList.remove('hidden');
+        document.getElementById('btnAbaPedidos').classList.remove('hidden');
+        if(papel === 'Master' || papel === 'Arquidiocesano') {
+            document.getElementById('btnAbaCadastros').classList.remove('hidden');
+            document.getElementById('btnAbaExportacao').classList.remove('hidden');
+        }
         if(papel === 'Master' || papel === 'Admin_Setor') document.getElementById('btnAbaAdmins').classList.remove('hidden');
 
-        // Controle da Sub-Aba Pedidos
         if(papel === 'Admin_Paroquia') { 
             document.getElementById('btnSubAbaAndamento').classList.add('hidden');
             document.getElementById('areaFiltrosPedidos').classList.add('hidden');
@@ -244,56 +272,61 @@
         }
 
         inicializarFiltros();
-        mudarAbaPrincipal('pedidos'); // Tela inicial padrão
+        mudarAbaPrincipal('pedidos');
     }
 
+    // Navegação Principal Estável
     function mudarAbaPrincipal(idAba) {
-        // Estiliza Menu Principal
         document.querySelectorAll('#menuAbas button').forEach(btn => { 
-            btn.classList.remove('border-blue-600', 'text-blue-700', 'font-extrabold'); 
-            btn.classList.add('border-transparent', 'text-gray-500', 'font-semibold'); 
+            btn.classList.remove('border-blue-600', 'text-blue-700'); 
+            btn.classList.add('border-transparent', 'text-gray-500'); 
         });
         const btnAtivo = document.getElementById('btnAba' + idAba.charAt(0).toUpperCase() + idAba.slice(1));
         if (btnAtivo) { 
-            btnAtivo.classList.remove('border-transparent', 'text-gray-500', 'font-semibold'); 
-            btnAtivo.classList.add('border-blue-600', 'text-blue-700', 'font-extrabold'); 
+            btnAtivo.classList.remove('border-transparent', 'text-gray-500'); 
+            btnAtivo.classList.add('border-blue-600', 'text-blue-700'); 
         }
 
-        // Esconde todas, mostra a escolhida
         document.querySelectorAll('.aba-principal').forEach(el => el.classList.add('hidden'));
         document.getElementById('abaPrincipal' + idAba.charAt(0).toUpperCase() + idAba.slice(1)).classList.remove('hidden');
 
-        // Gatilhos de carregamento
         if (idAba === 'pedidos') aplicarFiltrosAtuais();
         else if (idAba === 'cadastros') { mudarSubAbaLocais('setores'); carregarListasCadastros(); }
         else if (idAba === 'admins') inicializarAbaAdmins();
     }
 
+    // Navegação Secundária Estável
     function mudarSubAbaPedidos(aba) {
         subAbaPedidosAtual = aba;
         document.querySelectorAll('.sub-aba-pedidos').forEach(el => el.classList.add('hidden'));
-        document.querySelectorAll('.btn-sub-pedidos').forEach(btn => { btn.classList.remove('border-blue-600', 'text-blue-600', 'font-bold'); btn.classList.add('border-transparent', 'text-gray-500'); });
+        document.querySelectorAll('.btn-sub-pedidos').forEach(btn => { 
+            btn.classList.remove('border-blue-600', 'text-blue-600'); 
+            btn.classList.add('border-transparent', 'text-gray-500'); 
+        });
         
         if(aba === 'andamento') {
             document.getElementById('subAbaAndamento').classList.remove('hidden');
-            document.getElementById('btnSubAbaAndamento').classList.add('border-blue-600', 'text-blue-600', 'font-bold');
+            document.getElementById('btnSubAbaAndamento').classList.add('border-blue-600', 'text-blue-600');
         } else {
             document.getElementById('subAbaConcluidos').classList.remove('hidden');
-            document.getElementById('btnSubAbaConcluidos').classList.add('border-blue-600', 'text-blue-600', 'font-bold');
+            document.getElementById('btnSubAbaConcluidos').classList.add('border-blue-600', 'text-blue-600');
         }
         aplicarFiltrosAtuais();
     }
 
     function mudarSubAbaLocais(aba) {
         document.querySelectorAll('.sub-aba-locais').forEach(el => el.classList.add('hidden'));
-        document.querySelectorAll('.btn-sub-locais').forEach(btn => { btn.classList.remove('border-blue-600', 'text-blue-600', 'font-bold'); btn.classList.add('border-transparent', 'text-gray-500'); });
+        document.querySelectorAll('.btn-sub-locais').forEach(btn => { 
+            btn.classList.remove('border-blue-600', 'text-blue-600'); 
+            btn.classList.add('border-transparent', 'text-gray-500'); 
+        });
         
         if(aba === 'setores') {
             document.getElementById('subAbaSetores').classList.remove('hidden');
-            document.getElementById('btnSubAbaSetores').classList.add('border-blue-600', 'text-blue-600', 'font-bold');
+            document.getElementById('btnSubAbaSetores').classList.add('border-blue-600', 'text-blue-600');
         } else {
             document.getElementById('subAbaParoquias').classList.remove('hidden');
-            document.getElementById('btnSubAbaParoquias').classList.add('border-blue-600', 'text-blue-600', 'font-bold');
+            document.getElementById('btnSubAbaParoquias').classList.add('border-blue-600', 'text-blue-600');
         }
     }
 
@@ -323,12 +356,7 @@
     }
 
     function aoMudarFiltroSetor() { atualizarFiltroParoquias(); aplicarFiltrosAtuais(); }
-    
-    function aplicarFiltrosAtuais() {
-        if (subAbaPedidosAtual === 'andamento') buscarPedidosPendentes();
-        else buscarPedidosConcluidos();
-    }
-
+    function aplicarFiltrosAtuais() { if (subAbaPedidosAtual === 'andamento') buscarPedidosPendentes(); else buscarPedidosConcluidos(); }
     function gerarStringFiltroDinamico() {
         const fSetor = document.getElementById('filtro_setor').value; const fParoquia = document.getElementById('filtro_paroquia').value;
         if (fParoquia) return ` && (origem_paroquia_id = "${fParoquia}" || destino_paroquia_id = "${fParoquia}")`;
@@ -422,8 +450,44 @@
     }
     function alternarCamposAdmin() { const p = document.getElementById('admin_papel').value; const divSetor = document.getElementById('div_admin_setor'); const divParoquia = document.getElementById('div_admin_paroquia'); divSetor.classList.add('hidden'); divParoquia.classList.add('hidden'); document.getElementById('admin_setor_id').required = false; document.getElementById('admin_paroquia_id').required = false; if (p === 'Admin_Setor') { divSetor.classList.remove('hidden'); document.getElementById('admin_setor_id').required = true; } else if (p === 'Admin_Paroquia') { divParoquia.classList.remove('hidden'); document.getElementById('admin_paroquia_id').required = true; } }
     document.getElementById('formNovoAdmin').addEventListener('submit', async function(e) { e.preventDefault(); const btn = document.getElementById('btnSalvarAdmin'); btn.disabled = true; btn.textContent = "Salvando..."; const criador = pb.authStore.model; const p = getPapelSeguro(criador); let sId = document.getElementById('admin_setor_id').value || null; if (p === 'Admin_Setor') sId = criador.setor_id; const dados = { nome_casal: document.getElementById('admin_nome').value, email: document.getElementById('admin_email').value, password: document.getElementById('admin_senha').value, passwordConfirm: document.getElementById('admin_senha').value, papel: document.getElementById('admin_papel').value, setor_id: sId, paroquia_id: document.getElementById('admin_paroquia_id').value || null }; try { await pb.collection('users').create(dados); alert("Cadastrado!"); document.getElementById('formNovoAdmin').reset(); alternarCamposAdmin(); carregarTabelaAdmins(); } catch (e) { alert("Erro de cadastro."); } finally { btn.disabled = false; btn.textContent = "Cadastrar Acesso"; } });
-    async function carregarTabelaAdmins() { const u = pb.authStore.model; const pLogado = getPapelSeguro(u); let f = ''; if (pLogado === 'Admin_Setor') f = `setor_id = "${u.setor_id}" || paroquia_id.setor_id = "${u.setor_id}"`; try { const users = await pb.collection('users').getFullList({ filter: f, sort: '-created', expand: 'setor_id, paroquia_id' }); const tb = document.getElementById('listaUsuariosAdmin'); tb.innerHTML = ''; if (users.length === 0) tb.innerHTML = '<tr><td colspan="5" class="py-4 text-center">Nenhum usuário.</td></tr>'; users.forEach(us => { const pLido = getPapelSeguro(us); let l = '-'; if (pLido === 'Admin_Setor') l = us.expand?.setor_id?.nome || '-'; if (pLido === 'Admin_Paroquia') l = us.expand?.paroquia_id?.nome || '-'; const btn = pLogado === 'Master' ? `<td class="py-3 px-4 text-right"><button onclick="excluirAdmin('${us.id}')" class="text-red-600 font-bold text-sm hover:underline">Excluir</button></td>` : ''; tb.innerHTML += `<tr class="border-b border-gray-200 hover:bg-gray-100"><td class="py-3 px-4 font-medium">${us.nome_casal || '-'}</td><td class="py-3 px-4">${us.email}</td><td class="py-3 px-4"><span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">${pLido.replace(/_/g, ' ')}</span></td><td class="py-3 px-4 text-gray-600">${l}</td>${btn}</tr>`; }); } catch (e) {} }
+    async function carregarTabelaAdmins() { const u = pb.authStore.model; const pLogado = getPapelSeguro(u); let f = ''; if (pLogado === 'Admin_Setor') f = `setor_id = "${u.setor_id}" || paroquia_id.setor_id = "${u.setor_id}"`; try { const users = await pb.collection('users').getFullList({ filter: f, sort: '-created', expand: 'setor_id, paroquia_id' }); const tb = document.getElementById('listaUsuariosAdmin'); tb.innerHTML = ''; if (users.length === 0) tb.innerHTML = '<tr><td colspan="5" class="py-4 text-center">Nenhum usuário.</td></tr>'; users.forEach(us => { const pLido = getPapelSeguro(us); let l = '-'; if (pLido === 'Admin_Setor') l = us.expand?.setor_id?.nome || '-'; if (pLido === 'Admin_Paroquia') l = us.expand?.paroquia_id?.nome || '-'; const btn = pLogado === 'Master' ? `<td class="py-3 px-4 text-right"><button onclick="excluirAdmin('${us.id}')" class="text-red-600 font-bold text-sm hover:underline">Excluir</button></td>` : ''; tb.innerHTML += `<tr class="border-b border-gray-200 hover:bg-gray-100"><td class="py-3 px-4 font-medium text-gray-800">${us.nome_casal || '-'}</td><td class="py-3 px-4">${us.email}</td><td class="py-3 px-4"><span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">${pLido.replace(/_/g, ' ')}</span></td><td class="py-3 px-4 text-gray-600">${l}</td>${btn}</tr>`; }); } catch (e) {} }
     async function excluirAdmin(id) { if(confirm("Deseja excluir?")) { if (id === pb.authStore.model.id) { alert("Não pode excluir a si mesmo!"); return; } try { await pb.collection('users').delete(id); carregarTabelaAdmins(); } catch (e) {} } }
+
+    // --- EXPORTAÇÃO CSV ---
+    function baixarArquivoCSV(conteudoCSV, nomeArquivo) {
+        const blob = new Blob(['\uFEFF' + conteudoCSV], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", nomeArquivo);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+    async function exportarPedidosCSV() {
+        try {
+            const records = await pb.collection('pedidos').getFullList({ expand: 'origem_paroquia_id, destino_paroquia_id', sort: '-created' });
+            let csv = "Data de Solicitacao,Nome do Casal,Celular,Paroquia Origem,Paroquia Destino,Status\n";
+            records.forEach(p => {
+                const dataObj = new Date(p.created); const dataFormatada = dataObj.toLocaleDateString('pt-BR') + ' ' + dataObj.toLocaleTimeString('pt-BR');
+                const origem = p.expand?.origem_paroquia_id?.nome || 'N/A'; const destino = p.expand?.destino_paroquia_id?.nome || 'N/A';
+                csv += `${dataFormatada},"${p.nome_casal.replace(/"/g, '""')}","${p.celular}","${origem.replace(/"/g, '""')}","${destino.replace(/"/g, '""')}","${p.status.replace(/_/g, ' ')}"\n`;
+            });
+            baixarArquivoCSV(csv, 'relatorio_transferencias.csv');
+        } catch (error) { alert("Erro ao exportar pedidos."); }
+    }
+    async function exportarParoquiasCSV() {
+        try {
+            const records = await pb.collection('paroquias').getFullList({ expand: 'setor_id', sort: 'nome' });
+            let csv = "Nome da Paroquia,Setor\n";
+            records.forEach(p => {
+                const setor = p.expand?.setor_id?.nome || 'N/A';
+                csv += `"${p.nome.replace(/"/g, '""')}","${setor.replace(/"/g, '""')}"\n`;
+            });
+            baixarArquivoCSV(csv, 'relatorio_locais.csv');
+        } catch (error) { alert("Erro ao exportar locais."); }
+    }
 </script>
 </body>
 </html>
