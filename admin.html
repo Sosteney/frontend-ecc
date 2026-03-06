@@ -334,43 +334,52 @@
     }
 
     // --- NOVA LÓGICA: DASHBOARD ---
+   // --- NOVA LÓGICA: DASHBOARD ---
     async function carregarDashboard() {
-        const usuario = pb.authStore.model; const papel = getPapelSeguro(usuario);
+        const usuario = pb.authStore.model; 
+        const papel = getPapelSeguro(usuario);
         
         // Filtros baseados no papel para os números ficarem precisos
-        let filtroParoquiasDashboard = '';
-        let filtroPedidosDashboard = '';
+        let fParoquias = '';
+        let fPedidos = '';
 
         if (papel === 'Admin_Setor') {
-            filtroParoquiasDashboard = `setor_id = "${usuario.setor_id}"`;
-            filtroPedidosDashboard = `(origem_paroquia_id.setor_id = "${usuario.setor_id}" || destino_paroquia_id.setor_id = "${usuario.setor_id}")`;
+            fParoquias = `setor_id = "${usuario.setor_id}"`;
+            fPedidos = `(origem_paroquia_id.setor_id = "${usuario.setor_id}" || destino_paroquia_id.setor_id = "${usuario.setor_id}")`;
         } else if (papel === 'Admin_Paroquia') {
-            filtroParoquiasDashboard = `id = "${usuario.paroquia_id}"`;
-            filtroPedidosDashboard = `(origem_paroquia_id = "${usuario.paroquia_id}" || destino_paroquia_id = "${usuario.paroquia_id}")`;
+            fParoquias = `id = "${usuario.paroquia_id}"`;
+            fPedidos = `(origem_paroquia_id = "${usuario.paroquia_id}" || destino_paroquia_id = "${usuario.paroquia_id}")`;
         }
 
         try {
-            // Busca apenas os totais (usando perPage 1 para não sobrecarregar o banco)
+            // CORREÇÃO: Montando as opções de busca com segurança. 
+            // Se o filtro estiver vazio (Ex: Master), mandamos um objeto limpo {} para o PocketBase não dar erro.
+            const optParoquias = fParoquias ? { filter: fParoquias } : {};
+            const optPendentes = { filter: (fPedidos ? `${fPedidos} && ` : '') + `(status="Pendente_Setor_Origem" || status="Pendente_Setor_Destino")` };
+            const optConcluidos = { filter: (fPedidos ? `${fPedidos} && ` : '') + `status="Concluido"` };
+            const optRejeitados = { filter: (fPedidos ? `${fPedidos} && ` : '') + `status="Rejeitado"` };
+
+            // Busca apenas os totais (usando perPage 1 para ser muito rápido)
             const promessasBusca = [
-                pb.collection('paroquias').getList(1, 1, { filter: filtroParoquiasDashboard }),
-                pb.collection('setores').getList(1, 1),
-                pb.collection('pedidos').getList(1, 1, { filter: (filtroPedidosDashboard ? `${filtroPedidosDashboard} && ` : '') + `(status="Pendente_Setor_Origem" || status="Pendente_Setor_Destino")` }),
-                pb.collection('pedidos').getList(1, 1, { filter: (filtroPedidosDashboard ? `${filtroPedidosDashboard} && ` : '') + `status="Concluido"` }),
-                pb.collection('pedidos').getList(1, 1, { filter: (filtroPedidosDashboard ? `${filtroPedidosDashboard} && ` : '') + `status="Rejeitado"` })
+                pb.collection('paroquias').getList(1, 1, optParoquias),
+                pb.collection('setores').getList(1, 1), // Setores não precisam de filtro aqui
+                pb.collection('pedidos').getList(1, 1, optPendentes),
+                pb.collection('pedidos').getList(1, 1, optConcluidos),
+                pb.collection('pedidos').getList(1, 1, optRejeitados)
             ];
 
+            // Roda todas as buscas ao mesmo tempo
             const [resultParoquias, resultSetores, resultPendentes, resultConcluidos, resultRejeitados] = await Promise.all(promessasBusca);
 
-            // Atualiza os Cards
+            // Atualiza os Cards com os números do banco
             document.getElementById('dashParoquias').textContent = resultParoquias.totalItems;
-            // Se for Admin Setor/Paróquia não faz sentido mostrar todos os setores do estado no card dele
             document.getElementById('dashSetores').textContent = (papel === 'Master' || papel === 'Arquidiocesano') ? resultSetores.totalItems : '1';
             document.getElementById('dashPendentes').textContent = resultPendentes.totalItems;
             document.getElementById('dashConcluidas').textContent = resultConcluidos.totalItems;
 
             // Renderiza o Gráfico Donut (Chart.js)
             const ctx = document.getElementById('graficoStatus').getContext('2d');
-            if (graficoStatus) graficoStatus.destroy(); // Destroi o antigo se existir para não sobrepor
+            if (graficoStatus) graficoStatus.destroy(); // Destroi o antigo se você sair e voltar para a aba
 
             graficoStatus = new Chart(ctx, {
                 type: 'doughnut',
@@ -392,7 +401,9 @@
                 }
             });
 
-        } catch (e) { console.error("Erro ao carregar dashboard:", e); }
+        } catch (e) { 
+            console.error("Erro ao carregar dashboard (Veja o F12):", e); 
+        }
     }
 
     // NAVEGAÇÃO SECUNDÁRIA
