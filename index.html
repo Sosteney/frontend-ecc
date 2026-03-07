@@ -26,7 +26,7 @@
     </header>
 
     <main class="flex-grow flex items-center justify-center p-4">
-        <div class="bg-white p-8 md:p-10 rounded-2xl shadow-sm border border-slate-200 w-full max-w-2xl my-8">
+        <div class="bg-white p-8 md:p-10 rounded-2xl shadow-xl w-full max-w-2xl border border-slate-200 my-8">
             
             <div class="text-center mb-8">
                 <h2 class="text-3xl font-extrabold text-slate-800">Novo Pedido de Transferência</h2>
@@ -115,36 +115,28 @@
     <script>
         const pb = new PocketBase('https://pb.eccnatal.com.br');
 
-        // Máscara Automática para o Celular
         document.getElementById('celular').addEventListener('input', function (e) {
             let x = e.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,5})(\d{0,4})/);
             e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
         });
 
-        // Carregar a lista de Setores ao abrir a página
         async function inicializarFormulario() {
             const selectSetorOrigem = document.getElementById('setor_origem');
             const selectSetorDestino = document.getElementById('setor_destino');
-            
             try {
                 const setores = await pb.collection('setores').getFullList({ sort: 'nome' });
                 let options = '<option value="">Selecione o Setor...</option>';
                 setores.forEach(s => { options += `<option value="${s.id}">${s.nome}</option>`; });
-                
-                selectSetorOrigem.innerHTML = options; 
-                selectSetorDestino.innerHTML = options;
+                selectSetorOrigem.innerHTML = options; selectSetorDestino.innerHTML = options;
             } catch (error) {
-                console.error(error);
                 selectSetorOrigem.innerHTML = '<option value="">Erro de conexão</option>';
                 selectSetorDestino.innerHTML = '<option value="">Erro de conexão</option>';
             }
         }
 
-        // Função disparada quando escolhem o Setor de Origem
         async function carregarParoquiasOrigem() {
             const setorId = document.getElementById('setor_origem').value;
             const selectParoquia = document.getElementById('origem_id');
-            
             if (!setorId) {
                 selectParoquia.innerHTML = '<option value="">Escolha um setor primeiro...</option>';
                 selectParoquia.disabled = true;
@@ -152,21 +144,14 @@
                 selectParoquia.classList.remove('bg-white', 'text-slate-700', 'border-slate-300');
                 return;
             }
-
             selectParoquia.innerHTML = '<option value="">Buscando paróquias...</option>';
             selectParoquia.disabled = true;
-
             try {
                 const paroquias = await pb.collection('paroquias').getFullList({ filter: `setor_id = "${setorId}"`, sort: 'nome' });
                 let options = '<option value="">Selecione a Paróquia...</option>';
-                
-                if (paroquias.length === 0) {
-                    options = '<option value="">Nenhuma paróquia neste setor</option>';
-                } else {
-                    paroquias.forEach(p => { 
-                        const infoCidade = p.cidade ? ` - ${p.cidade}` : '';
-                        options += `<option value="${p.id}">${p.nome}${infoCidade}</option>`; 
-                    });
+                if (paroquias.length === 0) { options = '<option value="">Nenhuma paróquia neste setor</option>'; } 
+                else {
+                    paroquias.forEach(p => { const infoCidade = p.cidade ? ` - ${p.cidade}` : ''; options += `<option value="${p.id}">${p.nome}${infoCidade}</option>`; });
                     selectParoquia.disabled = false;
                     selectParoquia.classList.remove('bg-slate-100', 'text-slate-400', 'cursor-not-allowed', 'border-slate-200');
                     selectParoquia.classList.add('bg-white', 'text-slate-700', 'border-slate-300');
@@ -175,11 +160,9 @@
             } catch (error) { selectParoquia.innerHTML = '<option value="">Erro ao buscar</option>'; }
         }
 
-        // Função disparada quando escolhem o Setor de Destino
         async function carregarParoquiasDestino() {
             const setorId = document.getElementById('setor_destino').value;
             const selectParoquia = document.getElementById('destino_id');
-            
             if (!setorId) {
                 selectParoquia.innerHTML = '<option value="">Escolha um setor primeiro...</option>';
                 selectParoquia.disabled = true;
@@ -187,21 +170,14 @@
                 selectParoquia.classList.remove('bg-white', 'text-slate-700', 'border-slate-300');
                 return;
             }
-
             selectParoquia.innerHTML = '<option value="">Buscando paróquias...</option>';
             selectParoquia.disabled = true;
-
             try {
                 const paroquias = await pb.collection('paroquias').getFullList({ filter: `setor_id = "${setorId}"`, sort: 'nome' });
                 let options = '<option value="">Selecione a Paróquia...</option>';
-                
-                if (paroquias.length === 0) {
-                    options = '<option value="">Nenhuma paróquia neste setor</option>';
-                } else {
-                    paroquias.forEach(p => { 
-                        const infoCidade = p.cidade ? ` - ${p.cidade}` : '';
-                        options += `<option value="${p.id}">${p.nome}${infoCidade}</option>`; 
-                    });
+                if (paroquias.length === 0) { options = '<option value="">Nenhuma paróquia neste setor</option>'; } 
+                else {
+                    paroquias.forEach(p => { const infoCidade = p.cidade ? ` - ${p.cidade}` : ''; options += `<option value="${p.id}">${p.nome}${infoCidade}</option>`; });
                     selectParoquia.disabled = false;
                     selectParoquia.classList.remove('bg-slate-100', 'text-slate-400', 'cursor-not-allowed', 'border-slate-200');
                     selectParoquia.classList.add('bg-white', 'text-slate-700', 'border-slate-300');
@@ -210,43 +186,28 @@
             } catch (error) { selectParoquia.innerHTML = '<option value="">Erro ao buscar</option>'; }
         }
 
-        // Envio do Formulário Principal
         document.getElementById('formPedido').addEventListener('submit', async function(e) {
             e.preventDefault(); 
-            
             const origemId = document.getElementById('origem_id').value;
             const destinoId = document.getElementById('destino_id').value;
             const btnSubmit = document.getElementById('btnSubmit');
             const arquivoInput = document.getElementById('anexo_pedido');
 
-            // Validação de segurança dupla
-            if (!origemId || !destinoId) {
-                mostrarMensagem("Por favor, selecione a paróquia de origem e a de destino.", "erro"); return;
-            }
-
-            if (origemId === destinoId) {
-                mostrarMensagem("A paróquia de destino não pode ser a mesma de origem.", "erro"); return;
-            }
+            if (!origemId || !destinoId) { mostrarMensagem("Por favor, selecione a paróquia de origem e a de destino.", "erro"); return; }
+            if (origemId === destinoId) { mostrarMensagem("A paróquia de destino não pode ser a mesma de origem.", "erro"); return; }
 
             try {
-                btnSubmit.disabled = true; 
-                btnSubmit.textContent = "Enviando... Por favor, aguarde.";
-                btnSubmit.classList.add('opacity-75', 'cursor-not-allowed', 'transform-none');
-
+                btnSubmit.disabled = true; btnSubmit.textContent = "Enviando... Por favor, aguarde."; btnSubmit.classList.add('opacity-75', 'cursor-not-allowed', 'transform-none');
                 const formData = new FormData();
                 formData.append('nome_casal', document.getElementById('nome_casal').value);
                 formData.append('celular', document.getElementById('celular').value);
                 formData.append('origem_paroquia_id', origemId);
                 formData.append('destino_paroquia_id', destinoId);
                 formData.append('status', 'Pendente_Setor_Origem');
-
                 if (arquivoInput.files.length > 0) formData.append('anexo', arquivoInput.files[0]);
 
                 await pb.collection('pedidos').create(formData);
-                
                 mostrarMensagem("Pedido enviado com sucesso! Aguarde o contato do Setor.", "sucesso");
-                
-                // Reseta o formulário e bloqueia as paróquias novamente
                 document.getElementById('formPedido').reset();
                 
                 const selectOrigem = document.getElementById('origem_id');
@@ -261,31 +222,19 @@
                 selectDestino.classList.add('bg-slate-100', 'text-slate-400', 'cursor-not-allowed', 'border-slate-200');
                 selectDestino.classList.remove('bg-white', 'text-slate-700', 'border-slate-300');
 
-            } catch (error) {
-                console.error(error); mostrarMensagem("Erro ao enviar pedido. Verifique a sua conexão ou o tamanho do arquivo anexo.", "erro");
-            } finally {
-                btnSubmit.disabled = false; 
-                btnSubmit.textContent = "Enviar Solicitação";
-                btnSubmit.classList.remove('opacity-75', 'cursor-not-allowed', 'transform-none');
-            }
+            } catch (error) { mostrarMensagem("Erro ao enviar pedido. Verifique a sua conexão ou o tamanho do arquivo anexo.", "erro"); } 
+            finally { btnSubmit.disabled = false; btnSubmit.textContent = "Enviar Solicitação"; btnSubmit.classList.remove('opacity-75', 'cursor-not-allowed', 'transform-none'); }
         });
 
         function mostrarMensagem(texto, tipo) {
             const div = document.getElementById('areaMensagem');
             div.textContent = texto; 
             div.classList.remove('hidden', 'bg-red-50', 'text-red-800', 'border-red-200', 'bg-emerald-50', 'text-emerald-800', 'border-emerald-200');
-            
-            if (tipo === 'erro') {
-                div.classList.add('bg-red-50', 'text-red-800', 'border-red-200'); 
-            } else {
-                div.classList.add('bg-emerald-50', 'text-emerald-800', 'border-emerald-200');
-            }
-            
-            // Rola a tela para a mensagem
+            if (tipo === 'erro') div.classList.add('bg-red-50', 'text-red-800', 'border-red-200'); 
+            else div.classList.add('bg-emerald-50', 'text-emerald-800', 'border-emerald-200');
             div.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
-        // Chama a função para preencher os setores assim que a tela abre
         inicializarFormulario();
     </script>
 </body>
