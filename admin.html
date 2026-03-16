@@ -122,7 +122,7 @@
                                 <table class="w-full text-left text-sm min-w-max">
                                     <thead class="bg-slate-100 text-slate-600 uppercase tracking-wider text-xs font-bold">
                                         <tr>
-                                            <th class="py-4 px-5">Casal / Documento</th>
+                                            <th class="py-4 px-5">Casal / Etapa</th>
                                             <th class="py-4 px-5">Origem ➔ Destino</th>
                                             <th class="py-4 px-5">Data</th>
                                             <th class="py-4 px-5">Status Atual</th>
@@ -142,7 +142,7 @@
                                 <table class="w-full text-left text-sm min-w-max">
                                     <thead class="bg-slate-100 text-slate-600 uppercase tracking-wider text-xs font-bold">
                                         <tr>
-                                            <th class="py-4 px-5">Casal</th>
+                                            <th class="py-4 px-5">Casal / Etapa</th>
                                             <th class="py-4 px-5">Origem ➔ Destino</th>
                                             <th class="py-4 px-5">Datas</th>
                                             <th class="py-4 px-5">Status Final</th>
@@ -393,7 +393,6 @@
     let subAbaPedidosAtual = 'andamento';
     let graficoStatus = null; 
 
-    // Função de formatação de datas
     function formatarData(dataIso) {
         if (!dataIso) return '-';
         const d = new Date(dataIso);
@@ -616,10 +615,11 @@
             if (records.length === 0) { tbody.innerHTML = '<tr><td colspan="6" class="py-8 text-center text-slate-500 italic">Nenhum pedido encontrado.</td></tr>'; return; }
             records.forEach(p => {
                 const o = p.expand?.origem_paroquia_id?.nome || 'N/A'; const d = p.expand?.destino_paroquia_id?.nome || 'N/A';
-                
                 let linkAnexo = (p.anexo && p.anexo.length > 0) ? `<div class="mt-2.5"><a href="${pb.files.getUrl(p, p.anexo)}" target="_blank" class="inline-flex items-center justify-center bg-slate-200 text-slate-700 text-xs px-3 py-1.5 rounded-md hover:bg-slate-300 transition-colors shadow-sm font-bold border border-slate-300"><svg class="w-3.5 h-3.5 mr-1.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>Ver Documento</a></div>` : '';
                 
-                // Botão de Observação
+                // Info da Etapa
+                let infoEtapa = p.etapas ? `<span class="block text-xs font-bold text-indigo-600 mt-1 uppercase tracking-wider">${p.etapas}</span>` : `<span class="block text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider">Etapa não informada</span>`;
+
                 let corObs = p.observacao ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' : 'bg-slate-100 text-slate-500 hover:bg-slate-200';
                 let txtObs = p.observacao ? 'Ver Obs' : '+ Obs';
                 let btnObs = `<button onclick="abrirModalObs('${p.id}', '${encodeURIComponent(p.observacao || '')}')" class="${corObs} text-xs px-3 py-1.5 rounded-md font-bold transition shadow-sm w-full">${txtObs}</button>`;
@@ -627,7 +627,7 @@
                 let botoesHtml = mostrarAcoes ? `<td class="py-4 px-5 space-x-2 whitespace-nowrap text-right align-top"><button onclick="abrirModal('${p.id}', 'Aceitar')" class="bg-emerald-600 text-white text-xs px-3 py-1.5 rounded-md hover:bg-emerald-700 transition shadow font-bold">Aceitar</button><button onclick="abrirModal('${p.id}', 'Rejeitar')" class="bg-red-600 text-white text-xs px-3 py-1.5 rounded-md hover:bg-red-700 transition shadow font-bold">Rejeitar</button></td>` : '';
                 
                 tbody.innerHTML += `<tr class="hover:bg-slate-50 transition-colors">
-                    <td class="py-4 px-5 font-bold text-slate-800 align-top leading-relaxed">${p.nome_casal} ${linkAnexo}</td>
+                    <td class="py-4 px-5 font-bold text-slate-800 align-top leading-relaxed">${p.nome_casal} ${infoEtapa} ${linkAnexo}</td>
                     <td class="py-4 px-5 text-sm text-slate-600 align-top leading-relaxed">${o} <span class="text-blue-600 font-bold mx-1">➔</span><br>${d}</td>
                     <td class="py-4 px-5 align-top"><span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Solicitado</span><span class="text-sm font-medium text-slate-700">${formatarData(p.created)}</span></td>
                     <td class="py-4 px-5 align-top"><span class="bg-amber-100 text-amber-800 font-bold text-xs px-3 py-1 rounded-full whitespace-nowrap">${p.status.replace(/_/g, ' ')}</span></td>
@@ -650,14 +650,14 @@
             if (records.length === 0) { tbody.innerHTML = '<tr><td colspan="6" class="py-8 text-center text-slate-500 italic">Nenhum pedido concluído.</td></tr>'; return; }
             records.forEach(p => {
                 const o = p.expand?.origem_paroquia_id?.nome || 'N/A'; const d = p.expand?.destino_paroquia_id?.nome || 'N/A';
-                
-                // Botão de Observação
+                let infoEtapa = p.etapas ? `<span class="block text-xs font-bold text-indigo-600 mt-1 uppercase tracking-wider">${p.etapas}</span>` : `<span class="block text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider">Etapa não informada</span>`;
+
                 let corObs = p.observacao ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' : 'bg-slate-100 text-slate-500 hover:bg-slate-200';
                 let txtObs = p.observacao ? 'Ver Obs' : '+ Obs';
                 let btnObs = `<button onclick="abrirModalObs('${p.id}', '${encodeURIComponent(p.observacao || '')}')" class="${corObs} text-xs px-3 py-1.5 rounded-md font-bold transition shadow-sm w-full">${txtObs}</button>`;
 
                 tbody.innerHTML += `<tr class="hover:bg-slate-50 transition-colors">
-                    <td class="py-4 px-5 font-bold text-slate-800 align-top leading-relaxed">${p.nome_casal}</td>
+                    <td class="py-4 px-5 font-bold text-slate-800 align-top leading-relaxed">${p.nome_casal} ${infoEtapa}</td>
                     <td class="py-4 px-5 text-sm text-slate-600 align-top leading-relaxed">${o} <span class="text-blue-600 font-bold mx-1">➔</span><br>${d}</td>
                     <td class="py-4 px-5 align-top whitespace-nowrap"><div class="mb-1"><span class="text-xs text-slate-400 font-bold uppercase mr-2">Solicitado:</span><span class="text-sm font-medium text-slate-700">${formatarData(p.created)}</span></div><div><span class="text-xs text-emerald-500 font-bold uppercase mr-2">Concluído:</span><span class="text-sm font-bold text-emerald-700">${formatarData(p.updated)}</span></div></td>
                     <td class="py-4 px-5 align-top"><span class="bg-emerald-100 text-emerald-800 font-bold text-xs px-3 py-1 rounded-full">Concluído</span></td>
@@ -670,12 +670,10 @@
 
     async function buscarComprovante(pedidoId) { try { const r = await pb.collection('historico').getFullList({ filter: `pedido_id = "${pedidoId}" && anexo != ""`, sort: '-created', requestKey: null }); if (r.length > 0) window.open(pb.files.getUrl(r[0], r[0].anexo), '_blank'); else alert("Nenhum comprovante vinculado."); } catch (e) { alert("Erro ao abrir."); } }
     
-    // Modais de Ação Principal
     function abrirModal(pId, acao) { document.getElementById('pedido_id_modal').value = pId; document.getElementById('tipo_acao_modal').value = acao; document.getElementById('tituloModal').textContent = acao === 'Aceitar' ? 'Aprovar Pedido' : 'Rejeitar Pedido'; const btn = document.getElementById('btnConfirmar'); btn.className = acao === 'Aceitar' ? 'bg-emerald-600 text-white px-6 py-2.5 rounded-lg font-bold hover:bg-emerald-700 transition shadow-md' : 'bg-red-600 text-white px-6 py-2.5 rounded-lg font-bold hover:bg-red-700 transition shadow-md'; document.getElementById('modalAcao').classList.remove('hidden'); }
     function fecharModal() { document.getElementById('modalAcao').classList.add('hidden'); document.getElementById('formAcao').reset(); }
     document.getElementById('formAcao').addEventListener('submit', async function(e) { e.preventDefault(); const pId = document.getElementById('pedido_id_modal').value; const acao = document.getElementById('tipo_acao_modal').value; const arq = document.getElementById('arquivo_anexo'); const pAtual = await pb.collection('pedidos').getOne(pId); let novoStatus = ''; if (acao === 'Rejeitar') novoStatus = 'Rejeitado'; else if (acao === 'Aceitar') { if (pAtual.status === 'Pendente_Setor_Origem') novoStatus = 'Pendente_Setor_Destino'; else if (pAtual.status === 'Pendente_Setor_Destino') { if (arq.files.length === 0) { alert("ATENÇÃO: É OBRIGATÓRIO anexar o comprovante na paróquia de destino!"); return; } novoStatus = 'Concluido'; } } try { const formData = new FormData(); formData.append('pedido_id', pId); formData.append('usuario_id', pb.authStore.model.id); formData.append('acao', acao); formData.append('mensagem_texto', document.getElementById('mensagem_texto').value); if (arq.files.length > 0) formData.append('anexo', arq.files[0]); await pb.collection('historico').create(formData); await pb.collection('pedidos').update(pId, { status: novoStatus }); fecharModal(); buscarPedidosPendentes(); carregarDashboard(); } catch (e) {} });
 
-    // --- NOVO: MODAL OBSERVAÇÃO ---
     function abrirModalObs(id, obsEncodada) {
         document.getElementById('obs_pedido_id').value = id;
         document.getElementById('texto_observacao').value = decodeURIComponent(obsEncodada);
@@ -694,7 +692,7 @@
         try {
             await pb.collection('pedidos').update(pId, { observacao: texto });
             fecharModalObservacao();
-            aplicarFiltrosAtuais(); // Recarrega a tabela correta
+            aplicarFiltrosAtuais(); 
         } catch(e) { alert("Erro ao salvar observação."); }
         finally { btn.disabled = false; btn.textContent = 'Salvar Observação'; }
     });
@@ -825,7 +823,7 @@
 
     // --- EXPORTAÇÃO CSV ---
     function baixarArquivoCSV(conteudoCSV, nomeArquivo) { const blob = new Blob(['\uFEFF' + conteudoCSV], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement("a"); const url = URL.createObjectURL(blob); link.setAttribute("href", url); link.setAttribute("download", nomeArquivo); link.style.visibility = 'hidden'; document.body.appendChild(link); link.click(); document.body.removeChild(link); }
-    async function exportarPedidosCSV() { try { const records = await pb.collection('pedidos').getFullList({ expand: 'origem_paroquia_id, destino_paroquia_id', sort: '-created', requestKey: null }); let csv = "Data de Solicitacao,Nome do Casal,Celular,Paroquia Origem,Paroquia Destino,Status\n"; records.forEach(p => { const dataObj = new Date(p.created); const dataFormatada = dataObj.toLocaleDateString('pt-BR') + ' ' + dataObj.toLocaleTimeString('pt-BR'); const origem = p.expand?.origem_paroquia_id?.nome || 'N/A'; const destino = p.expand?.destino_paroquia_id?.nome || 'N/A'; csv += `${dataFormatada},"${p.nome_casal.replace(/"/g, '""')}","${p.celular}","${origem.replace(/"/g, '""')}","${destino.replace(/"/g, '""')}","${p.status.replace(/_/g, ' ')}"\n`; }); baixarArquivoCSV(csv, 'relatorio_transferencias.csv'); } catch (error) { alert("Erro ao exportar pedidos."); } }
+    async function exportarPedidosCSV() { try { const records = await pb.collection('pedidos').getFullList({ expand: 'origem_paroquia_id, destino_paroquia_id', sort: '-created', requestKey: null }); let csv = "Data de Solicitacao,Nome do Casal,Etapas,Celular,Paroquia Origem,Paroquia Destino,Status\n"; records.forEach(p => { const dataObj = new Date(p.created); const dataFormatada = dataObj.toLocaleDateString('pt-BR') + ' ' + dataObj.toLocaleTimeString('pt-BR'); const origem = p.expand?.origem_paroquia_id?.nome || 'N/A'; const destino = p.expand?.destino_paroquia_id?.nome || 'N/A'; csv += `${dataFormatada},"${p.nome_casal.replace(/"/g, '""')}","${p.etapas || ''}","${p.celular}","${origem.replace(/"/g, '""')}","${destino.replace(/"/g, '""')}","${p.status.replace(/_/g, ' ')}"\n`; }); baixarArquivoCSV(csv, 'relatorio_transferencias.csv'); } catch (error) { alert("Erro ao exportar pedidos."); } }
     async function exportarParoquiasCSV() { try { const records = await pb.collection('paroquias').getFullList({ expand: 'setor_id', sort: 'nome', requestKey: null }); let csv = "Nome da Paroquia,Cidade,Setor\n"; records.forEach(p => { const setor = p.expand?.setor_id?.nome || 'N/A'; const cidade = p.cidade || 'N/A'; csv += `"${p.nome.replace(/"/g, '""')}","${cidade.replace(/"/g, '""')}","${setor.replace(/"/g, '""')}"\n`; }); baixarArquivoCSV(csv, 'relatorio_locais.csv'); } catch (error) { alert("Erro ao exportar locais."); } }
 </script>
 </body>
