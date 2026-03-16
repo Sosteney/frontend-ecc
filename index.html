@@ -35,14 +35,26 @@
             
             <form id="formPedido" class="space-y-8">
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div>
-                        <label for="nome_casal" class="block text-sm font-bold text-slate-600 mb-1.5 uppercase tracking-wide">Nome do Casal</label>
-                        <input type="text" id="nome_casal" required placeholder="Ex: João e Maria" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl outline-none focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-slate-700 font-medium">
+                <div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+                        <div>
+                            <label for="nome_casal" class="block text-sm font-bold text-slate-600 mb-1.5 uppercase tracking-wide">Nome do Casal</label>
+                            <input type="text" id="nome_casal" required placeholder="Ex: João e Maria" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl outline-none focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-slate-700 font-medium">
+                        </div>
+                        <div>
+                            <label for="celular" class="block text-sm font-bold text-slate-600 mb-1.5 uppercase tracking-wide">Celular (WhatsApp)</label>
+                            <input type="tel" id="celular" required maxlength="15" placeholder="(00) 00000-0000" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl outline-none focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-slate-700 font-medium">
+                        </div>
                     </div>
+                    
                     <div>
-                        <label for="celular" class="block text-sm font-bold text-slate-600 mb-1.5 uppercase tracking-wide">Celular (WhatsApp)</label>
-                        <input type="tel" id="celular" required maxlength="15" placeholder="(00) 00000-0000" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl outline-none focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-slate-700 font-medium">
+                        <label for="etapas" class="block text-sm font-bold text-slate-600 mb-1.5 uppercase tracking-wide">Etapas Vivenciadas</label>
+                        <select id="etapas" required class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl outline-none focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-slate-700 font-medium">
+                            <option value="">Selecione a etapa atual do casal...</option>
+                            <option value="1ª Etapa">1ª Etapa</option>
+                            <option value="2ª Etapa">2ª Etapa</option>
+                            <option value="3ª Etapa">3ª Etapa</option>
+                        </select>
                     </div>
                 </div>
 
@@ -190,6 +202,7 @@
             e.preventDefault(); 
             const origemId = document.getElementById('origem_id').value;
             const destinoId = document.getElementById('destino_id').value;
+            const etapas = document.getElementById('etapas').value;
             const btnSubmit = document.getElementById('btnSubmit');
             const arquivoInput = document.getElementById('anexo_pedido');
 
@@ -201,6 +214,7 @@
                 const formData = new FormData();
                 formData.append('nome_casal', document.getElementById('nome_casal').value);
                 formData.append('celular', document.getElementById('celular').value);
+                formData.append('etapas', etapas); // Enviando o dado das etapas
                 formData.append('origem_paroquia_id', origemId);
                 formData.append('destino_paroquia_id', destinoId);
                 formData.append('status', 'Pendente_Setor_Origem');
