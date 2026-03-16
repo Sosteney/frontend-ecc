@@ -26,7 +26,7 @@
     </header>
 
     <main class="flex-grow flex items-center justify-center p-4">
-        <div class="bg-white p-8 md:p-10 rounded-2xl shadow-xl w-full max-w-2xl border border-slate-200 my-8">
+        <div class="bg-white p-8 md:p-10 rounded-2xl shadow-sm border border-slate-200 w-full max-w-2xl my-8">
             
             <div class="text-center mb-8">
                 <h2 class="text-3xl font-extrabold text-slate-800">Novo Pedido de Transferência</h2>
@@ -65,19 +65,23 @@
                         <svg class="w-5 h-5 mr-2 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                         Paróquia de Origem (Saída)
                     </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
                         <div>
                             <label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase tracking-wide">1. Selecione o Setor</label>
-                            <select id="setor_origem" onchange="carregarParoquiasOrigem()" required class="w-full p-3 bg-white border border-slate-300 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition-shadow text-slate-700 font-medium">
+                            <select id="setor_origem" onchange="carregarParoquiasOrigem()" class="w-full p-3 bg-white border border-slate-300 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition-shadow text-slate-700 font-medium">
                                 <option value="">Carregando setores...</option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase tracking-wide">2. Selecione a Paróquia</label>
-                            <select id="origem_id" required disabled class="w-full p-3 bg-slate-100 text-slate-400 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition-all cursor-not-allowed font-medium">
+                            <select id="origem_id" disabled class="w-full p-3 bg-slate-100 text-slate-400 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition-all cursor-not-allowed font-medium">
                                 <option value="">Escolha um setor primeiro...</option>
                             </select>
                         </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-slate-200/80">
+                        <label for="origem_externa" class="block text-xs font-bold text-slate-500 mb-1.5 uppercase tracking-wide">Ou digite caso seja de outra (Arqui)diocese</label>
+                        <input type="text" id="origem_externa" placeholder="Ex: Paróquia São Pedro - Recife/SP" class="w-full p-3 bg-white border border-slate-300 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-slate-700 font-medium">
                     </div>
                 </div>
 
@@ -86,19 +90,23 @@
                         <svg class="w-5 h-5 mr-2 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                         Paróquia de Destino (Chegada)
                     </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
                         <div>
                             <label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase tracking-wide">1. Selecione o Setor</label>
-                            <select id="setor_destino" onchange="carregarParoquiasDestino()" required class="w-full p-3 bg-white border border-slate-300 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition-shadow text-slate-700 font-medium">
+                            <select id="setor_destino" onchange="carregarParoquiasDestino()" class="w-full p-3 bg-white border border-slate-300 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition-shadow text-slate-700 font-medium">
                                 <option value="">Carregando setores...</option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase tracking-wide">2. Selecione a Paróquia</label>
-                            <select id="destino_id" required disabled class="w-full p-3 bg-slate-100 text-slate-400 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition-all cursor-not-allowed font-medium">
+                            <select id="destino_id" disabled class="w-full p-3 bg-slate-100 text-slate-400 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition-all cursor-not-allowed font-medium">
                                 <option value="">Escolha um setor primeiro...</option>
                             </select>
                         </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-slate-200/80">
+                        <label for="destino_externa" class="block text-xs font-bold text-slate-500 mb-1.5 uppercase tracking-wide">Ou digite caso seja de outra (Arqui)diocese</label>
+                        <input type="text" id="destino_externa" placeholder="Ex: Paróquia São João - Fortaleza/PE" class="w-full p-3 bg-white border border-slate-300 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-slate-700 font-medium">
                     </div>
                 </div>
 
@@ -200,41 +208,56 @@
 
         document.getElementById('formPedido').addEventListener('submit', async function(e) {
             e.preventDefault(); 
+            
             const origemId = document.getElementById('origem_id').value;
+            const origemExt = document.getElementById('origem_externa').value.trim();
             const destinoId = document.getElementById('destino_id').value;
+            const destinoExt = document.getElementById('destino_externa').value.trim();
             const etapas = document.getElementById('etapas').value;
             const btnSubmit = document.getElementById('btnSubmit');
             const arquivoInput = document.getElementById('anexo_pedido');
 
-            if (!origemId || !destinoId) { mostrarMensagem("Por favor, selecione a paróquia de origem e a de destino.", "erro"); return; }
-            if (origemId === destinoId) { mostrarMensagem("A paróquia de destino não pode ser a mesma de origem.", "erro"); return; }
+            // Validação de segurança dupla (Exigindo pelo menos a opção de lista ou a externa)
+            if (!origemId && !origemExt) { mostrarMensagem("Informe a paróquia de origem (selecione na lista ou digite no campo de outra diocese).", "erro"); return; }
+            if (!destinoId && !destinoExt) { mostrarMensagem("Informe a paróquia de destino (selecione na lista ou digite no campo de outra diocese).", "erro"); return; }
+            
+            // Verifica se a pessoa selecionou/digitou a mesma coisa em ambos
+            if ((origemId && origemId === destinoId) || (origemExt && destinoExt && origemExt.toLowerCase() === destinoExt.toLowerCase())) { 
+                mostrarMensagem("A paróquia de destino não pode ser a mesma de origem.", "erro"); return; 
+            }
 
             try {
                 btnSubmit.disabled = true; btnSubmit.textContent = "Enviando... Por favor, aguarde."; btnSubmit.classList.add('opacity-75', 'cursor-not-allowed', 'transform-none');
                 const formData = new FormData();
                 formData.append('nome_casal', document.getElementById('nome_casal').value);
                 formData.append('celular', document.getElementById('celular').value);
-                formData.append('etapas', etapas); // Enviando o dado das etapas
-                formData.append('origem_paroquia_id', origemId);
-                formData.append('destino_paroquia_id', destinoId);
+                formData.append('etapas', etapas);
+                
+                // Manda o ID se selecionou no sistema, ou o texto se for de fora
+                if (origemId) formData.append('origem_paroquia_id', origemId);
+                if (origemExt) formData.append('origem_externa', origemExt);
+                
+                if (destinoId) formData.append('destino_paroquia_id', destinoId);
+                if (destinoExt) formData.append('destino_externa', destinoExt);
+                
                 formData.append('status', 'Pendente_Setor_Origem');
+
                 if (arquivoInput.files.length > 0) formData.append('anexo', arquivoInput.files[0]);
 
                 await pb.collection('pedidos').create(formData);
                 mostrarMensagem("Pedido enviado com sucesso! Aguarde o contato do Setor.", "sucesso");
+                
+                // Reset geral
                 document.getElementById('formPedido').reset();
+                document.getElementById('origem_id').innerHTML = '<option value="">Escolha um setor primeiro...</option>';
+                document.getElementById('origem_id').disabled = true;
+                document.getElementById('origem_id').classList.add('bg-slate-100', 'text-slate-400', 'cursor-not-allowed', 'border-slate-200');
+                document.getElementById('origem_id').classList.remove('bg-white', 'text-slate-700', 'border-slate-300');
                 
-                const selectOrigem = document.getElementById('origem_id');
-                selectOrigem.innerHTML = '<option value="">Escolha um setor primeiro...</option>';
-                selectOrigem.disabled = true;
-                selectOrigem.classList.add('bg-slate-100', 'text-slate-400', 'cursor-not-allowed', 'border-slate-200');
-                selectOrigem.classList.remove('bg-white', 'text-slate-700', 'border-slate-300');
-                
-                const selectDestino = document.getElementById('destino_id');
-                selectDestino.innerHTML = '<option value="">Escolha um setor primeiro...</option>';
-                selectDestino.disabled = true;
-                selectDestino.classList.add('bg-slate-100', 'text-slate-400', 'cursor-not-allowed', 'border-slate-200');
-                selectDestino.classList.remove('bg-white', 'text-slate-700', 'border-slate-300');
+                document.getElementById('destino_id').innerHTML = '<option value="">Escolha um setor primeiro...</option>';
+                document.getElementById('destino_id').disabled = true;
+                document.getElementById('destino_id').classList.add('bg-slate-100', 'text-slate-400', 'cursor-not-allowed', 'border-slate-200');
+                document.getElementById('destino_id').classList.remove('bg-white', 'text-slate-700', 'border-slate-300');
 
             } catch (error) { mostrarMensagem("Erro ao enviar pedido. Verifique a sua conexão ou o tamanho do arquivo anexo.", "erro"); } 
             finally { btnSubmit.disabled = false; btnSubmit.textContent = "Enviar Solicitação"; btnSubmit.classList.remove('opacity-75', 'cursor-not-allowed', 'transform-none'); }
