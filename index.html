@@ -164,7 +164,7 @@ Substitua **TODO** o conteúdo do seu arquivo **`index.html`** por este código 
                 setores.forEach(s => { options += `<option value="${s.id}">${s.nome}</option>`; });
                 
                 // Adicionando a opção externa fixa no final da lista
-                options += '<option value="OUTRO">🌍 Outra (Arqui)diocese / Externo</option>';
+                options += '<option value="OUTRO">Outra (Arqui)diocese / Externo</option>';
                 
                 selectSetorOrigem.innerHTML = options; 
                 selectSetorDestino.innerHTML = options;
@@ -185,7 +185,7 @@ Substitua **TODO** o conteúdo do seu arquivo **`index.html`** por este código 
             // Se o usuário selecionou a opção externa
             if (setorId === 'OUTRO') {
                 divExterna.classList.remove('hidden');
-                selectParoquia.innerHTML = '<option value="">Preencha o campo abaixo 👇</option>';
+                selectParoquia.innerHTML = '<option value="">Preencha o campo abaixo</option>';
                 selectParoquia.disabled = true;
                 selectParoquia.classList.add('bg-slate-100', 'text-slate-400', 'cursor-not-allowed', 'border-slate-200');
                 selectParoquia.classList.remove('bg-white', 'text-slate-700', 'border-slate-300');
@@ -236,7 +236,7 @@ Substitua **TODO** o conteúdo do seu arquivo **`index.html`** por este código 
             // Se o usuário selecionou a opção externa
             if (setorId === 'OUTRO') {
                 divExterna.classList.remove('hidden');
-                selectParoquia.innerHTML = '<option value="">Preencha o campo abaixo 👇</option>';
+                selectParoquia.innerHTML = '<option value="">Preencha o campo abaixo</option>';
                 selectParoquia.disabled = true;
                 selectParoquia.classList.add('bg-slate-100', 'text-slate-400', 'cursor-not-allowed', 'border-slate-200');
                 selectParoquia.classList.remove('bg-white', 'text-slate-700', 'border-slate-300');
