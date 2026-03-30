@@ -70,7 +70,8 @@
 
                     <div id="abaPrincipalVisao" class="aba-principal">
                         <h2 class="text-xl font-extrabold text-slate-800 mb-6 border-b border-slate-100 pb-4">Visão Geral do Sistema</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-6 mb-10">
                             <div class="bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl shadow-md p-6 text-white transform hover:-translate-y-1 transition duration-300">
                                 <p class="text-amber-50 text-xs font-bold uppercase tracking-wider">Pendentes</p>
                                 <p id="dashPendentes" class="text-4xl font-extrabold mt-1">...</p>
@@ -79,6 +80,12 @@
                                 <p class="text-emerald-100 text-xs font-bold uppercase tracking-wider">Concluídas</p>
                                 <p id="dashConcluidas" class="text-4xl font-extrabold mt-1">...</p>
                             </div>
+                            
+                            <div class="bg-gradient-to-br from-red-500 to-rose-600 rounded-2xl shadow-md p-6 text-white transform hover:-translate-y-1 transition duration-300">
+                                <p class="text-red-100 text-xs font-bold uppercase tracking-wider">Rejeitadas</p>
+                                <p id="dashRejeitadas" class="text-4xl font-extrabold mt-1">...</p>
+                            </div>
+
                             <div class="bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl shadow-md p-6 text-white transform hover:-translate-y-1 transition duration-300">
                                 <p class="text-blue-100 text-xs font-bold uppercase tracking-wider">Paróquias</p>
                                 <p id="dashParoquias" class="text-4xl font-extrabold mt-1">...</p>
@@ -88,6 +95,7 @@
                                 <p id="dashSetores" class="text-4xl font-extrabold mt-1">...</p>
                             </div>
                         </div>
+
                         <div class="bg-slate-50 rounded-2xl border border-slate-100 p-6 max-w-4xl mx-auto shadow-inner">
                             <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-6 text-center">Proporção de Status dos Pedidos</h3>
                             <div class="relative h-72 w-full flex justify-center">
@@ -336,19 +344,30 @@
         else { document.getElementById('subAbaParoquias').classList.remove('hidden'); document.getElementById('btnSubAbaParoquias').classList.remove('border-transparent', 'text-slate-500', 'hover:text-slate-700'); document.getElementById('btnSubAbaParoquias').classList.add('border-blue-600', 'text-blue-700'); }
     }
 
+    // --- DASHBOARD ---
     async function carregarDashboard() {
         const usuario = pb.authStore.model; const papel = getPapelSeguro(usuario); let filterParoquias = ''; let filterPedidos = '';
-        if (papel === 'Admin_Setor') { filterParoquias = `setor_id = "${usuario.setor_id}"`; filterPedidos = `(origem_paroquia_id.setor_id = "${usuario.setor_id}" || destino_paroquia_id.setor_id = "${usuario.setor_id}")`; } 
-        else if (papel === 'Admin_Paroquia') { filterParoquias = `id = "${usuario.paroquia_id}"`; filterPedidos = `(origem_paroquia_id = "${usuario.paroquia_id}" || destino_paroquia_id = "${usuario.paroquia_id}")`; } 
-        else if (papel !== 'Master' && papel !== 'Arquidiocesano') { filterParoquias = `id = "null"`; filterPedidos = `id = "null"`; }
+        
+        if (papel === 'Admin_Setor') { 
+            filterParoquias = `setor_id = "${usuario.setor_id}"`; 
+            filterPedidos = `((origem_paroquia_id != "" && origem_paroquia_id.setor_id = "${usuario.setor_id}") || (destino_paroquia_id != "" && destino_paroquia_id.setor_id = "${usuario.setor_id}"))`; 
+        } 
+        else if (papel === 'Admin_Paroquia') { 
+            filterParoquias = `id = "${usuario.paroquia_id}"`; 
+            filterPedidos = `((origem_paroquia_id != "" && origem_paroquia_id = "${usuario.paroquia_id}") || (destino_paroquia_id != "" && destino_paroquia_id = "${usuario.paroquia_id}"))`; 
+        } 
+        else if (papel !== 'Master' && papel !== 'Arquidiocesano') { 
+            filterParoquias = `id = "null"`; filterPedidos = `id = "null"`; 
+        }
 
         let totParoquias = 0, totSetores = 0, totPendentes = 0, totConcluidos = 0, totRejeitados = 0;
 
         try { let opt = { requestKey: null }; if(filterParoquias) opt.filter = filterParoquias; const res = await pb.collection('paroquias').getList(1, 1, opt); totParoquias = res.totalItems; document.getElementById('dashParoquias').textContent = totParoquias; } catch (e) { document.getElementById('dashParoquias').textContent = 'Erro'; }
         try { if (papel === 'Master' || papel === 'Arquidiocesano') { const res = await pb.collection('setores').getList(1, 1, { requestKey: null }); totSetores = res.totalItems; } else { totSetores = 1; } document.getElementById('dashSetores').textContent = totSetores; } catch (e) { document.getElementById('dashSetores').textContent = 'Erro'; }
+        
         try { let fil = `(status != "Concluido" && status != "Rejeitado")`; if (filterPedidos) fil = `(${filterPedidos}) && ${fil}`; const res = await pb.collection('pedidos').getList(1, 1, { filter: fil, requestKey: null }); totPendentes = res.totalItems; document.getElementById('dashPendentes').textContent = totPendentes; } catch (e) { document.getElementById('dashPendentes').textContent = 'Erro'; }
         try { let fil = `status="Concluido"`; if (filterPedidos) fil = `(${filterPedidos}) && ${fil}`; const res = await pb.collection('pedidos').getList(1, 1, { filter: fil, requestKey: null }); totConcluidos = res.totalItems; document.getElementById('dashConcluidas').textContent = totConcluidos; } catch (e) { document.getElementById('dashConcluidas').textContent = 'Erro'; }
-        try { let fil = `status="Rejeitado"`; if (filterPedidos) fil = `(${filterPedidos}) && ${fil}`; const res = await pb.collection('pedidos').getList(1, 1, { filter: fil, requestKey: null }); totRejeitados = res.totalItems; } catch (e) {}
+        try { let fil = `status="Rejeitado"`; if (filterPedidos) fil = `(${filterPedidos}) && ${fil}`; const res = await pb.collection('pedidos').getList(1, 1, { filter: fil, requestKey: null }); totRejeitados = res.totalItems; document.getElementById('dashRejeitadas').textContent = totRejeitados; } catch (e) { document.getElementById('dashRejeitadas').textContent = 'Erro'; }
 
         try {
             if (typeof Chart === 'undefined') return; const ctx = document.getElementById('graficoStatus').getContext('2d'); if (graficoStatus) graficoStatus.destroy();
@@ -460,8 +479,6 @@
 
     async function buscarPedidosConcluidos() {
         const usuario = pb.authStore.model; const papel = getPapelSeguro(usuario); 
-        
-        // FIX: Incluir o status "Rejeitado" na busca da aba de Concluídas
         let filtroBase = '(status = "Concluido" || status = "Rejeitado")';
         
         if (papel === 'Admin_Paroquia') {
@@ -484,19 +501,11 @@
                 let infoEtapa = p.etapas ? `<span class="block text-xs font-bold text-indigo-600 mt-1 uppercase tracking-wider">${p.etapas}</span>` : `<span class="block text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider">Etapa não informada</span>`;
                 let corObs = p.observacao ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'; let txtObs = p.observacao ? 'Ler Obs' : '+ Obs'; let btnObs = `<button onclick="abrirModalObsLeitura('${p.id}', \`${encodeURIComponent(p.observacao || '')}\`)" class="${corObs} text-xs px-3 py-1.5 rounded-md font-bold transition shadow-sm w-full">${txtObs}</button>`;
                 
-                // FIX: Distinguir visualmente Concluído de Rejeitado
                 let badgeStatusFinal = p.status === 'Rejeitado' 
                     ? `<span class="bg-red-100 text-red-800 font-bold text-[11px] px-3 py-1 rounded-full uppercase tracking-wider">Rejeitado</span>`
                     : `<span class="bg-emerald-100 text-emerald-800 font-bold text-[11px] px-3 py-1 rounded-full uppercase tracking-wider">Concluído</span>`;
 
-                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition-colors">
-                    <td class="py-4 px-5 font-bold text-slate-800 align-top leading-relaxed">${p.nome_casal} ${infoEtapa}</td>
-                    <td class="py-4 px-5 text-sm text-slate-600 align-top leading-relaxed">${o} <span class="text-blue-600 font-bold mx-1">➔</span><br>${d}</td>
-                    <td class="py-4 px-5 align-top whitespace-nowrap"><div class="mb-1"><span class="text-xs text-slate-400 font-bold uppercase mr-2">Solicitado:</span><span class="text-sm font-medium text-slate-700">${formatarData(p.created)}</span></div><div><span class="text-xs ${p.status === 'Rejeitado' ? 'text-red-500' : 'text-emerald-500'} font-bold uppercase mr-2">${p.status === 'Rejeitado' ? 'Rejeitado:' : 'Concluído:'}</span><span class="text-sm font-bold ${p.status === 'Rejeitado' ? 'text-red-700' : 'text-emerald-700'}">${formatarData(p.updated)}</span></div></td>
-                    <td class="py-4 px-5 align-top">${badgeStatusFinal}</td>
-                    <td class="py-4 px-5 align-top text-center">${btnObs}</td>
-                    <td class="py-4 px-5 text-right align-top"><button onclick="buscarComprovante('${p.id}')" class="bg-blue-600 text-white text-xs px-4 py-1.5 rounded-md hover:bg-blue-700 transition shadow font-bold">Ver Doc</button></td>
-                </tr>`;
+                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition-colors"><td class="py-4 px-5 font-bold text-slate-800 align-top leading-relaxed">${p.nome_casal} ${infoEtapa}</td><td class="py-4 px-5 text-sm text-slate-600 align-top leading-relaxed">${o} <span class="text-blue-600 font-bold mx-1">➔</span><br>${d}</td><td class="py-4 px-5 align-top whitespace-nowrap"><div class="mb-1"><span class="text-xs text-slate-400 font-bold uppercase mr-2">Solicitado:</span><span class="text-sm font-medium text-slate-700">${formatarData(p.created)}</span></div><div><span class="text-xs ${p.status === 'Rejeitado' ? 'text-red-500' : 'text-emerald-500'} font-bold uppercase mr-2">${p.status === 'Rejeitado' ? 'Rejeitado:' : 'Concluído:'}</span><span class="text-sm font-bold ${p.status === 'Rejeitado' ? 'text-red-700' : 'text-emerald-700'}">${formatarData(p.updated)}</span></div></td><td class="py-4 px-5 align-top">${badgeStatusFinal}</td><td class="py-4 px-5 align-top text-center">${btnObs}</td><td class="py-4 px-5 text-right align-top"><button onclick="buscarComprovante('${p.id}')" class="bg-blue-600 text-white text-xs px-4 py-1.5 rounded-md hover:bg-blue-700 transition shadow font-bold">Ver Doc</button></td></tr>`;
             });
         } catch (e) {}
     }
@@ -547,7 +556,7 @@
     document.getElementById('formNovoAdmin').addEventListener('submit', async function(e) { e.preventDefault(); const btn = document.getElementById('btnSalvarAdmin'); btn.disabled = true; btn.textContent = "Salvando..."; const criador = pb.authStore.model; const p = getPapelSeguro(criador); let sId = document.getElementById('admin_setor_id').value || null; if (p === 'Admin_Setor') sId = criador.setor_id; const dados = { nome_casal: document.getElementById('admin_nome').value, celular: document.getElementById('admin_celular').value, email: document.getElementById('admin_email').value, password: document.getElementById('admin_senha').value, passwordConfirm: document.getElementById('admin_senha').value, papel: document.getElementById('admin_papel').value, setor_id: sId, paroquia_id: document.getElementById('admin_paroquia_id').value || null }; try { await pb.collection('users').create(dados); document.getElementById('formNovoAdmin').reset(); alternarCamposAdmin(); carregarTabelaAdmins(); alert("Usuário cadastrado com sucesso!"); } catch (e) { alert("Erro: Email já em uso ou dados inválidos."); } finally { btn.disabled = false; btn.textContent = "Cadastrar Usuário"; } });
     
     async function carregarTabelaAdmins() { 
-        const u = pb.authStore.model; const pLogado = getPapelSeguro(u); let optUsers = { sort: '-created', expand: 'setor_id, paroquia_id', requestKey: null }; if (pLogado === 'Admin_Setor') optUsers.filter = `setor_id = "${u.setor_id}" || paroquia_id.setor_id = "${u.setor_id}"`; 
+        const u = pb.authStore.model; const pLogado = getPapelSeguro(u); let optUsers = { sort: '-created', expand: 'setor_id, paroquia_id', requestKey: null }; if (pLogado === 'Admin_Setor') optUsers.filter = `setor_id ?= "${u.setor_id}" || paroquia_id.setor_id ?= "${u.setor_id}"`; 
         try { const users = await pb.collection('users').getFullList(optUsers); const tb = document.getElementById('listaUsuariosAdmin'); tb.innerHTML = ''; if (users.length === 0) tb.innerHTML = '<tr><td colspan="5" class="py-8 text-center text-slate-500 italic">Nenhum usuário cadastrado.</td></tr>'; users.forEach(us => { const pLido = getPapelSeguro(us); let l = '-'; let sIdForEdit = us.setor_id || ''; if (pLido === 'Admin_Setor') { l = us.expand?.setor_id?.nome || '-'; } else if (pLido === 'Admin_Paroquia') { l = us.expand?.paroquia_id?.nome || '-'; sIdForEdit = us.expand?.paroquia_id?.setor_id || ''; } const btnEditar = pLogado === 'Master' ? `<button onclick="abrirModalEdicaoUsuario('${us.id}', '${us.nome_casal || ''}', '${us.celular || ''}', '${pLido}', '${sIdForEdit}', '${us.paroquia_id || ''}')" class="text-blue-600 font-bold text-sm hover:text-blue-800 transition mr-4">Editar</button>` : ''; const btnExcluir = pLogado === 'Master' ? `<button onclick="excluirAdmin('${us.id}')" class="text-red-500 font-bold text-sm hover:text-red-700 transition">Excluir</button>` : ''; tb.innerHTML += `<tr class="hover:bg-slate-50 transition-colors"><td class="py-4 px-5 font-bold text-slate-800">${us.nome_casal || '-'}</td><td class="py-4 px-5 text-slate-600"><div>${us.email}</div><div class="text-xs text-slate-400 font-medium mt-0.5">${us.celular || 'Sem celular'}</div></td><td class="py-4 px-5"><span class="bg-blue-100 text-blue-800 font-bold text-xs px-3 py-1 rounded-full">${pLido.replace(/_/g, ' ')}</span></td><td class="py-4 px-5 text-slate-600 font-medium">${l}</td><td class="py-4 px-5 text-right whitespace-nowrap">${btnEditar}${btnExcluir}</td></tr>`; }); } catch (e) {} 
     }
 
@@ -557,7 +566,6 @@
     document.getElementById('formEdicaoUsuario').addEventListener('submit', async function(e) { e.preventDefault(); const id = document.getElementById('edit_user_id').value; const btn = document.getElementById('btnSalvarEdicaoUsuario'); const papel = document.getElementById('edit_user_papel').value; let sId = null; let pId = null; if (papel === 'Admin_Setor') sId = document.getElementById('edit_user_setor_id').value; if (papel === 'Admin_Paroquia') pId = document.getElementById('edit_user_paroquia_id').value; const dados = { nome_casal: document.getElementById('edit_user_nome').value, celular: document.getElementById('edit_user_celular').value, papel: papel, setor_id: sId, paroquia_id: pId }; btn.disabled = true; btn.textContent = 'Salvando...'; try { await pb.collection('users').update(id, dados); fecharModalEdicaoUsuario(); carregarTabelaAdmins(); alert('Acesso atualizado com sucesso!'); } catch (error) { alert('Erro ao atualizar usuário.'); } finally { btn.disabled = false; btn.textContent = 'Salvar Alterações'; } });
     async function excluirAdmin(id) { if(confirm("Deseja realmente revogar o acesso deste usuário?")) { if (id === pb.authStore.model.id) { alert("Você não pode excluir seu próprio usuário!"); return; } try { await pb.collection('users').delete(id); carregarTabelaAdmins(); } catch (e) {} } }
 
-    // --- EXPORTAÇÃO CSV ---
     function baixarArquivoCSV(conteudoCSV, nomeArquivo) { const blob = new Blob(['\uFEFF' + conteudoCSV], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement("a"); const url = URL.createObjectURL(blob); link.setAttribute("href", url); link.setAttribute("download", nomeArquivo); link.style.visibility = 'hidden'; document.body.appendChild(link); link.click(); document.body.removeChild(link); }
     async function exportarPedidosCSV() { try { const records = await pb.collection('pedidos').getFullList({ expand: 'origem_paroquia_id, destino_paroquia_id', sort: '-created', requestKey: null }); let csv = "Data de Solicitacao,Nome do Casal,Etapas,Celular,Paroquia Origem,Paroquia Destino,Status\n"; records.forEach(p => { const dataObj = new Date(p.created); const dataFormatada = dataObj.toLocaleDateString('pt-BR') + ' ' + dataObj.toLocaleTimeString('pt-BR'); const origem = p.expand?.origem_paroquia_id?.nome || p.origem_externa || 'N/A'; const destino = p.expand?.destino_paroquia_id?.nome || p.destino_externa || 'N/A'; csv += `${dataFormatada},"${p.nome_casal.replace(/"/g, '""')}","${p.etapas || ''}","${p.celular}","${origem.replace(/"/g, '""')}","${destino.replace(/"/g, '""')}","${p.status.replace(/_/g, ' ')}"\n`; }); baixarArquivoCSV(csv, 'relatorio_transferencias.csv'); } catch (error) { alert("Erro ao exportar pedidos."); } }
     async function exportarParoquiasCSV() { try { const records = await pb.collection('paroquias').getFullList({ expand: 'setor_id', sort: 'nome', requestKey: null }); let csv = "Nome da Paroquia,Cidade,Setor\n"; records.forEach(p => { const setor = p.expand?.setor_id?.nome || 'N/A'; const cidade = p.cidade || 'N/A'; csv += `"${p.nome.replace(/"/g, '""')}","${cidade.replace(/"/g, '""')}","${setor.replace(/"/g, '""')}"\n`; }); baixarArquivoCSV(csv, 'relatorio_locais.csv'); } catch (error) { alert("Erro ao exportar locais."); } }
