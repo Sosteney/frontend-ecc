@@ -144,7 +144,7 @@
                 const setores = await pb.collection('setores').getFullList({ sort: 'nome' });
                 let options = '<option value="">Selecione o Setor...</option>';
                 setores.forEach(s => { options += `<option value="${s.id}">${s.nome}</option>`; });
-                options += '<option value="OUTRO">🌍 Outra (Arqui)diocese / Externo</option>';
+                options += '<option value="OUTRO">Outra Arquidiocese/Externo</option>';
                 selectSetorOrigem.innerHTML = options; selectSetorDestino.innerHTML = options;
             } catch (error) {
                 selectSetorOrigem.innerHTML = '<option value="">Erro de conexão</option>';
