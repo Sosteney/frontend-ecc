@@ -266,43 +266,12 @@
     let subAbaPedidosAtual = 'andamento';
     let graficoStatus = null; 
 
-    // OPÇÕES DE FLUXO COM A NOVA NOMENCLATURA HUMANA
-    const STATUS_TERMINAIS = [
-        'Concluido', 'Rejeitado', 
-        'Destino - Documentos entregues a da paróquia de destino da transferência', 
-        'Destino - Documentos entregues ao Casal Arquidiocesano para transferencia'
-    ];
-
+    const STATUS_TERMINAIS = ['Concluido', 'Rejeitado', 'Destino - Documentos entregues a da paróquia de destino da transferência', 'Destino - Documentos entregues ao Casal Arquidiocesano para transferencia'];
     const OPCOES_FLUXO = {
-        1: [ 
-            "Origem - Documentos ainda não recebidos", 
-            "Origem - Documentos entregues parcialmente", 
-            "Origem - Recebido integral dos documentos da paróquia de origem", 
-            "Destino - Documentos entregues a da paróquia de destino da transferência" 
-        ],
-        2: [ 
-            "Origem - Ainda pendente de envio de documentos", 
-            "Origem - Recebido os documentos da paróquia de origem", 
-            "Origem - Recebido os documentos da paróquia de origem em transito para o setor de destino", 
-            "Origem - Documentos da paróquia de origem entregues para o setor de destino", 
-            "Destino - Recebido parcialmente do Setorial origem", 
-            "Destino - Recebido os documentos do setor de origem em transito para setor de destino", 
-            "Destino - Documentos entregues a da paróquia de destino da transferência" 
-        ],
-        3: [ 
-            "Destino - Documentos ainda não recebidos", 
-            "Destino - Documentos entregues parcialmente", 
-            "Destino - Recebido integral dos documentos da paróquia de origem", 
-            "Destino - Documentos entregues ao Casal Arquidiocesano para transferencia" 
-        ],
-        4: [ 
-            "Origem - Documentos ainda não recebidos", 
-            "Origem - Documentos entregues parcialmente", 
-            "Origem - Recebido integral dos documentos", 
-            "Destino - Recebido parcialmente", 
-            "Destino - Recebido os documentos em transito para paróquia de destino", 
-            "Destino - Documentos entregues a da paróquia de destino da transferência" 
-        ]
+        1: [ "Origem - Documentos ainda não recebidos", "Origem - Documentos entregues parcialmente", "Origem - Recebido integral dos documentos da paróquia de origem", "Destino - Documentos entregues a da paróquia de destino da transferência" ],
+        2: [ "Origem - Ainda pendente de envio de documentos", "Origem - Recebido os documentos da paróquia de origem", "Origem - Recebido os documentos da paróquia de origem em transito para o setor de destino", "Origem - Documentos da paróquia de origem entregues para o setor de destino", "Destino - Recebido parcialmente do Setorial origem", "Destino - Recebido os documentos do setor de origem em transito para setor de destino", "Destino - Documentos entregues a da paróquia de destino da transferência" ],
+        3: [ "Destino - Documentos ainda não recebidos", "Destino - Documentos entregues parcialmente", "Destino - Recebido integral dos documentos da paróquia de origem", "Destino - Documentos entregues ao Casal Arquidiocesano para transferencia" ],
+        4: [ "Origem - Documentos ainda não recebidos", "Origem - Documentos entregues parcialmente", "Origem - Recebido integral dos documentos", "Destino - Recebido parcialmente", "Destino - Recebido os documentos em transito para paróquia de destino", "Destino - Documentos entregues a da paróquia de destino da transferência" ]
     };
 
     ['admin_celular', 'edit_user_celular'].forEach(id => {
@@ -325,7 +294,6 @@
         return { tipo: 2, nome: "Mudança de Paróquia (Setores Diferentes)" };
     }
 
-    // Função visual para colorir as etiquetas Origem/Destino
     function renderizarBadgeStatus(statusTexto) {
         if (statusTexto === 'Aceite pendente' || statusTexto === 'Envio pendente') {
             return `<span class="bg-slate-100 text-slate-700 font-bold text-[11px] px-3 py-1 rounded-lg block leading-tight border border-slate-300">${statusTexto}</span>`;
@@ -387,27 +355,16 @@
         else { document.getElementById('subAbaParoquias').classList.remove('hidden'); document.getElementById('btnSubAbaParoquias').classList.remove('border-transparent', 'text-slate-500', 'hover:text-slate-700'); document.getElementById('btnSubAbaParoquias').classList.add('border-blue-600', 'text-blue-700'); }
     }
 
-    // --- DASHBOARD ---
     async function carregarDashboard() {
         const usuario = pb.authStore.model; const papel = getPapelSeguro(usuario); let filterParoquias = ''; let filterPedidos = '';
-        
-        if (papel === 'Admin_Setor') { 
-            filterParoquias = `setor_id = "${usuario.setor_id}"`; 
-            filterPedidos = `((origem_paroquia_id != "" && origem_paroquia_id.setor_id = "${usuario.setor_id}") || (destino_paroquia_id != "" && destino_paroquia_id.setor_id = "${usuario.setor_id}"))`; 
-        } 
-        else if (papel === 'Admin_Paroquia') { 
-            filterParoquias = `id = "${usuario.paroquia_id}"`; 
-            filterPedidos = `((origem_paroquia_id != "" && origem_paroquia_id = "${usuario.paroquia_id}") || (destino_paroquia_id != "" && destino_paroquia_id = "${usuario.paroquia_id}"))`; 
-        } 
-        else if (papel !== 'Master' && papel !== 'Arquidiocesano') { 
-            filterParoquias = `id = "null"`; filterPedidos = `id = "null"`; 
-        }
+        if (papel === 'Admin_Setor') { filterParoquias = `setor_id = "${usuario.setor_id}"`; filterPedidos = `((origem_paroquia_id != "" && origem_paroquia_id.setor_id = "${usuario.setor_id}") || (destino_paroquia_id != "" && destino_paroquia_id.setor_id = "${usuario.setor_id}"))`; } 
+        else if (papel === 'Admin_Paroquia') { filterParoquias = `id = "${usuario.paroquia_id}"`; filterPedidos = `((origem_paroquia_id != "" && origem_paroquia_id = "${usuario.paroquia_id}") || (destino_paroquia_id != "" && destino_paroquia_id = "${usuario.paroquia_id}"))`; } 
+        else if (papel !== 'Master' && papel !== 'Arquidiocesano') { filterParoquias = `id = "null"`; filterPedidos = `id = "null"`; }
 
         let totParoquias = 0, totSetores = 0, totPendentes = 0, totConcluidos = 0, totRejeitados = 0;
 
         try { let opt = { requestKey: null }; if(filterParoquias) opt.filter = filterParoquias; const res = await pb.collection('paroquias').getList(1, 1, opt); totParoquias = res.totalItems; document.getElementById('dashParoquias').textContent = totParoquias; } catch (e) { document.getElementById('dashParoquias').textContent = 'Erro'; }
         try { if (papel === 'Master' || papel === 'Arquidiocesano') { const res = await pb.collection('setores').getList(1, 1, { requestKey: null }); totSetores = res.totalItems; } else { totSetores = 1; } document.getElementById('dashSetores').textContent = totSetores; } catch (e) { document.getElementById('dashSetores').textContent = 'Erro'; }
-        
         try { let fil = `(status != "Concluido" && status != "Rejeitado")`; if (filterPedidos) fil = `(${filterPedidos}) && ${fil}`; const res = await pb.collection('pedidos').getList(1, 1, { filter: fil, requestKey: null }); totPendentes = res.totalItems; document.getElementById('dashPendentes').textContent = totPendentes; } catch (e) { document.getElementById('dashPendentes').textContent = 'Erro'; }
         try { let fil = `status="Concluido"`; if (filterPedidos) fil = `(${filterPedidos}) && ${fil}`; const res = await pb.collection('pedidos').getList(1, 1, { filter: fil, requestKey: null }); totConcluidos = res.totalItems; document.getElementById('dashConcluidas').textContent = totConcluidos; } catch (e) { document.getElementById('dashConcluidas').textContent = 'Erro'; }
         try { let fil = `status="Rejeitado"`; if (filterPedidos) fil = `(${filterPedidos}) && ${fil}`; const res = await pb.collection('pedidos').getList(1, 1, { filter: fil, requestKey: null }); totRejeitados = res.totalItems; document.getElementById('dashRejeitadas').textContent = totRejeitados; } catch (e) { document.getElementById('dashRejeitadas').textContent = 'Erro'; }
@@ -439,16 +396,8 @@
     async function atualizarFiltroParoquias(setorForcadoId = null) {
         const setorId = setorForcadoId || document.getElementById('filtro_setor').value; 
         const selParoquia = document.getElementById('filtro_paroquia');
-        
-        if (setorId === 'EXTERNO') {
-            selParoquia.innerHTML = '<option value="">Não aplicável para Externas...</option>';
-            selParoquia.disabled = true; selParoquia.classList.add('bg-slate-100', 'text-slate-400', 'cursor-not-allowed'); selParoquia.classList.remove('bg-white', 'text-slate-700');
-            aplicarFiltrosAtuais();
-            return;
-        }
-        
+        if (setorId === 'EXTERNO') { selParoquia.innerHTML = '<option value="">Não aplicável para Externas...</option>'; selParoquia.disabled = true; selParoquia.classList.add('bg-slate-100', 'text-slate-400', 'cursor-not-allowed'); selParoquia.classList.remove('bg-white', 'text-slate-700'); aplicarFiltrosAtuais(); return; }
         if (!setorId) { selParoquia.innerHTML = '<option value="">Selecione um Setor primeiro...</option>'; selParoquia.disabled = true; selParoquia.classList.add('bg-slate-100', 'text-slate-400', 'cursor-not-allowed'); selParoquia.classList.remove('bg-white', 'text-slate-700'); aplicarFiltrosAtuais(); return; }
-        
         selParoquia.innerHTML = '<option value="">Carregando...</option>'; selParoquia.disabled = true;
         try { 
             const paroquias = await pb.collection('paroquias').getFullList({ sort: 'nome', filter: `setor_id = "${setorId}"`, requestKey: null }); 
@@ -461,11 +410,8 @@
     function aplicarFiltrosAtuais() { if (subAbaPedidosAtual === 'andamento') buscarPedidosPendentes(); else buscarPedidosConcluidos(); }
     
     function gerarStringFiltroDinamico() {
-        const fSetor = document.getElementById('filtro_setor').value; 
-        const fParoquia = document.getElementById('filtro_paroquia').value;
-        
+        const fSetor = document.getElementById('filtro_setor').value; const fParoquia = document.getElementById('filtro_paroquia').value;
         if (fSetor === 'EXTERNO') { return ` && (origem_externa != "" || destino_externa != "")`; }
-
         if (fParoquia) return ` && ((origem_paroquia_id != "" && origem_paroquia_id ?= "${fParoquia}") || (destino_paroquia_id != "" && destino_paroquia_id ?= "${fParoquia}"))`;
         if (fSetor) return ` && ((origem_paroquia_id != "" && origem_paroquia_id.setor_id ?= "${fSetor}") || (destino_paroquia_id != "" && destino_paroquia_id.setor_id ?= "${fSetor}"))`; 
         return '';
@@ -473,10 +419,7 @@
 
     async function buscarPedidosPendentes() {
         const usuario = pb.authStore.model; const papel = getPapelSeguro(usuario); let filtroBase = `status != 'Concluido' && status != 'Rejeitado'`;
-        
-        if (papel === 'Admin_Setor') { 
-            filtroBase += ` && ((origem_paroquia_id != "" && origem_paroquia_id.setor_id ?= "${usuario.setor_id}") || (destino_paroquia_id != "" && destino_paroquia_id.setor_id ?= "${usuario.setor_id}"))`; 
-        }
+        if (papel === 'Admin_Setor') { filtroBase += ` && ((origem_paroquia_id != "" && origem_paroquia_id.setor_id ?= "${usuario.setor_id}") || (destino_paroquia_id != "" && destino_paroquia_id.setor_id ?= "${usuario.setor_id}"))`; }
 
         const filtroFinal = filtroBase + gerarStringFiltroDinamico(); 
         const mostrarAcoes = papel !== 'Arquidiocesano'; document.getElementById('thAcoesPedidos').style.display = mostrarAcoes ? '' : 'none';
@@ -511,16 +454,45 @@
 
                 let botoesHtml = '';
                 if (mostrarAcoes) { 
-                    const hasOrigemExterna = !!p.origem_externa;
-                    if (p.status === 'Aceite pendente') { 
-                        if (isOrigem || papel === 'Master' || (hasOrigemExterna && isDestino)) { 
+                    let podeEditar = false;
+                    let msgBloqueio = '';
+
+                    if (papel === 'Master') {
+                        podeEditar = true;
+                    } else {
+                        if (p.status === 'Aceite pendente') {
+                            if (isOrigem || (!!p.origem_externa && isDestino)) {
+                                podeEditar = true;
+                            } else {
+                                msgBloqueio = 'Aguardando Aceite da Origem';
+                            }
+                        } else {
+                            let isFaseDestino = p.status.startsWith('Destino -');
+                            if (isFaseDestino) {
+                                if (isDestino || (classif.tipo === 4 && isOrigem)) {
+                                    podeEditar = true;
+                                } else {
+                                    msgBloqueio = 'Em andamento no Destino';
+                                }
+                            } else {
+                                if (isOrigem || (classif.tipo === 3 && isDestino)) {
+                                    podeEditar = true;
+                                } else {
+                                    msgBloqueio = 'Em andamento na Origem';
+                                }
+                            }
+                        }
+                    }
+
+                    if (podeEditar) {
+                        if (p.status === 'Aceite pendente') { 
                             botoesHtml = `<td class="py-4 px-5 space-y-2 whitespace-nowrap text-right align-top"><button onclick="abrirModalInicial('${p.id}', 'Aceitar')" class="bg-emerald-600 text-white text-xs px-3 py-1.5 rounded-md hover:bg-emerald-700 transition shadow font-bold w-full">✅ Aceitar</button><br><button onclick="abrirModalInicial('${p.id}', 'Rejeitar')" class="bg-red-600 text-white text-xs px-3 py-1.5 rounded-md hover:bg-red-700 transition shadow font-bold w-full">❌ Rejeitar</button></td>`; 
                         } else { 
-                            botoesHtml = `<td class="py-4 px-5 text-right text-xs text-slate-400 italic">Aguardando Aceite</td>`; 
-                        } 
-                    } else { 
-                        botoesHtml = `<td class="py-4 px-5 space-x-2 whitespace-nowrap text-right align-top"><button onclick="abrirModalMudarStatus('${p.id}', ${classif.tipo}, '${p.status}', '${classif.nome}')" class="bg-blue-600 text-white text-xs px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow font-bold">Mudar Status</button></td>`; 
-                    } 
+                            botoesHtml = `<td class="py-4 px-5 space-x-2 whitespace-nowrap text-right align-top"><button onclick="abrirModalMudarStatus('${p.id}', ${classif.tipo}, '${p.status}', '${classif.nome}')" class="bg-blue-600 text-white text-xs px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow font-bold">Mudar Status</button></td>`; 
+                        }
+                    } else {
+                        botoesHtml = `<td class="py-4 px-5 text-right text-[10px] font-bold text-slate-400 uppercase tracking-wider align-top pt-6 leading-tight">${msgBloqueio}</td>`;
+                    }
                 }
                 
                 htmlTotal += `<tr class="hover:bg-slate-50 transition-colors"><td class="py-4 px-5 font-bold text-slate-800 align-top leading-relaxed">${p.nome_casal} ${infoEtapa} ${linkAnexo}</td><td class="py-4 px-5 text-sm text-slate-600 align-top leading-relaxed">${o} <span class="text-blue-600 font-bold mx-1">➔</span><br>${d}</td><td class="py-4 px-5 align-top"><span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Solicitado</span><span class="text-sm font-medium text-slate-700">${formatarData(p.created)}</span></td><td class="py-4 px-5 align-top max-w-xs">${badgeStatusHtml}</td><td class="py-4 px-5 align-top text-center">${btnObs}</td>${botoesHtml}</tr>`;
@@ -531,17 +503,11 @@
 
     async function buscarPedidosConcluidos() {
         const usuario = pb.authStore.model; const papel = getPapelSeguro(usuario); 
-        
         let filtroBase = '(status = "Concluido" || status = "Rejeitado")';
-        
-        if (papel === 'Admin_Paroquia') {
-            filtroBase = `((status = "Concluido" || status = "Rejeitado") && ((origem_paroquia_id != "" && origem_paroquia_id ?= "${usuario.paroquia_id}") || (destino_paroquia_id != "" && destino_paroquia_id ?= "${usuario.paroquia_id}")))`;
-        } else if (papel === 'Admin_Setor') {
-            filtroBase = `((status = "Concluido" || status = "Rejeitado") && ((origem_paroquia_id != "" && origem_paroquia_id.setor_id ?= "${usuario.setor_id}") || (destino_paroquia_id != "" && destino_paroquia_id.setor_id ?= "${usuario.setor_id}")))`;
-        }
+        if (papel === 'Admin_Paroquia') { filtroBase = `((status = "Concluido" || status = "Rejeitado") && ((origem_paroquia_id != "" && origem_paroquia_id ?= "${usuario.paroquia_id}") || (destino_paroquia_id != "" && destino_paroquia_id ?= "${usuario.paroquia_id}")))`; } 
+        else if (papel === 'Admin_Setor') { filtroBase = `((status = "Concluido" || status = "Rejeitado") && ((origem_paroquia_id != "" && origem_paroquia_id.setor_id ?= "${usuario.setor_id}") || (destino_paroquia_id != "" && destino_paroquia_id.setor_id ?= "${usuario.setor_id}")))`; }
 
         const filtroFinal = filtroBase + (papel !== 'Admin_Paroquia' ? gerarStringFiltroDinamico() : '');
-        
         try {
             const records = await pb.collection('pedidos').getFullList({ filter: filtroFinal, expand: 'origem_paroquia_id, destino_paroquia_id', sort: '-updated', requestKey: null });
             const tbody = document.getElementById('listaConcluidos'); tbody.innerHTML = '';
@@ -554,10 +520,7 @@
                 let infoEtapa = p.etapas ? `<span class="block text-xs font-bold text-indigo-600 mt-1 uppercase tracking-wider">${p.etapas}</span>` : `<span class="block text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider">Etapa não informada</span>`;
                 let corObs = p.observacao ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'; let txtObs = p.observacao ? 'Ler Obs' : '+ Obs'; let btnObs = `<button onclick="abrirModalObsLeitura('${p.id}', \`${encodeURIComponent(p.observacao || '')}\`)" class="${corObs} text-xs px-3 py-1.5 rounded-md font-bold transition shadow-sm w-full">${txtObs}</button>`;
                 
-                let badgeStatusFinal = p.status === 'Rejeitado' 
-                    ? `<span class="bg-red-100 text-red-800 font-bold text-[11px] px-3 py-1 rounded-full uppercase tracking-wider border border-red-200">Rejeitado</span>`
-                    : `<span class="bg-emerald-100 text-emerald-800 font-bold text-[11px] px-3 py-1 rounded-full uppercase tracking-wider border border-emerald-200">Concluído</span>`;
-
+                let badgeStatusFinal = p.status === 'Rejeitado' ? `<span class="bg-red-100 text-red-800 font-bold text-[11px] px-3 py-1 rounded-full uppercase tracking-wider border border-red-200">Rejeitado</span>` : `<span class="bg-emerald-100 text-emerald-800 font-bold text-[11px] px-3 py-1 rounded-full uppercase tracking-wider border border-emerald-200">Concluído</span>`;
                 tbody.innerHTML += `<tr class="hover:bg-slate-50 transition-colors"><td class="py-4 px-5 font-bold text-slate-800 align-top leading-relaxed">${p.nome_casal} ${infoEtapa}</td><td class="py-4 px-5 text-sm text-slate-600 align-top leading-relaxed">${o} <span class="text-blue-600 font-bold mx-1">➔</span><br>${d}</td><td class="py-4 px-5 align-top whitespace-nowrap"><div class="mb-1"><span class="text-xs text-slate-400 font-bold uppercase mr-2">Solicitado:</span><span class="text-sm font-medium text-slate-700">${formatarData(p.created)}</span></div><div><span class="text-xs ${p.status === 'Rejeitado' ? 'text-red-500' : 'text-emerald-500'} font-bold uppercase mr-2">${p.status === 'Rejeitado' ? 'Rejeitado:' : 'Concluído:'}</span><span class="text-sm font-bold ${p.status === 'Rejeitado' ? 'text-red-700' : 'text-emerald-700'}">${formatarData(p.updated)}</span></div></td><td class="py-4 px-5 align-top">${badgeStatusFinal}</td><td class="py-4 px-5 align-top text-center">${btnObs}</td><td class="py-4 px-5 text-right align-top"><button onclick="buscarComprovante('${p.id}')" class="bg-blue-600 text-white text-xs px-4 py-1.5 rounded-md hover:bg-blue-700 transition shadow font-bold">Ver Doc</button></td></tr>`;
             });
         } catch (e) {}
@@ -569,7 +532,22 @@
     function fecharModal() { document.getElementById('modalAcao').classList.add('hidden'); document.getElementById('formAcao').reset(); }
     document.getElementById('formAcao').addEventListener('submit', async function(e) { e.preventDefault(); const pId = document.getElementById('pedido_id_modal').value; const acao = document.getElementById('tipo_acao_modal').value; const txtUser = document.getElementById('mensagem_texto').value; const autor = pb.authStore.model.nome_casal || 'Admin'; let novoStatus = acao === 'Rejeitar' ? 'Rejeitado' : 'Envio pendente'; const pAtual = await pb.collection('pedidos').getOne(pId); let obsAntiga = pAtual.observacao || ''; let obsNova = `[${getDataHoraAtual()}] ${autor} (SISTEMA):\nPedido ${acao === 'Aceitar' ? 'ACEITO INICIALMENTE' : 'REJEITADO'}.\nMotivo/Recado: ${txtUser}\n\n`; let obsFinal = obsNova + obsAntiga; try { await pb.collection('pedidos').update(pId, { status: novoStatus, observacao: obsFinal }); fecharModal(); aplicarFiltrosAtuais(); carregarDashboard(); } catch (e) { alert("Erro ao alterar pedido."); } });
 
-    function abrirModalMudarStatus(id, tipo, statusAtual, nomeFluxo) { document.getElementById('update_pedido_id').value = id; document.getElementById('subtitulo_tipo_fluxo').textContent = `Fluxo Atual: ${nomeFluxo}`; const select = document.getElementById('select_novo_status'); select.innerHTML = `<option value="">Escolha o novo andamento...</option>`; if (OPCOES_FLUXO[tipo]) { OPCOES_FLUXO[tipo].forEach(op => { let isSelected = (op === statusAtual) ? 'selected' : ''; select.innerHTML += `<option value="${op}" ${isSelected}>${op}</option>`; }); } document.getElementById('modalMudarStatus').classList.remove('hidden'); verificarStatusFinal(); }
+    function abrirModalMudarStatus(id, tipo, statusAtual, nomeFluxo) { 
+        document.getElementById('update_pedido_id').value = id; document.getElementById('subtitulo_tipo_fluxo').textContent = `Fluxo Atual: ${nomeFluxo}`; 
+        const select = document.getElementById('select_novo_status'); select.innerHTML = `<option value="">Escolha o novo andamento...</option>`; 
+        
+        if (OPCOES_FLUXO[tipo]) { 
+            let idxAtual = OPCOES_FLUXO[tipo].indexOf(statusAtual);
+            OPCOES_FLUXO[tipo].forEach((op, i) => { 
+                // Impede que o usuário selecione uma opção anterior no fluxo
+                if (i >= idxAtual) {
+                    let isSelected = (op === statusAtual) ? 'selected' : ''; select.innerHTML += `<option value="${op}" ${isSelected}>${op}</option>`; 
+                }
+            }); 
+        } 
+        document.getElementById('modalMudarStatus').classList.remove('hidden'); verificarStatusFinal(); 
+    }
+    
     function fecharModalStatus() { document.getElementById('modalMudarStatus').classList.add('hidden'); document.getElementById('formMudarStatus').reset(); document.getElementById('div_anexo_final').classList.add('hidden'); }
     function verificarStatusFinal() { const val = document.getElementById('select_novo_status').value; const divAnexo = document.getElementById('div_anexo_final'); const inputAnexo = document.getElementById('arquivo_anexo_final'); if (STATUS_TERMINAIS.includes(val)) { divAnexo.classList.remove('hidden'); inputAnexo.required = true; } else { divAnexo.classList.add('hidden'); inputAnexo.required = false; } }
 
