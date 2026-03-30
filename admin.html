@@ -70,7 +70,6 @@
 
                     <div id="abaPrincipalVisao" class="aba-principal">
                         <h2 class="text-xl font-extrabold text-slate-800 mb-6 border-b border-slate-100 pb-4">Visão Geral do Sistema</h2>
-                        
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-6 mb-10">
                             <div class="bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl shadow-md p-6 text-white transform hover:-translate-y-1 transition duration-300">
                                 <p class="text-amber-50 text-xs font-bold uppercase tracking-wider">Pendentes</p>
@@ -80,12 +79,10 @@
                                 <p class="text-emerald-100 text-xs font-bold uppercase tracking-wider">Concluídas</p>
                                 <p id="dashConcluidas" class="text-4xl font-extrabold mt-1">...</p>
                             </div>
-                            
                             <div class="bg-gradient-to-br from-red-500 to-rose-600 rounded-2xl shadow-md p-6 text-white transform hover:-translate-y-1 transition duration-300">
                                 <p class="text-red-100 text-xs font-bold uppercase tracking-wider">Rejeitadas</p>
                                 <p id="dashRejeitadas" class="text-4xl font-extrabold mt-1">...</p>
                             </div>
-
                             <div class="bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl shadow-md p-6 text-white transform hover:-translate-y-1 transition duration-300">
                                 <p class="text-blue-100 text-xs font-bold uppercase tracking-wider">Paróquias</p>
                                 <p id="dashParoquias" class="text-4xl font-extrabold mt-1">...</p>
@@ -95,7 +92,6 @@
                                 <p id="dashSetores" class="text-4xl font-extrabold mt-1">...</p>
                             </div>
                         </div>
-
                         <div class="bg-slate-50 rounded-2xl border border-slate-100 p-6 max-w-4xl mx-auto shadow-inner">
                             <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-6 text-center">Proporção de Status dos Pedidos</h3>
                             <div class="relative h-72 w-full flex justify-center">
@@ -270,12 +266,43 @@
     let subAbaPedidosAtual = 'andamento';
     let graficoStatus = null; 
 
-    const STATUS_TERMINAIS = ['Concluido', 'Rejeitado', '1.4 Documentos entregues a da paróquia de destino da transferência', '2.2.3 Documentos entregues a da paróquia de destino da transferência', '3.4 Documentos entregues ao Casal Arquidiocesano para transferencia', '4.2.3 Documentos entregues a da paróquia de destino da transferência'];
+    // OPÇÕES DE FLUXO COM A NOVA NOMENCLATURA HUMANA
+    const STATUS_TERMINAIS = [
+        'Concluido', 'Rejeitado', 
+        'Destino - Documentos entregues a da paróquia de destino da transferência', 
+        'Destino - Documentos entregues ao Casal Arquidiocesano para transferencia'
+    ];
+
     const OPCOES_FLUXO = {
-        1: [ "1.1 Documentos ainda não recebidos", "1.2 Documentos entregues parcialmente", "1.3 Recebido integral dos documentos da paróquia de origem", "1.4 Documentos entregues a da paróquia de destino da transferência" ],
-        2: [ "2.1.1 Ainda pendente de envio de documentos", "2.1.2 Recebido os documentos da paróquia de origem", "2.1.3 Recebido os documentos da paróquia de origem em transito para o setor de destino", "2.1.4 Documentos da paróquia de origem entregues para o setor de destino", "2.2.1 Recebido parcialmente do Setorial origem", "2.2.2 Recebido os documentos do setor de origem em transito para setor de destino", "2.2.3 Documentos entregues a da paróquia de destino da transferência" ],
-        3: [ "3.1 Documentos ainda não recebidos", "3.2 Documentos entregues parcialmente", "3.3 Recebido integral dos documentos da paróquia de origem", "3.4 Documentos entregues ao Casal Arquidiocesano para transferencia" ],
-        4: [ "4.1.1 Documentos ainda não recebidos", "4.1.2 Documentos entregues parcialmente", "4.1.3 Recebido integral dos documentos", "4.2.1 Recebido parcialmente", "4.2.2 Recebido os documentos em transito para paróquia de destino", "4.2.3 Documentos entregues a da paróquia de destino da transferência" ]
+        1: [ 
+            "Origem - Documentos ainda não recebidos", 
+            "Origem - Documentos entregues parcialmente", 
+            "Origem - Recebido integral dos documentos da paróquia de origem", 
+            "Destino - Documentos entregues a da paróquia de destino da transferência" 
+        ],
+        2: [ 
+            "Origem - Ainda pendente de envio de documentos", 
+            "Origem - Recebido os documentos da paróquia de origem", 
+            "Origem - Recebido os documentos da paróquia de origem em transito para o setor de destino", 
+            "Origem - Documentos da paróquia de origem entregues para o setor de destino", 
+            "Destino - Recebido parcialmente do Setorial origem", 
+            "Destino - Recebido os documentos do setor de origem em transito para setor de destino", 
+            "Destino - Documentos entregues a da paróquia de destino da transferência" 
+        ],
+        3: [ 
+            "Destino - Documentos ainda não recebidos", 
+            "Destino - Documentos entregues parcialmente", 
+            "Destino - Recebido integral dos documentos da paróquia de origem", 
+            "Destino - Documentos entregues ao Casal Arquidiocesano para transferencia" 
+        ],
+        4: [ 
+            "Origem - Documentos ainda não recebidos", 
+            "Origem - Documentos entregues parcialmente", 
+            "Origem - Recebido integral dos documentos", 
+            "Destino - Recebido parcialmente", 
+            "Destino - Recebido os documentos em transito para paróquia de destino", 
+            "Destino - Documentos entregues a da paróquia de destino da transferência" 
+        ]
     };
 
     ['admin_celular', 'edit_user_celular'].forEach(id => {
@@ -296,6 +323,22 @@
         const sO = p.expand?.origem_paroquia_id?.setor_id; const sD = p.expand?.destino_paroquia_id?.setor_id;
         if (sO && sD && sO === sD) return { tipo: 1, nome: "Mudança Interna (Mesmo Setor)" };
         return { tipo: 2, nome: "Mudança de Paróquia (Setores Diferentes)" };
+    }
+
+    // Função visual para colorir as etiquetas Origem/Destino
+    function renderizarBadgeStatus(statusTexto) {
+        if (statusTexto === 'Aceite pendente' || statusTexto === 'Envio pendente') {
+            return `<span class="bg-slate-100 text-slate-700 font-bold text-[11px] px-3 py-1 rounded-lg block leading-tight border border-slate-300">${statusTexto}</span>`;
+        }
+        if (statusTexto.startsWith('Origem -')) {
+            const limpo = statusTexto.replace('Origem - ', '');
+            return `<span class="bg-orange-50 text-orange-800 font-bold text-[11px] px-3 py-1 rounded-lg block leading-tight border border-orange-200"><strong class="text-orange-600 block uppercase tracking-wider text-[9px] mb-0.5">Origem:</strong>${limpo}</span>`;
+        }
+        if (statusTexto.startsWith('Destino -')) {
+            const limpo = statusTexto.replace('Destino - ', '');
+            return `<span class="bg-emerald-50 text-emerald-800 font-bold text-[11px] px-3 py-1 rounded-lg block leading-tight border border-emerald-200"><strong class="text-emerald-600 block uppercase tracking-wider text-[9px] mb-0.5">Destino:</strong>${limpo}</span>`;
+        }
+        return `<span class="bg-amber-100 text-amber-800 font-bold text-[11px] px-3 py-1 rounded-lg block leading-tight border border-amber-200">${statusTexto}</span>`;
     }
 
     document.getElementById('formLogin').addEventListener('submit', async function(e) {
@@ -449,7 +492,14 @@
                 const isDestino = (p.destino_paroquia_id && p.expand?.destino_paroquia_id?.setor_id === usuario.setor_id);
 
                 if ((papel === 'Admin_Setor' || papel === 'Admin_Paroquia') && isDestino && !isOrigem) { 
-                    if (classif.tipo === 2) { const visiveis = ['2.1.4', '2.2.1', '2.2.2', '2.2.3']; if (!visiveis.some(s => p.status.startsWith(s))) return; } 
+                    if (classif.tipo === 2) { 
+                        const visiveis = ['Origem - Documentos da paróquia de origem entregues para o setor de destino', 'Destino - Recebido parcialmente do Setorial origem', 'Destino - Recebido os documentos do setor de origem em transito para setor de destino', 'Destino - Documentos entregues a da paróquia de destino da transferência']; 
+                        if (!visiveis.some(s => p.status === s)) return; 
+                    } 
+                    if (classif.tipo === 4) { 
+                        const visiveis = ['Origem - Recebido integral dos documentos', 'Destino - Recebido parcialmente', 'Destino - Recebido os documentos em transito para paróquia de destino', 'Destino - Documentos entregues a da paróquia de destino da transferência']; 
+                        if (!visiveis.some(s => p.status === s)) return; 
+                    } 
                 }
 
                 const o = p.expand?.origem_paroquia_id?.nome || (p.origem_externa ? `${badgeExterna} ${p.origem_externa}` : 'N/A'); const d = p.expand?.destino_paroquia_id?.nome || (p.destino_externa ? `${badgeExterna} ${p.destino_externa}` : 'N/A');
@@ -457,6 +507,8 @@
                 let infoEtapa = p.etapas ? `<span class="block text-xs font-bold text-indigo-600 mt-1 uppercase tracking-wider">${p.etapas}</span>` : `<span class="block text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider">Etapa não informada</span>`;
                 let corObs = p.observacao ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'; let txtObs = p.observacao ? 'Ler Obs' : '+ Obs'; let btnObs = `<button onclick="abrirModalObsLeitura('${p.id}', \`${encodeURIComponent(p.observacao || '')}\`)" class="${corObs} text-xs px-3 py-1.5 rounded-md font-bold transition shadow-sm w-full">${txtObs}</button>`;
                 
+                let badgeStatusHtml = renderizarBadgeStatus(p.status);
+
                 let botoesHtml = '';
                 if (mostrarAcoes) { 
                     const hasOrigemExterna = !!p.origem_externa;
@@ -471,7 +523,7 @@
                     } 
                 }
                 
-                htmlTotal += `<tr class="hover:bg-slate-50 transition-colors"><td class="py-4 px-5 font-bold text-slate-800 align-top leading-relaxed">${p.nome_casal} ${infoEtapa} ${linkAnexo}</td><td class="py-4 px-5 text-sm text-slate-600 align-top leading-relaxed">${o} <span class="text-blue-600 font-bold mx-1">➔</span><br>${d}</td><td class="py-4 px-5 align-top"><span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Solicitado</span><span class="text-sm font-medium text-slate-700">${formatarData(p.created)}</span></td><td class="py-4 px-5 align-top max-w-xs"><span class="bg-amber-100 text-amber-800 font-bold text-[11px] px-3 py-1 rounded-lg block leading-tight border border-amber-200/50">${p.status}</span></td><td class="py-4 px-5 align-top text-center">${btnObs}</td>${botoesHtml}</tr>`;
+                htmlTotal += `<tr class="hover:bg-slate-50 transition-colors"><td class="py-4 px-5 font-bold text-slate-800 align-top leading-relaxed">${p.nome_casal} ${infoEtapa} ${linkAnexo}</td><td class="py-4 px-5 text-sm text-slate-600 align-top leading-relaxed">${o} <span class="text-blue-600 font-bold mx-1">➔</span><br>${d}</td><td class="py-4 px-5 align-top"><span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Solicitado</span><span class="text-sm font-medium text-slate-700">${formatarData(p.created)}</span></td><td class="py-4 px-5 align-top max-w-xs">${badgeStatusHtml}</td><td class="py-4 px-5 align-top text-center">${btnObs}</td>${botoesHtml}</tr>`;
             });
             if (htmlTotal === '') htmlTotal = '<tr><td colspan="6" class="py-8 text-center text-slate-500 italic">Nenhum pedido encontrado.</td></tr>'; tbody.innerHTML = htmlTotal;
         } catch (e) { document.getElementById('listaPedidos').innerHTML = '<tr><td colspan="6" class="py-8 text-center text-red-500 font-bold">Erro de conexão.</td></tr>'; }
@@ -479,6 +531,7 @@
 
     async function buscarPedidosConcluidos() {
         const usuario = pb.authStore.model; const papel = getPapelSeguro(usuario); 
+        
         let filtroBase = '(status = "Concluido" || status = "Rejeitado")';
         
         if (papel === 'Admin_Paroquia') {
@@ -502,8 +555,8 @@
                 let corObs = p.observacao ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'; let txtObs = p.observacao ? 'Ler Obs' : '+ Obs'; let btnObs = `<button onclick="abrirModalObsLeitura('${p.id}', \`${encodeURIComponent(p.observacao || '')}\`)" class="${corObs} text-xs px-3 py-1.5 rounded-md font-bold transition shadow-sm w-full">${txtObs}</button>`;
                 
                 let badgeStatusFinal = p.status === 'Rejeitado' 
-                    ? `<span class="bg-red-100 text-red-800 font-bold text-[11px] px-3 py-1 rounded-full uppercase tracking-wider">Rejeitado</span>`
-                    : `<span class="bg-emerald-100 text-emerald-800 font-bold text-[11px] px-3 py-1 rounded-full uppercase tracking-wider">Concluído</span>`;
+                    ? `<span class="bg-red-100 text-red-800 font-bold text-[11px] px-3 py-1 rounded-full uppercase tracking-wider border border-red-200">Rejeitado</span>`
+                    : `<span class="bg-emerald-100 text-emerald-800 font-bold text-[11px] px-3 py-1 rounded-full uppercase tracking-wider border border-emerald-200">Concluído</span>`;
 
                 tbody.innerHTML += `<tr class="hover:bg-slate-50 transition-colors"><td class="py-4 px-5 font-bold text-slate-800 align-top leading-relaxed">${p.nome_casal} ${infoEtapa}</td><td class="py-4 px-5 text-sm text-slate-600 align-top leading-relaxed">${o} <span class="text-blue-600 font-bold mx-1">➔</span><br>${d}</td><td class="py-4 px-5 align-top whitespace-nowrap"><div class="mb-1"><span class="text-xs text-slate-400 font-bold uppercase mr-2">Solicitado:</span><span class="text-sm font-medium text-slate-700">${formatarData(p.created)}</span></div><div><span class="text-xs ${p.status === 'Rejeitado' ? 'text-red-500' : 'text-emerald-500'} font-bold uppercase mr-2">${p.status === 'Rejeitado' ? 'Rejeitado:' : 'Concluído:'}</span><span class="text-sm font-bold ${p.status === 'Rejeitado' ? 'text-red-700' : 'text-emerald-700'}">${formatarData(p.updated)}</span></div></td><td class="py-4 px-5 align-top">${badgeStatusFinal}</td><td class="py-4 px-5 align-top text-center">${btnObs}</td><td class="py-4 px-5 text-right align-top"><button onclick="buscarComprovante('${p.id}')" class="bg-blue-600 text-white text-xs px-4 py-1.5 rounded-md hover:bg-blue-700 transition shadow font-bold">Ver Doc</button></td></tr>`;
             });
