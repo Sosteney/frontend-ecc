@@ -226,12 +226,11 @@
             } catch (error) { selectParoquia.innerHTML = '<option value="">Erro ao buscar</option>'; }
         }
 
-        // Função para gerar o PDF via jsPDF
-        function gerarComprovantePDF(idPedido, casal, celular, etapas, origem, destino) {
+        // Função para gerar o PDF via jsPDF com o número de Protocolo
+        function gerarComprovantePDF(protocolo, casal, celular, etapas, origem, destino) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
 
-            // Cabeçalho
             doc.setFontSize(18);
             doc.setFont("helvetica", "bold");
             doc.text("Encontro de Casais com Cristo - ECC", 105, 20, { align: "center" });
@@ -245,14 +244,14 @@
 
             doc.line(20, 42, 190, 42);
 
-            // Dados da Solicitação
             doc.setFontSize(12);
             doc.setFont("helvetica", "bold");
             doc.text("Dados do Protocolo", 20, 55);
 
             doc.setFontSize(11);
             doc.setFont("helvetica", "normal");
-            doc.text(`ID do Pedido: #${idPedido}`, 20, 65);
+            // Agora usa o Protocolo gerado
+            doc.text(`Número do Protocolo: #${protocolo}`, 20, 65);
             
             const dataAtual = new Date().toLocaleString('pt-BR');
             doc.text(`Gerado em: ${dataAtual}`, 20, 73);
@@ -261,12 +260,10 @@
             doc.text(`Celular: ${celular}`, 20, 89);
             doc.text(`Etapas Vivenciadas: ${etapas}`, 20, 97);
 
-            // Trajeto
             doc.setFont("helvetica", "bold");
             doc.text("Trajeto da Transferência", 20, 110);
             doc.setFont("helvetica", "normal");
             
-            // Limitando o tamanho do texto para não quebrar a página se for muito longo
             const textoOrigemFormatado = doc.splitTextToSize(`Origem: ${origem}`, 170);
             doc.text(textoOrigemFormatado, 20, 120);
             
@@ -275,20 +272,18 @@
 
             doc.line(20, 145, 190, 145);
 
-            // Rodapé / Contatos
             doc.setFont("helvetica", "bold");
             doc.text("Acompanhamento e Dúvidas", 20, 155);
             doc.setFont("helvetica", "normal");
             
             const infoTexto = "A sua solicitação de transferência foi registrada em nossa base de dados com\n" +
                               "sucesso e será encaminhada para análise da equipe de Pós-Encontro do seu Setor.\n\n" +
-                              "Por favor, guarde este documento ou o ID do Pedido acima. Caso precise de\n" +
+                              "Por favor, guarde o Número do Protocolo acima. Caso precise de\n" +
                               "ajuda, entrar em contato com os Casais Ligação Setoriais ou com a Equipe\n" +
                               "Dirigente do seu Setor de destino.";
             
             doc.text(infoTexto, 20, 165);
 
-            // Download
             doc.save(`Transferencia_ECC_${casal.replace(/\s+/g, '_')}.pdf`);
         }
 
@@ -319,6 +314,14 @@
                 formData.append('celular', celularCasal);
                 formData.append('etapas', etapas);
                 
+                // GERAÇÃO DO PROTOCOLO AMIGÁVEL (AAMM + 4 DÍGITOS ALEATÓRIOS)
+                const dataAtual = new Date();
+                const anoMes = dataAtual.getFullYear().toString().slice(-2) + (dataAtual.getMonth() + 1).toString().padStart(2, '0');
+                const numAleatorio = Math.floor(1000 + Math.random() * 9000).toString();
+                const protocoloGerado = anoMes + numAleatorio;
+                
+                formData.append('protocolo', protocoloGerado);
+                
                 if (origemId) formData.append('origem_paroquia_id', origemId);
                 if (origemExt) formData.append('origem_externa', origemExt);
                 if (destinoId) formData.append('destino_paroquia_id', destinoId);
@@ -328,22 +331,19 @@
 
                 if (arquivoInput.files.length > 0) formData.append('anexo', arquivoInput.files[0]);
 
-                // Salva no banco e guarda o registro retornado (que contém o ID)
-                const record = await pb.collection('pedidos').create(formData);
+                await pb.collection('pedidos').create(formData);
                 
-                // Preparar dados para o PDF
                 const selectOrigem = document.getElementById('origem_id');
                 const textoOrigem = origemId ? selectOrigem.options[selectOrigem.selectedIndex].text : origemExt;
                 
                 const selectDestino = document.getElementById('destino_id');
                 const textoDestino = destinoId ? selectDestino.options[selectDestino.selectedIndex].text : destinoExt;
 
-                // Dispara o download do PDF
-                gerarComprovantePDF(record.id, nomeCasal, celularCasal, etapas, textoOrigem, textoDestino);
+                // Gera o PDF com o número de Protocolo gerado
+                gerarComprovantePDF(protocoloGerado, nomeCasal, celularCasal, etapas, textoOrigem, textoDestino);
                 
-                mostrarMensagem(`Pedido enviado com sucesso! O comprovante (Protocolo: #${record.id}) foi baixado automaticamente no seu dispositivo. Guarde-o com segurança.`, "sucesso");
+                mostrarMensagem(`Pedido enviado com sucesso! O comprovante (Protocolo: #${protocoloGerado}) foi baixado automaticamente. Guarde-o com segurança.`, "sucesso");
                 
-                // Reseta a tela
                 document.getElementById('formPedido').reset();
                 document.getElementById('div_origem_externa').classList.add('hidden'); document.getElementById('div_destino_externa').classList.add('hidden');
                 
