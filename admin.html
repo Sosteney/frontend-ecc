@@ -313,10 +313,8 @@
         return `<span class="bg-amber-100 text-amber-800 font-bold text-[11px] px-3 py-1 rounded-lg block leading-tight border border-amber-200">${statusTexto}</span>`;
     }
 
-    // LÓGICA DE VISIBILIDADE MESTRE
     function getFiltroVisibilidadeBase(usuario, papel) {
         if (papel === 'Master' || papel === 'Arquidiocesano') return `(id != "")`; 
-
         let prefO = papel === 'Admin_Setor' ? 'origem_paroquia_id.setor_id' : 'origem_paroquia_id';
         let prefD = papel === 'Admin_Setor' ? 'destino_paroquia_id.setor_id' : 'destino_paroquia_id';
         let idLoc = papel === 'Admin_Setor' ? usuario.setor_id : usuario.paroquia_id;
@@ -380,7 +378,6 @@
 
     async function carregarDashboard() {
         const usuario = pb.authStore.model; const papel = getPapelSeguro(usuario); 
-        
         let baseFiltro = getFiltroVisibilidadeBase(usuario, papel);
         let filterParoquias = ''; 
         if (papel === 'Admin_Setor') { filterParoquias = `setor_id = "${usuario.setor_id}"`; } else if (papel === 'Admin_Paroquia') { filterParoquias = `id = "${usuario.paroquia_id}"`; } else if (papel !== 'Master' && papel !== 'Arquidiocesano') { filterParoquias = `id = "null"`; }
@@ -525,7 +522,8 @@
                     }
                 }
                 
-                htmlTotal += `<tr class="hover:bg-slate-50 transition-colors"><td class="py-4 px-5 font-bold text-slate-800 align-top leading-relaxed"><div class="text-[10px] text-slate-400 font-mono mb-1">#${p.id}</div>${p.nome_casal} ${infoEtapa} ${linkAnexo}</td><td class="py-4 px-5 text-sm text-slate-600 align-top leading-relaxed">${o} <span class="text-blue-600 font-bold mx-1">➔</span><br>${d}</td><td class="py-4 px-5 align-top"><span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Solicitado</span><span class="text-sm font-medium text-slate-700">${formatarData(p.created)}</span></td><td class="py-4 px-5 align-top max-w-xs">${badgeStatusHtml}</td><td class="py-4 px-5 align-top text-center">${btnObs}</td>${botoesHtml}</tr>`;
+                // Exibe o protocolo no lugar do ID
+                htmlTotal += `<tr class="hover:bg-slate-50 transition-colors"><td class="py-4 px-5 font-bold text-slate-800 align-top leading-relaxed"><div class="text-[10px] text-slate-400 font-mono mb-1">#${p.protocolo || p.id}</div>${p.nome_casal} ${infoEtapa} ${linkAnexo}</td><td class="py-4 px-5 text-sm text-slate-600 align-top leading-relaxed">${o} <span class="text-blue-600 font-bold mx-1">➔</span><br>${d}</td><td class="py-4 px-5 align-top"><span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Solicitado</span><span class="text-sm font-medium text-slate-700">${formatarData(p.created)}</span></td><td class="py-4 px-5 align-top max-w-xs">${badgeStatusHtml}</td><td class="py-4 px-5 align-top text-center">${btnObs}</td>${botoesHtml}</tr>`;
             });
             if (htmlTotal === '') htmlTotal = '<tr><td colspan="6" class="py-8 text-center text-slate-500 italic">Nenhum pedido encontrado.</td></tr>'; tbody.innerHTML = htmlTotal;
         } catch (e) { document.getElementById('listaPedidos').innerHTML = '<tr><td colspan="6" class="py-8 text-center text-red-500 font-bold">Erro de conexão.</td></tr>'; }
@@ -549,7 +547,7 @@
                 let corObs = p.observacao ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'; let txtObs = p.observacao ? 'Ler Obs' : '+ Obs'; let btnObs = `<button onclick="abrirModalObsLeitura('${p.id}', \`${encodeURIComponent(p.observacao || '')}\`)" class="${corObs} text-xs px-3 py-1.5 rounded-md font-bold transition shadow-sm w-full">${txtObs}</button>`;
                 let badgeStatusFinal = `<span class="bg-emerald-100 text-emerald-800 font-bold text-[11px] px-3 py-1 rounded-full uppercase tracking-wider border border-emerald-200">Concluído</span>`;
 
-                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition-colors"><td class="py-4 px-5 font-bold text-slate-800 align-top leading-relaxed"><div class="text-[10px] text-slate-400 font-mono mb-1">#${p.id}</div>${p.nome_casal} ${infoEtapa}</td><td class="py-4 px-5 text-sm text-slate-600 align-top leading-relaxed">${o} <span class="text-blue-600 font-bold mx-1">➔</span><br>${d}</td><td class="py-4 px-5 align-top whitespace-nowrap"><div class="mb-1"><span class="text-xs text-slate-400 font-bold uppercase mr-2">Solicitado:</span><span class="text-sm font-medium text-slate-700">${formatarData(p.created)}</span></div><div><span class="text-xs text-emerald-500 font-bold uppercase mr-2">Concluído:</span><span class="text-sm font-bold text-emerald-700">${formatarData(p.updated)}</span></div></td><td class="py-4 px-5 align-top">${badgeStatusFinal}</td><td class="py-4 px-5 align-top text-center">${btnObs}</td><td class="py-4 px-5 text-right align-top"><button onclick="buscarComprovante('${p.id}')" class="bg-blue-600 text-white text-xs px-4 py-1.5 rounded-md hover:bg-blue-700 transition shadow font-bold">Ver Doc</button></td></tr>`;
+                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition-colors"><td class="py-4 px-5 font-bold text-slate-800 align-top leading-relaxed"><div class="text-[10px] text-slate-400 font-mono mb-1">#${p.protocolo || p.id}</div>${p.nome_casal} ${infoEtapa}</td><td class="py-4 px-5 text-sm text-slate-600 align-top leading-relaxed">${o} <span class="text-blue-600 font-bold mx-1">➔</span><br>${d}</td><td class="py-4 px-5 align-top whitespace-nowrap"><div class="mb-1"><span class="text-xs text-slate-400 font-bold uppercase mr-2">Solicitado:</span><span class="text-sm font-medium text-slate-700">${formatarData(p.created)}</span></div><div><span class="text-xs text-emerald-500 font-bold uppercase mr-2">Concluído:</span><span class="text-sm font-bold text-emerald-700">${formatarData(p.updated)}</span></div></td><td class="py-4 px-5 align-top">${badgeStatusFinal}</td><td class="py-4 px-5 align-top text-center">${btnObs}</td><td class="py-4 px-5 text-right align-top"><button onclick="buscarComprovante('${p.id}')" class="bg-blue-600 text-white text-xs px-4 py-1.5 rounded-md hover:bg-blue-700 transition shadow font-bold">Ver Doc</button></td></tr>`;
             });
         } catch (e) {}
     }
@@ -572,7 +570,7 @@
                 let corObs = p.observacao ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'; let txtObs = p.observacao ? 'Ler Obs' : '+ Obs'; let btnObs = `<button onclick="abrirModalObsLeitura('${p.id}', \`${encodeURIComponent(p.observacao || '')}\`)" class="${corObs} text-xs px-4 py-2 rounded-md font-bold transition shadow-sm w-full">${txtObs}</button>`;
                 let badgeStatusFinal = `<span class="bg-red-100 text-red-800 font-bold text-[11px] px-3 py-1 rounded-full uppercase tracking-wider border border-red-200">Rejeitado</span>`;
 
-                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition-colors"><td class="py-4 px-5 font-bold text-slate-800 align-top leading-relaxed"><div class="text-[10px] text-slate-400 font-mono mb-1">#${p.id}</div>${p.nome_casal} ${infoEtapa}</td><td class="py-4 px-5 text-sm text-slate-600 align-top leading-relaxed">${o} <span class="text-blue-600 font-bold mx-1">➔</span><br>${d}</td><td class="py-4 px-5 align-top whitespace-nowrap"><div class="mb-1"><span class="text-xs text-slate-400 font-bold uppercase mr-2">Solicitado:</span><span class="text-sm font-medium text-slate-700">${formatarData(p.created)}</span></div><div><span class="text-xs text-red-500 font-bold uppercase mr-2">Rejeitado:</span><span class="text-sm font-bold text-red-700">${formatarData(p.updated)}</span></div></td><td class="py-4 px-5 align-top">${badgeStatusFinal}</td><td class="py-4 px-5 align-top text-center">${btnObs}</td></tr>`;
+                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition-colors"><td class="py-4 px-5 font-bold text-slate-800 align-top leading-relaxed"><div class="text-[10px] text-slate-400 font-mono mb-1">#${p.protocolo || p.id}</div>${p.nome_casal} ${infoEtapa}</td><td class="py-4 px-5 text-sm text-slate-600 align-top leading-relaxed">${o} <span class="text-blue-600 font-bold mx-1">➔</span><br>${d}</td><td class="py-4 px-5 align-top whitespace-nowrap"><div class="mb-1"><span class="text-xs text-slate-400 font-bold uppercase mr-2">Solicitado:</span><span class="text-sm font-medium text-slate-700">${formatarData(p.created)}</span></div><div><span class="text-xs text-red-500 font-bold uppercase mr-2">Rejeitado:</span><span class="text-sm font-bold text-red-700">${formatarData(p.updated)}</span></div></td><td class="py-4 px-5 align-top">${badgeStatusFinal}</td><td class="py-4 px-5 align-top text-center">${btnObs}</td></tr>`;
             });
         } catch (e) {}
     }
@@ -637,7 +635,7 @@
     document.getElementById('formNovoAdmin').addEventListener('submit', async function(e) { e.preventDefault(); const btn = document.getElementById('btnSalvarAdmin'); btn.disabled = true; btn.textContent = "Salvando..."; const criador = pb.authStore.model; const p = getPapelSeguro(criador); let sId = document.getElementById('admin_setor_id').value || null; if (p === 'Admin_Setor') sId = criador.setor_id; const dados = { nome_casal: document.getElementById('admin_nome').value, celular: document.getElementById('admin_celular').value, email: document.getElementById('admin_email').value, password: document.getElementById('admin_senha').value, passwordConfirm: document.getElementById('admin_senha').value, papel: document.getElementById('admin_papel').value, setor_id: sId, paroquia_id: document.getElementById('admin_paroquia_id').value || null }; try { await pb.collection('users').create(dados); document.getElementById('formNovoAdmin').reset(); alternarCamposAdmin(); carregarTabelaAdmins(); alert("Usuário cadastrado com sucesso!"); } catch (e) { alert("Erro: Email já em uso ou dados inválidos."); } finally { btn.disabled = false; btn.textContent = "Cadastrar Usuário"; } });
     
     async function carregarTabelaAdmins() { 
-        const u = pb.authStore.model; const pLogado = getPapelSeguro(u); let optUsers = { sort: '-created', expand: 'setor_id, paroquia_id', requestKey: null }; if (pLogado === 'Admin_Setor') optUsers.filter = `setor_id ?= "${u.setor_id}" || paroquia_id.setor_id ?= "${u.setor_id}"`; 
+        const u = pb.authStore.model; const pLogado = getPapelSeguro(u); let optUsers = { sort: '-created', expand: 'setor_id, paroquia_id', requestKey: null }; if (pLogado === 'Admin_Setor') optUsers.filter = `setor_id = "${u.setor_id}" || paroquia_id.setor_id = "${u.setor_id}"`; 
         try { const users = await pb.collection('users').getFullList(optUsers); const tb = document.getElementById('listaUsuariosAdmin'); tb.innerHTML = ''; if (users.length === 0) tb.innerHTML = '<tr><td colspan="5" class="py-8 text-center text-slate-500 italic">Nenhum usuário cadastrado.</td></tr>'; users.forEach(us => { const pLido = getPapelSeguro(us); let l = '-'; let sIdForEdit = us.setor_id || ''; if (pLido === 'Admin_Setor') { l = us.expand?.setor_id?.nome || '-'; } else if (pLido === 'Admin_Paroquia') { l = us.expand?.paroquia_id?.nome || '-'; sIdForEdit = us.expand?.paroquia_id?.setor_id || ''; } const btnEditar = pLogado === 'Master' ? `<button onclick="abrirModalEdicaoUsuario('${us.id}', '${us.nome_casal || ''}', '${us.celular || ''}', '${pLido}', '${sIdForEdit}', '${us.paroquia_id || ''}')" class="text-blue-600 font-bold text-sm hover:text-blue-800 transition mr-4">Editar</button>` : ''; const btnExcluir = pLogado === 'Master' ? `<button onclick="excluirAdmin('${us.id}')" class="text-red-500 font-bold text-sm hover:text-red-700 transition">Excluir</button>` : ''; tb.innerHTML += `<tr class="hover:bg-slate-50 transition-colors"><td class="py-4 px-5 font-bold text-slate-800">${us.nome_casal || '-'}</td><td class="py-4 px-5 text-slate-600"><div>${us.email}</div><div class="text-xs text-slate-400 font-medium mt-0.5">${us.celular || 'Sem celular'}</div></td><td class="py-4 px-5"><span class="bg-blue-100 text-blue-800 font-bold text-xs px-3 py-1 rounded-full">${pLido.replace(/_/g, ' ')}</span></td><td class="py-4 px-5 text-slate-600 font-medium">${l}</td><td class="py-4 px-5 text-right whitespace-nowrap">${btnEditar}${btnExcluir}</td></tr>`; }); } catch (e) {} 
     }
 
@@ -655,11 +653,11 @@
         
         try { 
             const records = await pb.collection('pedidos').getFullList({ filter: baseFiltro + dynFiltro, expand: 'origem_paroquia_id, destino_paroquia_id', sort: '-created', requestKey: null }); 
-            let csv = "Data de Solicitacao,Nome do Casal,Etapas,Celular,Paroquia Origem,Paroquia Destino,Status\n"; 
+            let csv = "Protocolo,Data de Solicitacao,Nome do Casal,Etapas,Celular,Paroquia Origem,Paroquia Destino,Status\n"; 
             records.forEach(p => { 
                 const dataObj = new Date(p.created); const dataFormatada = dataObj.toLocaleDateString('pt-BR') + ' ' + dataObj.toLocaleTimeString('pt-BR'); 
                 const origem = p.expand?.origem_paroquia_id?.nome || p.origem_externa || 'N/A'; const destino = p.expand?.destino_paroquia_id?.nome || p.destino_externa || 'N/A'; 
-                csv += `${dataFormatada},"${p.nome_casal.replace(/"/g, '""')}","${p.etapas || ''}","${p.celular}","${origem.replace(/"/g, '""')}","${destino.replace(/"/g, '""')}","${p.status.replace(/_/g, ' ')}"\n`; 
+                csv += `"${p.protocolo || p.id}",${dataFormatada},"${p.nome_casal.replace(/"/g, '""')}","${p.etapas || ''}","${p.celular}","${origem.replace(/"/g, '""')}","${destino.replace(/"/g, '""')}","${p.status.replace(/_/g, ' ')}"\n`; 
             }); 
             baixarArquivoCSV(csv, 'relatorio_transferencias.csv'); 
         } catch (error) { alert("Erro ao exportar pedidos."); } 
