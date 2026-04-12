@@ -353,6 +353,30 @@
     const pb = new PocketBase('https://pb.eccnatal.com.br'); 
     let subAbaPedidosAtual = 'andamento';
     let graficoStatus = null; 
+    // --- SEGURANÇA: TIMEOUT POR INATIVIDADE (1 HORA) ---
+    let inatividadeTimer;
+    const TEMPO_LIMITE = 60 * 60 * 1000; // 60 min * 60 seg * 1000 ms = 1 Hora
+
+    function resetarTimer() {
+        clearTimeout(inatividadeTimer);
+        // Só inicia a contagem se o usuário estiver logado
+        if (pb.authStore.isValid) {
+            inatividadeTimer = setTimeout(fazerLogoutAutomatico, TEMPO_LIMITE);
+        }
+    }
+
+    function fazerLogoutAutomatico() {
+        pb.authStore.clear(); // Apaga o token de acesso
+        alert("Sua sessão expirou por inatividade de 1 hora. Por segurança, faça login novamente.");
+        window.location.reload();
+    }
+
+    // Ouve qualquer movimento na tela para zerar o cronômetro
+    window.onload = resetarTimer;
+    document.onmousemove = resetarTimer;
+    document.onkeypress = resetarTimer;
+    document.onscroll = resetarTimer;
+    document.onclick = resetarTimer;
 
     const STATUS_TERMINAIS = ['Concluido', 'Rejeitado', 'Destino - Documentos entregues a da paróquia de destino da transferência', 'Destino - Documentos entregues ao Casal Arquidiocesano para transferencia'];
     const OPCOES_FLUXO = {
