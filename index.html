@@ -250,7 +250,6 @@
 
             doc.setFontSize(11);
             doc.setFont("helvetica", "normal");
-            // Agora usa o Protocolo gerado
             doc.text(`Número do Protocolo: #${protocolo}`, 20, 65);
             
             const dataAtual = new Date().toLocaleString('pt-BR');
@@ -314,12 +313,11 @@
                 formData.append('celular', celularCasal);
                 formData.append('etapas', etapas);
                 
-                // GERAÇÃO DO PROTOCOLO AMIGÁVEL (AAMM + 4 DÍGITOS ALEATÓRIOS)
+                // GERAÇÃO DO PROTOCOLO
                 const dataAtual = new Date();
                 const anoMes = dataAtual.getFullYear().toString().slice(-2) + (dataAtual.getMonth() + 1).toString().padStart(2, '0');
                 const numAleatorio = Math.floor(1000 + Math.random() * 9000).toString();
                 const protocoloGerado = anoMes + numAleatorio;
-                
                 formData.append('protocolo', protocoloGerado);
                 
                 if (origemId) formData.append('origem_paroquia_id', origemId);
@@ -331,15 +329,61 @@
 
                 if (arquivoInput.files.length > 0) formData.append('anexo', arquivoInput.files[0]);
 
-                await pb.collection('pedidos').create(formData);
+                const record = await pb.collection('pedidos').create(formData);
                 
                 const selectOrigem = document.getElementById('origem_id');
                 const textoOrigem = origemId ? selectOrigem.options[selectOrigem.selectedIndex].text : origemExt;
-                
                 const selectDestino = document.getElementById('destino_id');
                 const textoDestino = destinoId ? selectDestino.options[selectDestino.selectedIndex].text : destinoExt;
 
-                // Gera o PDF com o número de Protocolo gerado
+                // --- INÍCIO: INTEGRAÇÃO WHATSAPP EVOLUTION API ---
+                try {
+                    let idSetorNotificar = document.getElementById('setor_origem').value;
+                    
+                    // Se origem for externa, notifica o destino (que irá receber o casal)
+                    if (idSetorNotificar === 'OUTRO') {
+                        idSetorNotificar = document.getElementById('setor_destino').value;
+                    }
+
+                    if (idSetorNotificar && idSetorNotificar !== 'OUTRO') {
+                        const setorData = await pb.collection('setores').getOne(idSetorNotificar);
+                        
+                        if (setorData.contato) {
+                            // Limpa qualquer máscara que o usuário tenha digitado no PocketBase
+                            let numLimpo = setorData.contato.replace(/\D/g, '');
+                            let numEvo = '';
+                            
+                            // Adiciona DDI do Brasil se faltar
+                            if (!numLimpo.startsWith('55')) numEvo = '55' + numLimpo;
+                            else numEvo = numLimpo;
+                            
+                            const numeroFinal = '+' + numEvo;
+
+                            const msgTexto = `🚨 *NOVO PEDIDO DE TRANSFERÊNCIA - ECC*\n\nO Casal *${nomeCasal}* acaba de registrar um pedido de transferência.\n\n📍 *De:* ${textoOrigem}\n🎯 *Para:* ${textoDestino}\n\n*Protocolo:* #${protocoloGerado}\n\nAcesse o painel administrativo para analisar.`;
+
+                            const evoPayload = {
+                                "number": numeroFinal,
+                                "text": msgTexto,
+                                "delay": 1200,
+                                "linkPreview": true
+                            };
+
+                            // Requisição POST (Não trava a tela esperando resposta)
+                            fetch('https://evolution.eccnatal.com.br/message/sendText/Agente', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'apikey': 'zV0Gan6hAKit0GOU3MRFgbOcihiUVjRK'
+                                },
+                                body: JSON.stringify(evoPayload)
+                            }).catch(e => console.error('Aviso: Falha silenciosa no envio do WhatsApp', e));
+                        }
+                    }
+                } catch (errWpp) {
+                    console.error('Aviso: Erro na lógica de notificação do WhatsApp', errWpp);
+                }
+                // --- FIM: INTEGRAÇÃO WHATSAPP EVOLUTION API ---
+
                 gerarComprovantePDF(protocoloGerado, nomeCasal, celularCasal, etapas, textoOrigem, textoDestino);
                 
                 mostrarMensagem(`Pedido enviado com sucesso! O comprovante (Protocolo: #${protocoloGerado}) foi baixado automaticamente. Guarde-o com segurança.`, "sucesso");
