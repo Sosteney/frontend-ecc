@@ -153,9 +153,57 @@
                     </div>
 
                     <div id="abaPrincipalCadastros" class="aba-principal hidden w-full">
-                        <div class="flex border-b border-slate-200 mb-6 space-x-6 px-2"><button id="btnSubAbaSetores" onclick="mudarSubAbaLocais('setores')" class="btn-sub-locais pb-3 border-b-2 text-sm uppercase tracking-wide font-bold focus:outline-none transition-colors">Setores</button><button id="btnSubAbaParoquias" onclick="mudarSubAbaLocais('paroquias')" class="btn-sub-locais pb-3 border-b-2 text-sm uppercase tracking-wide font-bold focus:outline-none transition-colors">Paróquias</button></div>
-                        <div id="subAbaSetores" class="sub-aba-locais w-full"><div id="divFormNovoSetor" class="bg-slate-50 rounded-xl border border-slate-200 p-6 mb-8 w-full hidden"><h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Cadastrar Novo Setor</h3><form id="formNovoSetor" class="flex gap-4"><input type="text" id="nome_setor" required placeholder="Ex: Setor Sul" class="flex-1 p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"><button type="submit" class="bg-blue-600 text-white font-bold py-2.5 px-8 rounded-lg hover:bg-blue-700 transition shadow">Salvar Setor</button></form></div><div class="overflow-x-auto rounded-xl border border-slate-200 w-full"><table class="w-full text-left text-sm min-w-max"><thead class="bg-slate-100 text-slate-600 uppercase tracking-wider text-xs font-bold"><tr><th class="py-4 px-5">Nome do Setor</th><th class="py-4 px-5 text-right">Ações</th></tr></thead><tbody id="listaSetoresAdmin" class="divide-y divide-slate-100"></tbody></table></div></div>
-                        <div id="subAbaParoquias" class="sub-aba-locais hidden w-full"><div id="divFormNovaParoquia" class="bg-slate-50 rounded-xl border border-slate-200 p-6 mb-8 w-full hidden"><h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Cadastrar Nova Paróquia</h3><form id="formNovaParoquia" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end"><div class="md:col-span-2"><label class="block text-xs font-bold text-slate-600 mb-1">Nome da Paróquia</label><input type="text" id="nome_paroquia" required placeholder="Ex: Paróquia São José" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"></div><div class="md:col-span-1"><label class="block text-xs font-bold text-slate-600 mb-1">Cidade</label><input type="text" id="cidade_paroquia" required placeholder="Ex: Natal" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"></div><div class="md:col-span-1"><label class="block text-xs font-bold text-slate-600 mb-1">Setor</label><select id="select_setor_paroquia" required class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"><option value="">Carregando...</option></select></div><div class="md:col-span-4 flex justify-end mt-2"><button type="submit" class="bg-blue-600 text-white font-bold py-2.5 px-8 rounded-lg hover:bg-blue-700 transition shadow">Adicionar Paróquia</button></div></form></div><div class="overflow-x-auto rounded-xl border border-slate-200 w-full"><table class="w-full text-left text-sm min-w-max"><thead class="bg-slate-100 text-slate-600 uppercase tracking-wider text-xs font-bold"><tr><th class="py-4 px-5">Nome da Paróquia</th><th class="py-4 px-5">Cidade</th><th class="py-4 px-5">Setor</th><th class="py-4 px-5 text-right">Ações</th></tr></thead><tbody id="listaParoquiasAdmin" class="divide-y divide-slate-100"></tbody></table></div></div>
+                        <div class="flex border-b border-slate-200 mb-6 space-x-6 px-2">
+                            <button id="btnSubAbaSetores" onclick="mudarSubAbaLocais('setores')" class="btn-sub-locais pb-3 border-b-2 text-sm uppercase tracking-wide font-bold focus:outline-none transition-colors">Setores</button>
+                            <button id="btnSubAbaParoquias" onclick="mudarSubAbaLocais('paroquias')" class="btn-sub-locais pb-3 border-b-2 text-sm uppercase tracking-wide font-bold focus:outline-none transition-colors">Paróquias</button>
+                        </div>
+                        
+                        <div id="subAbaSetores" class="sub-aba-locais w-full">
+                            <div id="divFormNovoSetor" class="bg-slate-50 rounded-xl border border-slate-200 p-6 mb-8 w-full hidden">
+                                <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Cadastrar Novo Setor</h3>
+                                <form id="formNovoSetor" class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+                                    <div class="md:col-span-2">
+                                        <label class="block text-xs font-bold text-slate-600 mb-1">Nome do Setor</label>
+                                        <input type="text" id="nome_setor" required placeholder="Ex: Setor Sul" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow">
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label class="block text-xs font-bold text-slate-600 mb-1">Contato WhatsApp (Opcional)</label>
+                                        <input type="tel" id="contato_setor" maxlength="15" placeholder="(00) 00000-0000" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow">
+                                    </div>
+                                    <div class="md:col-span-1">
+                                        <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2.5 px-4 rounded-lg hover:bg-blue-700 transition shadow">Salvar Setor</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="overflow-x-auto rounded-xl border border-slate-200 w-full">
+                                <table class="w-full text-left text-sm min-w-max">
+                                    <thead class="bg-slate-100 text-slate-600 uppercase tracking-wider text-xs font-bold">
+                                        <tr><th class="py-4 px-5">Nome do Setor</th><th class="py-4 px-5">Contato WhatsApp</th><th class="py-4 px-5 text-right">Ações</th></tr>
+                                    </thead>
+                                    <tbody id="listaSetoresAdmin" class="divide-y divide-slate-100"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div id="subAbaParoquias" class="sub-aba-locais hidden w-full">
+                            <div id="divFormNovaParoquia" class="bg-slate-50 rounded-xl border border-slate-200 p-6 mb-8 w-full hidden">
+                                <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Cadastrar Nova Paróquia</h3>
+                                <form id="formNovaParoquia" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                                    <div class="md:col-span-2"><label class="block text-xs font-bold text-slate-600 mb-1">Nome da Paróquia</label><input type="text" id="nome_paroquia" required placeholder="Ex: Paróquia São José" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"></div>
+                                    <div class="md:col-span-1"><label class="block text-xs font-bold text-slate-600 mb-1">Cidade</label><input type="text" id="cidade_paroquia" required placeholder="Ex: Natal" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"></div>
+                                    <div class="md:col-span-1"><label class="block text-xs font-bold text-slate-600 mb-1">Setor</label><select id="select_setor_paroquia" required class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"><option value="">Carregando...</option></select></div>
+                                    <div class="md:col-span-4 flex justify-end mt-2"><button type="submit" class="bg-blue-600 text-white font-bold py-2.5 px-8 rounded-lg hover:bg-blue-700 transition shadow">Adicionar Paróquia</button></div>
+                                </form>
+                            </div>
+                            <div class="overflow-x-auto rounded-xl border border-slate-200 w-full">
+                                <table class="w-full text-left text-sm min-w-max">
+                                    <thead class="bg-slate-100 text-slate-600 uppercase tracking-wider text-xs font-bold">
+                                        <tr><th class="py-4 px-5">Nome da Paróquia</th><th class="py-4 px-5">Cidade</th><th class="py-4 px-5">Setor</th><th class="py-4 px-5 text-right">Ações</th></tr>
+                                    </thead>
+                                    <tbody id="listaParoquiasAdmin" class="divide-y divide-slate-100"></tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
 
                     <div id="abaPrincipalAdmins" class="aba-principal hidden w-full">
@@ -242,7 +290,35 @@
     </div>
 
     <div id="modalEdicao" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md transform transition-all"><h3 id="tituloModalEdicao" class="text-xl font-extrabold mb-5 text-slate-800">Editar Local</h3><form id="formEdicao" class="space-y-5"><input type="hidden" id="edit_id"><input type="hidden" id="edit_tipo"><div><label class="block text-sm font-bold text-slate-600 mb-1">Nome</label><input type="text" id="edit_nome" required class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition"></div><div id="div_edit_cidade" class="hidden"><label class="block text-sm font-bold text-slate-600 mb-1">Cidade</label><input type="text" id="edit_cidade" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition"></div><div id="div_edit_setor" class="hidden"><label class="block text-sm font-bold text-slate-600 mb-1">Setor</label><select id="edit_setor_id" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition"></select></div><div class="flex justify-end space-x-3 mt-8"><button type="button" onclick="fecharModalEdicao()" class="bg-slate-200 text-slate-700 px-5 py-2.5 rounded-lg font-bold hover:bg-slate-300 transition">Cancelar</button><button type="submit" id="btnSalvarEdicao" class="bg-blue-600 text-white px-6 py-2.5 rounded-lg font-bold shadow hover:bg-blue-700 transition">Salvar</button></div></form></div>
+        <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md transform transition-all">
+            <h3 id="tituloModalEdicao" class="text-xl font-extrabold mb-5 text-slate-800">Editar Local</h3>
+            <form id="formEdicao" class="space-y-5">
+                <input type="hidden" id="edit_id">
+                <input type="hidden" id="edit_tipo">
+                <div>
+                    <label class="block text-sm font-bold text-slate-600 mb-1">Nome</label>
+                    <input type="text" id="edit_nome" required class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition">
+                </div>
+                
+                <div id="div_edit_contato_setor" class="hidden">
+                    <label class="block text-sm font-bold text-slate-600 mb-1">Contato (WhatsApp)</label>
+                    <input type="tel" id="edit_contato_setor" maxlength="15" placeholder="(00) 00000-0000" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition">
+                </div>
+
+                <div id="div_edit_cidade" class="hidden">
+                    <label class="block text-sm font-bold text-slate-600 mb-1">Cidade</label>
+                    <input type="text" id="edit_cidade" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition">
+                </div>
+                <div id="div_edit_setor" class="hidden">
+                    <label class="block text-sm font-bold text-slate-600 mb-1">Setor</label>
+                    <select id="edit_setor_id" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition"></select>
+                </div>
+                <div class="flex justify-end space-x-3 mt-8">
+                    <button type="button" onclick="fecharModalEdicao()" class="bg-slate-200 text-slate-700 px-5 py-2.5 rounded-lg font-bold hover:bg-slate-300 transition">Cancelar</button>
+                    <button type="submit" id="btnSalvarEdicao" class="bg-blue-600 text-white px-6 py-2.5 rounded-lg font-bold shadow hover:bg-blue-700 transition">Salvar</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <div id="modalEdicaoUsuario" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
@@ -286,7 +362,7 @@
         4: [ "Origem - Documentos ainda não recebidos", "Origem - Documentos entregues parcialmente", "Origem - Recebido integral dos documentos", "Destino - Recebido parcialmente", "Destino - Recebido os documentos em transito para paróquia de destino", "Destino - Documentos entregues a da paróquia de destino da transferência" ]
     };
 
-    ['admin_celular', 'edit_user_celular'].forEach(id => {
+    ['admin_celular', 'edit_user_celular', 'contato_setor', 'edit_contato_setor'].forEach(id => {
         const el = document.getElementById(id);
         if(el) el.addEventListener('input', function(e) {
             let x = e.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,5})(\d{0,4})/);
@@ -313,6 +389,7 @@
         return `<span class="bg-amber-100 text-amber-800 font-bold text-[11px] px-3 py-1 rounded-lg block leading-tight border border-amber-200">${statusTexto}</span>`;
     }
 
+    // LÓGICA DE VISIBILIDADE MESTRE
     function getFiltroVisibilidadeBase(usuario, papel) {
         if (papel === 'Master' || papel === 'Arquidiocesano') return `(id != "")`; 
         let prefO = papel === 'Admin_Setor' ? 'origem_paroquia_id.setor_id' : 'origem_paroquia_id';
@@ -378,6 +455,7 @@
 
     async function carregarDashboard() {
         const usuario = pb.authStore.model; const papel = getPapelSeguro(usuario); 
+        
         let baseFiltro = getFiltroVisibilidadeBase(usuario, papel);
         let filterParoquias = ''; 
         if (papel === 'Admin_Setor') { filterParoquias = `setor_id = "${usuario.setor_id}"`; } else if (papel === 'Admin_Paroquia') { filterParoquias = `id = "${usuario.paroquia_id}"`; } else if (papel !== 'Master' && papel !== 'Arquidiocesano') { filterParoquias = `id = "null"`; }
@@ -522,7 +600,6 @@
                     }
                 }
                 
-                // Exibe o protocolo no lugar do ID
                 htmlTotal += `<tr class="hover:bg-slate-50 transition-colors"><td class="py-4 px-5 font-bold text-slate-800 align-top leading-relaxed"><div class="text-[10px] text-slate-400 font-mono mb-1">#${p.protocolo || p.id}</div>${p.nome_casal} ${infoEtapa} ${linkAnexo}</td><td class="py-4 px-5 text-sm text-slate-600 align-top leading-relaxed">${o} <span class="text-blue-600 font-bold mx-1">➔</span><br>${d}</td><td class="py-4 px-5 align-top"><span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Solicitado</span><span class="text-sm font-medium text-slate-700">${formatarData(p.created)}</span></td><td class="py-4 px-5 align-top max-w-xs">${badgeStatusHtml}</td><td class="py-4 px-5 align-top text-center">${btnObs}</td>${botoesHtml}</tr>`;
             });
             if (htmlTotal === '') htmlTotal = '<tr><td colspan="6" class="py-8 text-center text-slate-500 italic">Nenhum pedido encontrado.</td></tr>'; tbody.innerHTML = htmlTotal;
@@ -609,16 +686,44 @@
         const isMaster = (getPapelSeguro(pb.authStore.model) === 'Master');
         if (isMaster) { document.getElementById('divFormNovoSetor').classList.remove('hidden'); document.getElementById('divFormNovaParoquia').classList.remove('hidden'); } 
         else { document.getElementById('divFormNovoSetor').classList.add('hidden'); document.getElementById('divFormNovaParoquia').classList.add('hidden'); }
-        try { const setores = await pb.collection('setores').getFullList({ sort: 'nome', requestKey: null }); if(isMaster) { let opt = '<option value="">Selecione um Setor</option>'; setores.forEach(s => opt += `<option value="${s.id}">${s.nome}</option>`); document.getElementById('select_setor_paroquia').innerHTML = opt; } const tSetores = document.getElementById('listaSetoresAdmin'); tSetores.innerHTML = ''; if (setores.length === 0) tSetores.innerHTML = '<tr><td colspan="2" class="py-8 text-center text-slate-500 italic">Nenhum setor.</td></tr>'; setores.forEach(s => { const btnEditar = isMaster ? `<button onclick="abrirModalEdicao('setor', '${s.id}', '${s.nome}')" class="text-blue-600 text-sm font-bold hover:text-blue-800 transition mr-4">Editar</button>` : ''; const btnExcluir = isMaster ? `<button onclick="excluirBase('setores', '${s.id}')" class="text-red-500 text-sm font-bold hover:text-red-700 transition">Excluir</button>` : ''; tSetores.innerHTML += `<tr class="hover:bg-slate-50 transition-colors"><td class="py-4 px-5 font-bold text-slate-700">${s.nome}</td><td class="py-4 px-5 text-right whitespace-nowrap">${btnEditar}${btnExcluir}</td></tr>`; }); } catch (e) {}
+        try { 
+            const setores = await pb.collection('setores').getFullList({ sort: 'nome', requestKey: null }); 
+            if(isMaster) { let opt = '<option value="">Selecione um Setor</option>'; setores.forEach(s => opt += `<option value="${s.id}">${s.nome}</option>`); document.getElementById('select_setor_paroquia').innerHTML = opt; } 
+            const tSetores = document.getElementById('listaSetoresAdmin'); tSetores.innerHTML = ''; 
+            if (setores.length === 0) tSetores.innerHTML = '<tr><td colspan="3" class="py-8 text-center text-slate-500 italic">Nenhum setor.</td></tr>'; 
+            setores.forEach(s => { 
+                const btnEditar = isMaster ? `<button onclick="abrirModalEdicao('setor', '${s.id}', '${s.nome}', '', '', '${s.contato || ''}')" class="text-blue-600 text-sm font-bold hover:text-blue-800 transition mr-4">Editar</button>` : ''; 
+                const btnExcluir = isMaster ? `<button onclick="excluirBase('setores', '${s.id}')" class="text-red-500 text-sm font-bold hover:text-red-700 transition">Excluir</button>` : ''; 
+                tSetores.innerHTML += `<tr class="hover:bg-slate-50 transition-colors"><td class="py-4 px-5 font-bold text-slate-700">${s.nome}</td><td class="py-4 px-5 text-slate-500">${s.contato || '-'}</td><td class="py-4 px-5 text-right whitespace-nowrap">${btnEditar}${btnExcluir}</td></tr>`; 
+            }); 
+        } catch (e) {}
         try { const paroquias = await pb.collection('paroquias').getFullList({ sort: 'nome', expand: 'setor_id', requestKey: null }); const tParoquias = document.getElementById('listaParoquiasAdmin'); tParoquias.innerHTML = ''; if (paroquias.length === 0) tParoquias.innerHTML = '<tr><td colspan="4" class="py-8 text-center text-slate-500 italic">Nenhuma paróquia.</td></tr>'; paroquias.forEach(p => { const sNome = p.expand?.setor_id?.nome || '-'; const btnEditar = isMaster ? `<button onclick="abrirModalEdicao('paroquia', '${p.id}', '${p.nome}', '${p.setor_id}', '${p.cidade || ''}')" class="text-blue-600 text-sm font-bold hover:text-blue-800 transition mr-4">Editar</button>` : ''; const btnExcluir = isMaster ? `<button onclick="excluirBase('paroquias', '${p.id}')" class="text-red-500 text-sm font-bold hover:text-red-700 transition">Excluir</button>` : ''; tParoquias.innerHTML += `<tr class="hover:bg-slate-50 transition-colors"><td class="py-4 px-5 font-bold text-slate-700">${p.nome}</td><td class="py-4 px-5 text-slate-500">${p.cidade || '-'}</td><td class="py-4 px-5 text-slate-500 font-medium">${sNome}</td><td class="py-4 px-5 text-right whitespace-nowrap">${btnEditar}${btnExcluir}</td></tr>`; }); } catch (e) {}
     }
-    document.getElementById('formNovoSetor').addEventListener('submit', async function(e) { e.preventDefault(); try { await pb.collection('setores').create({ nome: document.getElementById('nome_setor').value }); document.getElementById('formNovoSetor').reset(); carregarListasCadastros(); inicializarFiltros(); carregarDashboard(); } catch (e) { alert("Erro ao salvar."); } });
+    document.getElementById('formNovoSetor').addEventListener('submit', async function(e) { e.preventDefault(); try { await pb.collection('setores').create({ nome: document.getElementById('nome_setor').value, contato: document.getElementById('contato_setor').value }); document.getElementById('formNovoSetor').reset(); carregarListasCadastros(); inicializarFiltros(); carregarDashboard(); } catch (e) { alert("Erro ao salvar."); } });
     document.getElementById('formNovaParoquia').addEventListener('submit', async function(e) { e.preventDefault(); try { await pb.collection('paroquias').create({ nome: document.getElementById('nome_paroquia').value, cidade: document.getElementById('cidade_paroquia').value, setor_id: document.getElementById('select_setor_paroquia').value }); document.getElementById('formNovaParoquia').reset(); carregarListasCadastros(); inicializarFiltros(); carregarDashboard(); } catch (e) { alert("Erro ao salvar."); } });
     async function excluirBase(col, id) { if(confirm("Tem certeza que deseja excluir?")) { try { if (col === 'setores') { const paroquiasVinculadas = await pb.collection('paroquias').getList(1, 1, { filter: `setor_id = "${id}"` }); if (paroquiasVinculadas.totalItems > 0) { alert(`⛔ Bloqueado!\nExistem paróquias neste Setor.`); return; } } await pb.collection(col).delete(id); carregarListasCadastros(); inicializarFiltros(); carregarDashboard(); } catch(e) { alert("Erro ao tentar excluir."); } } }
 
-    function abrirModalEdicao(tipo, id, nome, setorId = '', cidade = '') { document.getElementById('edit_id').value = id; document.getElementById('edit_tipo').value = tipo; document.getElementById('edit_nome').value = nome; if (tipo === 'paroquia') { document.getElementById('tituloModalEdicao').textContent = 'Editar Paróquia'; document.getElementById('div_edit_setor').classList.remove('hidden'); document.getElementById('edit_setor_id').innerHTML = document.getElementById('select_setor_paroquia').innerHTML; document.getElementById('edit_setor_id').value = setorId; document.getElementById('edit_setor_id').required = true; document.getElementById('div_edit_cidade').classList.remove('hidden'); document.getElementById('edit_cidade').value = cidade; document.getElementById('edit_cidade').required = true; } else { document.getElementById('tituloModalEdicao').textContent = 'Editar Setor'; document.getElementById('div_edit_setor').classList.add('hidden'); document.getElementById('edit_setor_id').required = false; document.getElementById('div_edit_cidade').classList.add('hidden'); document.getElementById('edit_cidade').required = false; } document.getElementById('modalEdicao').classList.remove('hidden'); }
+    function abrirModalEdicao(tipo, id, nome, setorId = '', cidade = '', contato = '') { 
+        document.getElementById('edit_id').value = id; 
+        document.getElementById('edit_tipo').value = tipo; 
+        document.getElementById('edit_nome').value = nome; 
+        
+        if (tipo === 'paroquia') { 
+            document.getElementById('tituloModalEdicao').textContent = 'Editar Paróquia'; 
+            document.getElementById('div_edit_setor').classList.remove('hidden'); document.getElementById('edit_setor_id').innerHTML = document.getElementById('select_setor_paroquia').innerHTML; document.getElementById('edit_setor_id').value = setorId; document.getElementById('edit_setor_id').required = true; 
+            document.getElementById('div_edit_cidade').classList.remove('hidden'); document.getElementById('edit_cidade').value = cidade; document.getElementById('edit_cidade').required = true; 
+            document.getElementById('div_edit_contato_setor').classList.add('hidden');
+        } else { 
+            document.getElementById('tituloModalEdicao').textContent = 'Editar Setor'; 
+            document.getElementById('div_edit_setor').classList.add('hidden'); document.getElementById('edit_setor_id').required = false; 
+            document.getElementById('div_edit_cidade').classList.add('hidden'); document.getElementById('edit_cidade').required = false; 
+            document.getElementById('div_edit_contato_setor').classList.remove('hidden'); document.getElementById('edit_contato_setor').value = contato;
+        } 
+        document.getElementById('modalEdicao').classList.remove('hidden'); 
+    }
+    
     function fecharModalEdicao() { document.getElementById('modalEdicao').classList.add('hidden'); document.getElementById('formEdicao').reset(); }
-    document.getElementById('formEdicao').addEventListener('submit', async function(e) { e.preventDefault(); const id = document.getElementById('edit_id').value; const tipo = document.getElementById('edit_tipo').value; const btn = document.getElementById('btnSalvarEdicao'); const dados = { nome: document.getElementById('edit_nome').value }; if (tipo === 'paroquia') { dados.setor_id = document.getElementById('edit_setor_id').value; dados.cidade = document.getElementById('edit_cidade').value; } const colecao = tipo === 'setor' ? 'setores' : 'paroquias'; btn.disabled = true; btn.textContent = 'Salvando...'; try { await pb.collection(colecao).update(id, dados); fecharModalEdicao(); carregarListasCadastros(); inicializarFiltros(); } catch(error) { alert('Erro ao salvar.'); } finally { btn.disabled = false; btn.textContent = 'Salvar Alterações'; } });
+    document.getElementById('formEdicao').addEventListener('submit', async function(e) { e.preventDefault(); const id = document.getElementById('edit_id').value; const tipo = document.getElementById('edit_tipo').value; const btn = document.getElementById('btnSalvarEdicao'); const dados = { nome: document.getElementById('edit_nome').value }; if (tipo === 'paroquia') { dados.setor_id = document.getElementById('edit_setor_id').value; dados.cidade = document.getElementById('edit_cidade').value; } else { dados.contato = document.getElementById('edit_contato_setor').value; } const colecao = tipo === 'setor' ? 'setores' : 'paroquias'; btn.disabled = true; btn.textContent = 'Salvando...'; try { await pb.collection(colecao).update(id, dados); fecharModalEdicao(); carregarListasCadastros(); inicializarFiltros(); } catch(error) { alert('Erro ao salvar.'); } finally { btn.disabled = false; btn.textContent = 'Salvar Alterações'; } });
 
     async function inicializarAbaAdmins() {
         const papel = getPapelSeguro(pb.authStore.model); const selectPapel = document.getElementById('admin_papel');
