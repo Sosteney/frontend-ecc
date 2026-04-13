@@ -82,7 +82,7 @@
                     </div>
                     
                     <div id="div_origem_externa" class="hidden mt-4 pt-4 border-t border-slate-200/80 transition-all duration-300">
-                        <label for="origem_externa" class="block text-xs font-bold text-slate-500 mb-1.5 uppercase tracking-wide">Digite a (Arqui)diocese e Paróquia</label>
+                        <label for="origem_externa" class="block text-xs font-bold text-slate-500 mb-1.5 uppercase tracking-wide">Digite a Arquidiocese e Paróquia</label>
                         <input type="text" id="origem_externa" placeholder="Ex: Paróquia São Pedro - Recife/PE" class="w-full p-3 bg-white border border-slate-300 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-slate-700 font-medium">
                     </div>
                 </div>
@@ -108,7 +108,7 @@
                     </div>
                     
                     <div id="div_destino_externa" class="hidden mt-4 pt-4 border-t border-slate-200/80 transition-all duration-300">
-                        <label for="destino_externa" class="block text-xs font-bold text-slate-500 mb-1.5 uppercase tracking-wide">Digite a (Arqui)diocese e Paróquia</label>
+                        <label for="destino_externa" class="block text-xs font-bold text-slate-500 mb-1.5 uppercase tracking-wide">Digite a Arquidiocese e Paróquia</label>
                         <input type="text" id="destino_externa" placeholder="Ex: Paróquia São João - Fortaleza/CE" class="w-full p-3 bg-white border border-slate-300 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-slate-700 font-medium">
                     </div>
                 </div>
@@ -150,7 +150,7 @@
                 const setores = await pb.collection('setores').getFullList({ sort: 'nome' });
                 let options = '<option value="">Selecione o Setor...</option>';
                 setores.forEach(s => { options += `<option value="${s.id}">${s.nome}</option>`; });
-                options += '<option value="OUTRO">🌍 Outra (Arqui)diocese / Externo</option>';
+                options += '<option value="OUTRO">Outra Arquidiocese / Externo</option>';
                 
                 selectSetorOrigem.innerHTML = options; 
                 selectSetorDestino.innerHTML = options;
@@ -168,7 +168,7 @@
             
             if (setorId === 'OUTRO') {
                 divExterna.classList.remove('hidden');
-                selectParoquia.innerHTML = '<option value="">Preencha o campo abaixo 👇</option>';
+                selectParoquia.innerHTML = '<option value="">Preencha o campo abaixo</option>';
                 selectParoquia.disabled = true; selectParoquia.classList.add('bg-slate-100', 'text-slate-400', 'cursor-not-allowed', 'border-slate-200'); selectParoquia.classList.remove('bg-white', 'text-slate-700', 'border-slate-300');
                 return;
             }
