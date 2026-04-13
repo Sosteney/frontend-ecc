@@ -242,24 +242,21 @@
             }
         }
 
-        // Função para gerar o PDF via jsPDF com o Layout Atualizado e Novo Texto Institucional
-        function gerarComprovantePDF(protocolo, casal, celular, etapas, origem, destino) {
+        // Função para gerar o PDF via jsPDF com o Layout Atualizado e Setores inclusos
+        function gerarComprovantePDF(protocolo, casal, celular, etapas, origem, setorOrigem, destino, setorDestino) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
             
-            // Variável de controle vertical (Y)
             let atualY = 15;
 
-            // Insere a Logo (se conseguir processar)
             const logoDataUrl = obterBase64DaLogo();
             if (logoDataUrl) {
-                doc.addImage(logoDataUrl, 'PNG', 95, atualY, 20, 20); // Centralizado (X: 95)
+                doc.addImage(logoDataUrl, 'PNG', 95, atualY, 20, 20);
                 atualY += 28;
             } else {
                 atualY += 10;
             }
 
-            // Cabeçalho
             doc.setFontSize(16);
             doc.setFont("helvetica", "bold");
             doc.text("Encontro de Casais com Cristo - ECC", 105, atualY, { align: "center" });
@@ -277,7 +274,6 @@
             doc.line(20, atualY, 190, atualY);
             atualY += 12;
 
-            // Dados do Pedido
             doc.setFontSize(12);
             doc.setFont("helvetica", "bold");
             doc.text("Dados do Protocolo", 20, atualY);
@@ -299,33 +295,31 @@
             doc.text(`Etapas Vivenciadas: ${etapas}`, 20, atualY);
             atualY += 14;
 
-            // Trajeto
             doc.setFont("helvetica", "bold");
             doc.text("Trajeto da Transferência", 20, atualY);
             atualY += 8;
             
             doc.setFont("helvetica", "normal");
             
-            const textoOrigemFormatado = doc.splitTextToSize(`Origem: ${origem}`, 170);
+            // Formatando com o Setor ao lado
+            const textoOrigemFormatado = doc.splitTextToSize(`Origem: ${origem} - ${setorOrigem}`, 170);
             doc.text(textoOrigemFormatado, 20, atualY);
             atualY += (textoOrigemFormatado.length * 6) + 2;
             
-            const textoDestinoFormatado = doc.splitTextToSize(`Destino: ${destino}`, 170);
+            const textoDestinoFormatado = doc.splitTextToSize(`Destino: ${destino} - ${setorDestino}`, 170);
             doc.text(textoDestinoFormatado, 20, atualY);
             atualY += (textoDestinoFormatado.length * 6) + 6;
 
             doc.line(20, atualY, 190, atualY);
             atualY += 12;
 
-            // Rodapé Institucional
             doc.setFont("helvetica", "bold");
             doc.text("Acompanhamento e Dúvidas", 20, atualY);
             atualY += 8;
             
             doc.setFont("helvetica", "normal");
-            doc.setFontSize(10); // Fonte ligeiramente menor para o texto fluir bem
+            doc.setFontSize(10); 
             
-            // O novo texto completo de acompanhamento e dúvidas
             const paragrafos = [
                 "Informamos que sua solicitação preliminar eletrônica foi registrada com sucesso e será encaminhada para análise preliminar pelo casal setorial da paróquia de origem.",
                 "Trata-se do início do processo de encaminhamento do casal no âmbito do ECC, podendo envolver a atualização e intercâmbio de sua ficha entre paróquias ou dioceses.",
@@ -334,17 +328,19 @@
             ];
 
             paragrafos.forEach(texto => {
-                const linhas = doc.splitTextToSize(texto, 170); // 170mm de limite lateral
+                const linhas = doc.splitTextToSize(texto, 170); 
                 doc.text(linhas, 20, atualY);
-                atualY += (linhas.length * 5) + 4; // avança Y com base na quantidade de linhas + margem do parágrafo
+                atualY += (linhas.length * 5) + 4; 
             });
 
-            // Processa o Download automático
             doc.save(`Transferencia_ECC_${casal.replace(/\s+/g, '_')}.pdf`);
         }
 
         document.getElementById('formPedido').addEventListener('submit', async function(e) {
             e.preventDefault(); 
+            
+            const selectSetorOrigem = document.getElementById('setor_origem');
+            const selectSetorDestino = document.getElementById('setor_destino');
             
             const origemId = document.getElementById('origem_id').value;
             const origemExt = document.getElementById('origem_externa').value.trim();
@@ -370,7 +366,6 @@
                 formData.append('celular', celularCasal);
                 formData.append('etapas', etapas);
                 
-                // GERAÇÃO DO PROTOCOLO
                 const dataAtual = new Date();
                 const anoMes = dataAtual.getFullYear().toString().slice(-2) + (dataAtual.getMonth() + 1).toString().padStart(2, '0');
                 const numAleatorio = Math.floor(1000 + Math.random() * 9000).toString();
@@ -388,18 +383,20 @@
 
                 await pb.collection('pedidos').create(formData);
                 
+                // Preparação dos Nomes para o PDF e WhatsApp
                 const selectOrigem = document.getElementById('origem_id');
                 const textoOrigem = origemId ? selectOrigem.options[selectOrigem.selectedIndex].text : origemExt;
+                const textoSetorOrigem = selectSetorOrigem.options[selectSetorOrigem.selectedIndex].text.replace('🌍 ', '');
                 
                 const selectDestino = document.getElementById('destino_id');
                 const textoDestino = destinoId ? selectDestino.options[selectDestino.selectedIndex].text : destinoExt;
+                const textoSetorDestino = selectSetorDestino.options[selectSetorDestino.selectedIndex].text.replace('🌍 ', '');
 
-                // --- INÍCIO: INTEGRAÇÃO WHATSAPP EVOLUTION API (MANTIDA NO FRONTEND) ---
                 try {
-                    let idSetorNotificar = document.getElementById('setor_origem').value;
+                    let idSetorNotificar = selectSetorOrigem.value;
                     
                     if (idSetorNotificar === 'OUTRO') {
-                        idSetorNotificar = document.getElementById('setor_destino').value;
+                        idSetorNotificar = selectSetorDestino.value;
                     }
 
                     if (idSetorNotificar && idSetorNotificar !== 'OUTRO') {
@@ -432,10 +429,8 @@
                 } catch (errWpp) {
                     console.error('Aviso: Erro na lógica de notificação do WhatsApp', errWpp);
                 }
-                // --- FIM: INTEGRAÇÃO WHATSAPP EVOLUTION API ---
 
-                // Gera o PDF aprimorado
-                gerarComprovantePDF(protocoloGerado, nomeCasal, celularCasal, etapas, textoOrigem, textoDestino);
+                gerarComprovantePDF(protocoloGerado, nomeCasal, celularCasal, etapas, textoOrigem, textoSetorOrigem, textoDestino, textoSetorDestino);
                 
                 mostrarMensagem(`Pedido enviado com sucesso! O comprovante (Protocolo: #${protocoloGerado}) foi baixado automaticamente. Guarde-o com segurança.`, "sucesso");
                 
