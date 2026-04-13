@@ -13,7 +13,7 @@
     <header class="bg-gradient-to-r from-blue-900 to-blue-800 text-white shadow-md relative z-10">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center max-w-7xl">
             <div class="flex items-center space-x-4">
-                <img src="brasao.png" alt="Brasão ECC" class="w-12 h-12 object-contain drop-shadow-sm">
+                <img src="brasao.png" id="logoImg" alt="Brasão ECC" class="w-12 h-12 object-contain drop-shadow-sm">
                 <div>
                     <h1 class="text-xl font-bold tracking-wide">Sistema de Transferências</h1>
                     <p class="text-xs text-blue-200 -mt-0.5 hidden sm:block font-medium">Encontro de Casais com Cristo</p>
@@ -226,63 +226,120 @@
             } catch (error) { selectParoquia.innerHTML = '<option value="">Erro ao buscar</option>'; }
         }
 
-        // Função para gerar o PDF via jsPDF com o número de Protocolo
+        // Função para desenhar a imagem logo no PDF via Canvas Base64
+        function obterBase64DaLogo() {
+            try {
+                const img = document.getElementById('logoImg');
+                const canvas = document.createElement('canvas');
+                canvas.width = img.naturalWidth || 200;
+                canvas.height = img.naturalHeight || 200;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                return canvas.toDataURL('image/png');
+            } catch(e) {
+                console.warn("Não foi possível processar a imagem do brasão.", e);
+                return null;
+            }
+        }
+
+        // Função para gerar o PDF via jsPDF com o Layout Atualizado e Novo Texto Institucional
         function gerarComprovantePDF(protocolo, casal, celular, etapas, origem, destino) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-
-            doc.setFontSize(18);
-            doc.setFont("helvetica", "bold");
-            doc.text("Encontro de Casais com Cristo - ECC", 105, 20, { align: "center" });
             
-            doc.setFontSize(14);
-            doc.text("Comprovante de Solicitação de Transferência", 105, 30, { align: "center" });
+            // Variável de controle vertical (Y)
+            let atualY = 15;
+
+            // Insere a Logo (se conseguir processar)
+            const logoDataUrl = obterBase64DaLogo();
+            if (logoDataUrl) {
+                doc.addImage(logoDataUrl, 'PNG', 95, atualY, 20, 20); // Centralizado (X: 95)
+                atualY += 28;
+            } else {
+                atualY += 10;
+            }
+
+            // Cabeçalho
+            doc.setFontSize(16);
+            doc.setFont("helvetica", "bold");
+            doc.text("Encontro de Casais com Cristo - ECC", 105, atualY, { align: "center" });
+            atualY += 8;
+            
+            doc.setFontSize(13);
+            doc.text("Comprovante de Solicitação de Transferência", 105, atualY, { align: "center" });
+            atualY += 6;
             
             doc.setFontSize(10);
             doc.setFont("helvetica", "normal");
-            doc.text("Arquidiocese de Natal / RN", 105, 36, { align: "center" });
+            doc.text("Arquidiocese de Natal / RN", 105, atualY, { align: "center" });
+            atualY += 6;
 
-            doc.line(20, 42, 190, 42);
+            doc.line(20, atualY, 190, atualY);
+            atualY += 12;
 
+            // Dados do Pedido
             doc.setFontSize(12);
             doc.setFont("helvetica", "bold");
-            doc.text("Dados do Protocolo", 20, 55);
+            doc.text("Dados do Protocolo", 20, atualY);
+            atualY += 10;
 
             doc.setFontSize(11);
             doc.setFont("helvetica", "normal");
-            doc.text(`Número do Protocolo: #${protocolo}`, 20, 65);
+            doc.text(`Número do Protocolo: #${protocolo}`, 20, atualY);
+            atualY += 8;
             
             const dataAtual = new Date().toLocaleString('pt-BR');
-            doc.text(`Gerado em: ${dataAtual}`, 20, 73);
+            doc.text(`Gerado em: ${dataAtual}`, 20, atualY);
+            atualY += 8;
             
-            doc.text(`Casal: ${casal}`, 20, 81);
-            doc.text(`Celular: ${celular}`, 20, 89);
-            doc.text(`Etapas Vivenciadas: ${etapas}`, 20, 97);
+            doc.text(`Casal: ${casal}`, 20, atualY);
+            atualY += 8;
+            doc.text(`Celular: ${celular}`, 20, atualY);
+            atualY += 8;
+            doc.text(`Etapas Vivenciadas: ${etapas}`, 20, atualY);
+            atualY += 14;
 
+            // Trajeto
             doc.setFont("helvetica", "bold");
-            doc.text("Trajeto da Transferência", 20, 110);
+            doc.text("Trajeto da Transferência", 20, atualY);
+            atualY += 8;
+            
             doc.setFont("helvetica", "normal");
             
             const textoOrigemFormatado = doc.splitTextToSize(`Origem: ${origem}`, 170);
-            doc.text(textoOrigemFormatado, 20, 120);
+            doc.text(textoOrigemFormatado, 20, atualY);
+            atualY += (textoOrigemFormatado.length * 6) + 2;
             
             const textoDestinoFormatado = doc.splitTextToSize(`Destino: ${destino}`, 170);
-            doc.text(textoDestinoFormatado, 20, 128 + (textoOrigemFormatado.length - 1) * 5);
+            doc.text(textoDestinoFormatado, 20, atualY);
+            atualY += (textoDestinoFormatado.length * 6) + 6;
 
-            doc.line(20, 145, 190, 145);
+            doc.line(20, atualY, 190, atualY);
+            atualY += 12;
 
+            // Rodapé Institucional
             doc.setFont("helvetica", "bold");
-            doc.text("Acompanhamento e Dúvidas", 20, 155);
+            doc.text("Acompanhamento e Dúvidas", 20, atualY);
+            atualY += 8;
+            
             doc.setFont("helvetica", "normal");
+            doc.setFontSize(10); // Fonte ligeiramente menor para o texto fluir bem
             
-            const infoTexto = "A sua solicitação de transferência foi registrada em nossa base de dados com\n" +
-                              "sucesso e será encaminhada para análise da equipe de Pós-Encontro do seu Setor.\n\n" +
-                              "Por favor, guarde o Número do Protocolo acima. Caso precise de\n" +
-                              "ajuda, entrar em contato com os Casais Ligação Setoriais ou com a Equipe\n" +
-                              "Dirigente do seu Setor de destino.";
-            
-            doc.text(infoTexto, 20, 165);
+            // O novo texto completo de acompanhamento e dúvidas
+            const paragrafos = [
+                "Informamos que sua solicitação preliminar eletrônica foi registrada com sucesso e será encaminhada para análise preliminar pelo casal setorial da paróquia de origem.",
+                "Trata-se do início do processo de encaminhamento do casal no âmbito do ECC, podendo envolver a atualização e intercâmbio de sua ficha entre paróquias ou dioceses.",
+                "O pedido será analisado e acompanhado pelo Conselho Arquidiocesano do ECC, que verificará a conveniência pastoral e os procedimentos adequados para o encaminhamento.",
+                "Por favor, guarde o número do protocolo. Em caso de dúvidas, entre em contato com o casal ligação setorial ou com a equipe dirigente do seu setor de destino."
+            ];
 
+            paragrafos.forEach(texto => {
+                const linhas = doc.splitTextToSize(texto, 170); // 170mm de limite lateral
+                doc.text(linhas, 20, atualY);
+                atualY += (linhas.length * 5) + 4; // avança Y com base na quantidade de linhas + margem do parágrafo
+            });
+
+            // Processa o Download automático
             doc.save(`Transferencia_ECC_${casal.replace(/\s+/g, '_')}.pdf`);
         }
 
@@ -329,18 +386,18 @@
 
                 if (arquivoInput.files.length > 0) formData.append('anexo', arquivoInput.files[0]);
 
-                const record = await pb.collection('pedidos').create(formData);
+                await pb.collection('pedidos').create(formData);
                 
                 const selectOrigem = document.getElementById('origem_id');
                 const textoOrigem = origemId ? selectOrigem.options[selectOrigem.selectedIndex].text : origemExt;
+                
                 const selectDestino = document.getElementById('destino_id');
                 const textoDestino = destinoId ? selectDestino.options[selectDestino.selectedIndex].text : destinoExt;
 
-                // --- INÍCIO: INTEGRAÇÃO WHATSAPP EVOLUTION API ---
+                // --- INÍCIO: INTEGRAÇÃO WHATSAPP EVOLUTION API (MANTIDA NO FRONTEND) ---
                 try {
                     let idSetorNotificar = document.getElementById('setor_origem').value;
                     
-                    // Se origem for externa, notifica o destino (que irá receber o casal)
                     if (idSetorNotificar === 'OUTRO') {
                         idSetorNotificar = document.getElementById('setor_destino').value;
                     }
@@ -349,14 +406,8 @@
                         const setorData = await pb.collection('setores').getOne(idSetorNotificar);
                         
                         if (setorData.contato) {
-                            // Limpa qualquer máscara que o usuário tenha digitado no PocketBase
                             let numLimpo = setorData.contato.replace(/\D/g, '');
-                            let numEvo = '';
-                            
-                            // Adiciona DDI do Brasil se faltar
-                            if (!numLimpo.startsWith('55')) numEvo = '55' + numLimpo;
-                            else numEvo = numLimpo;
-                            
+                            let numEvo = (!numLimpo.startsWith('55')) ? '55' + numLimpo : numLimpo;
                             const numeroFinal = '+' + numEvo;
 
                             const msgTexto = `🚨 *NOVO PEDIDO DE TRANSFERÊNCIA - ECC*\n\nO Casal *${nomeCasal}* acaba de registrar um pedido de transferência.\n\n📍 *De:* ${textoOrigem}\n🎯 *Para:* ${textoDestino}\n\n*Protocolo:* #${protocoloGerado}\n\nAcesse o painel administrativo para analisar.`;
@@ -368,7 +419,6 @@
                                 "linkPreview": true
                             };
 
-                            // Requisição POST (Não trava a tela esperando resposta)
                             fetch('https://evolution.eccnatal.com.br/message/sendText/Agente', {
                                 method: 'POST',
                                 headers: {
@@ -384,6 +434,7 @@
                 }
                 // --- FIM: INTEGRAÇÃO WHATSAPP EVOLUTION API ---
 
+                // Gera o PDF aprimorado
                 gerarComprovantePDF(protocoloGerado, nomeCasal, celularCasal, etapas, textoOrigem, textoDestino);
                 
                 mostrarMensagem(`Pedido enviado com sucesso! O comprovante (Protocolo: #${protocoloGerado}) foi baixado automaticamente. Guarde-o com segurança.`, "sucesso");
