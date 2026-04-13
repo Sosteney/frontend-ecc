@@ -9,6 +9,8 @@
     <script src="https://cdn.jsdelivr.net/gh/pocketbase/js-sdk@master/dist/pocketbase.umd.js"></script>
     <style>
         .obs-texto { white-space: pre-wrap; font-family: monospace; font-size: 11px; }
+        /* Garante que a barra de rolagem horizontal fique suave */
+        .overflow-x-auto { scroll-behavior: smooth; }
     </style>
 </head>
 <body class="bg-slate-100 flex flex-col min-h-screen overflow-y-scroll text-slate-800 font-sans">
@@ -119,10 +121,17 @@
                         </div>
 
                         <div id="subAbaAndamento" class="sub-aba-pedidos w-full">
-                            <div class="overflow-x-auto rounded-xl border border-slate-200 w-full">
+                            <div class="overflow-x-auto rounded-xl border border-slate-200 w-full relative">
                                 <table class="w-full text-left text-sm min-w-max">
                                     <thead class="bg-slate-100 text-slate-600 uppercase tracking-wider text-xs font-bold">
-                                        <tr><th class="py-4 px-5">Casal / Etapa</th><th class="py-4 px-5">Origem ➔ Destino</th><th class="py-4 px-5">Data</th><th class="py-4 px-5">Status Atual</th><th class="py-4 px-5 text-center">Obs</th><th id="thAcoesPedidos" class="py-4 px-5 text-right">Ações</th></tr>
+                                        <tr>
+                                            <th class="py-4 px-5">Casal / Etapa</th>
+                                            <th class="py-4 px-5">Origem ➔ Destino</th>
+                                            <th class="py-4 px-5">Data</th>
+                                            <th class="py-4 px-5">Status Atual</th>
+                                            <th class="py-4 px-5 text-center">Obs</th>
+                                            <th id="thAcoesPedidos" class="py-4 px-5 text-right sticky right-0 bg-slate-100 border-l border-slate-200 z-10">Ações</th>
+                                        </tr>
                                     </thead>
                                     <tbody id="listaPedidos" class="divide-y divide-slate-100"><tr><td colspan="6" class="py-8 text-center text-slate-500 italic">Buscando pedidos...</td></tr></tbody>
                                 </table>
@@ -130,10 +139,17 @@
                         </div>
 
                         <div id="subAbaConcluidos" class="sub-aba-pedidos hidden w-full">
-                            <div class="overflow-x-auto rounded-xl border border-slate-200 w-full">
+                            <div class="overflow-x-auto rounded-xl border border-slate-200 w-full relative">
                                 <table class="w-full text-left text-sm min-w-max">
                                     <thead class="bg-slate-100 text-slate-600 uppercase tracking-wider text-xs font-bold">
-                                        <tr><th class="py-4 px-5">Casal / Etapa</th><th class="py-4 px-5">Origem ➔ Destino</th><th class="py-4 px-5">Datas</th><th class="py-4 px-5">Status Final</th><th class="py-4 px-5 text-center">Obs</th><th class="py-4 px-5 text-right">Comprovante</th></tr>
+                                        <tr>
+                                            <th class="py-4 px-5">Casal / Etapa</th>
+                                            <th class="py-4 px-5">Origem ➔ Destino</th>
+                                            <th class="py-4 px-5">Datas</th>
+                                            <th class="py-4 px-5">Status Final</th>
+                                            <th class="py-4 px-5 text-center">Obs</th>
+                                            <th class="py-4 px-5 text-right sticky right-0 bg-slate-100 border-l border-slate-200 z-10">Comprovante</th>
+                                        </tr>
                                     </thead>
                                     <tbody id="listaConcluidos" class="divide-y divide-slate-100"><tr><td colspan="6" class="py-8 text-center text-slate-500 italic">Buscando concluídos...</td></tr></tbody>
                                 </table>
@@ -164,7 +180,7 @@
                                 <form id="formNovoSetor" class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
                                     <div class="md:col-span-2">
                                         <label class="block text-xs font-bold text-slate-600 mb-1">Nome do Setor</label>
-                                        <input type="text" id="nome_setor" required placeholder="Ex: Setor Sul" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow">
+                                        <input type="text" id="nome_setor" required placeholder="Ex: Setor Sul" class="flex-1 p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow">
                                     </div>
                                     <div class="md:col-span-2">
                                         <label class="block text-xs font-bold text-slate-600 mb-1">Contato WhatsApp (Opcional)</label>
@@ -175,10 +191,14 @@
                                     </div>
                                 </form>
                             </div>
-                            <div class="overflow-x-auto rounded-xl border border-slate-200 w-full">
+                            <div class="overflow-x-auto rounded-xl border border-slate-200 w-full relative">
                                 <table class="w-full text-left text-sm min-w-max">
                                     <thead class="bg-slate-100 text-slate-600 uppercase tracking-wider text-xs font-bold">
-                                        <tr><th class="py-4 px-5">Nome do Setor</th><th class="py-4 px-5">Contato WhatsApp</th><th class="py-4 px-5 text-right">Ações</th></tr>
+                                        <tr>
+                                            <th class="py-4 px-5">Nome do Setor</th>
+                                            <th class="py-4 px-5">Contato WhatsApp</th>
+                                            <th class="py-4 px-5 text-right sticky right-0 bg-slate-100 border-l border-slate-200 z-10">Ações</th>
+                                        </tr>
                                     </thead>
                                     <tbody id="listaSetoresAdmin" class="divide-y divide-slate-100"></tbody>
                                 </table>
@@ -195,10 +215,15 @@
                                     <div class="md:col-span-4 flex justify-end mt-2"><button type="submit" class="bg-blue-600 text-white font-bold py-2.5 px-8 rounded-lg hover:bg-blue-700 transition shadow">Adicionar Paróquia</button></div>
                                 </form>
                             </div>
-                            <div class="overflow-x-auto rounded-xl border border-slate-200 w-full">
+                            <div class="overflow-x-auto rounded-xl border border-slate-200 w-full relative">
                                 <table class="w-full text-left text-sm min-w-max">
                                     <thead class="bg-slate-100 text-slate-600 uppercase tracking-wider text-xs font-bold">
-                                        <tr><th class="py-4 px-5">Nome da Paróquia</th><th class="py-4 px-5">Cidade</th><th class="py-4 px-5">Setor</th><th class="py-4 px-5 text-right">Ações</th></tr>
+                                        <tr>
+                                            <th class="py-4 px-5">Nome da Paróquia</th>
+                                            <th class="py-4 px-5">Cidade</th>
+                                            <th class="py-4 px-5">Setor</th>
+                                            <th class="py-4 px-5 text-right sticky right-0 bg-slate-100 border-l border-slate-200 z-10">Ações</th>
+                                        </tr>
                                     </thead>
                                     <tbody id="listaParoquiasAdmin" class="divide-y divide-slate-100"></tbody>
                                 </table>
@@ -208,7 +233,20 @@
 
                     <div id="abaPrincipalAdmins" class="aba-principal hidden w-full">
                         <div class="bg-slate-50 rounded-xl border border-slate-200 p-6 mb-8 w-full"><h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-5">Conceder Novo Acesso</h3><form id="formNovoAdmin" class="space-y-4"><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div><label class="block text-xs font-bold text-slate-600 mb-1">Nome do Casal</label><input type="text" id="admin_nome" required class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"></div><div><label class="block text-xs font-bold text-slate-600 mb-1">Celular (WhatsApp)</label><input type="tel" id="admin_celular" required maxlength="15" placeholder="(00) 00000-0000" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"></div><div><label class="block text-xs font-bold text-slate-600 mb-1">E-mail (Login)</label><input type="email" id="admin_email" required class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"></div><div><label class="block text-xs font-bold text-slate-600 mb-1">Senha (mín 8)</label><input type="password" id="admin_senha" required minlength="8" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"></div><div class="md:col-span-2"><label class="block text-xs font-bold text-slate-600 mb-1">Papel / Nível</label><select id="admin_papel" required onchange="alternarCamposAdmin()" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"></select></div></div><div id="div_admin_setor" class="hidden mt-4"><label class="block text-xs font-bold text-slate-600 mb-1" id="label_admin_setor">Travar no Setor</label><select id="admin_setor_id" onchange="carregarParoquiasAdminUser()" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"></select></div><div id="div_admin_paroquia" class="hidden mt-4"><label class="block text-xs font-bold text-slate-600 mb-1">Travar na Paróquia</label><select id="admin_paroquia_id" class="w-full p-2.5 bg-slate-100 text-slate-400 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 transition-shadow cursor-not-allowed" disabled><option value="">Selecione um Setor primeiro...</option></select></div><div class="flex justify-end pt-4"><button type="submit" id="btnSalvarAdmin" class="bg-blue-600 text-white font-bold py-2.5 px-8 rounded-lg hover:bg-blue-700 transition shadow">Cadastrar Usuário</button></div></form></div>
-                        <div class="overflow-x-auto rounded-xl border border-slate-200 w-full"><table class="w-full text-left text-sm min-w-max"><thead class="bg-slate-100 text-slate-600 uppercase tracking-wider text-xs font-bold"><tr><th class="py-4 px-5">Casal</th><th class="py-4 px-5">Contato</th><th class="py-4 px-5">Nível de Acesso</th><th class="py-4 px-5">Local Vinculado</th><th id="thAcoesAdmin" class="py-4 px-5 text-right">Ações</th></tr></thead><tbody id="listaUsuariosAdmin" class="divide-y divide-slate-100"></tbody></table></div>
+                        <div class="overflow-x-auto rounded-xl border border-slate-200 w-full relative">
+                            <table class="w-full text-left text-sm min-w-max">
+                                <thead class="bg-slate-100 text-slate-600 uppercase tracking-wider text-xs font-bold">
+                                    <tr>
+                                        <th class="py-4 px-5">Casal</th>
+                                        <th class="py-4 px-5">Contato</th>
+                                        <th class="py-4 px-5">Nível de Acesso</th>
+                                        <th class="py-4 px-5">Local Vinculado</th>
+                                        <th id="thAcoesAdmin" class="py-4 px-5 text-right sticky right-0 bg-slate-100 border-l border-slate-200 z-10">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="listaUsuariosAdmin" class="divide-y divide-slate-100"></tbody>
+                            </table>
+                        </div>
                     </div>
 
                     <div id="abaPrincipalExportacao" class="aba-principal hidden w-full">
@@ -592,14 +630,14 @@
                     } else {
                         botoesHtml = `<div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider pt-2 leading-tight">${msgBloqueio}</div>`;
                     }
-                    tdAcoesHtml = `<td class="py-4 px-5 whitespace-nowrap text-right align-top">${botoesHtml}</td>`;
+                    tdAcoesHtml = `<td class="py-4 px-5 whitespace-nowrap text-right align-top sticky right-0 bg-white group-hover:bg-slate-50 transition-colors border-l border-slate-200 z-10">${botoesHtml}</td>`;
                 }
 
                 let corObs = p.observacao ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'; 
                 let txtObs = p.observacao ? 'Ler Obs' : '+ Obs'; 
                 let btnObs = `<button onclick="abrirModalObsLeitura('${p.id}', \`${encodeURIComponent(p.observacao || '')}\`, ${podeEditar})" class="${corObs} text-xs px-3 py-1.5 rounded-md font-bold transition shadow-sm w-full">${txtObs}</button>`;
                 
-                htmlTotal += `<tr class="hover:bg-slate-50 transition-colors"><td class="py-4 px-5 font-bold text-slate-800 align-top leading-relaxed"><div class="text-[10px] text-slate-400 font-mono mb-1">#${p.protocolo || p.id}</div>${p.nome_casal} ${infoEtapa} ${linkAnexo}</td><td class="py-4 px-5 text-sm text-slate-600 align-top leading-relaxed">${o} <span class="text-blue-600 font-bold mx-1">➔</span><br>${d}</td><td class="py-4 px-5 align-top"><span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Solicitado</span><span class="text-sm font-medium text-slate-700">${formatarData(p.created)}</span></td><td class="py-4 px-5 align-top max-w-xs">${badgeStatusHtml}</td><td class="py-4 px-5 align-top text-center">${btnObs}</td>${tdAcoesHtml}</tr>`;
+                htmlTotal += `<tr class="hover:bg-slate-50 transition-colors group"><td class="py-4 px-5 font-bold text-slate-800 align-top leading-relaxed"><div class="text-[10px] text-slate-400 font-mono mb-1">#${p.protocolo || p.id}</div>${p.nome_casal} ${infoEtapa} ${linkAnexo}</td><td class="py-4 px-5 text-sm text-slate-600 align-top leading-relaxed">${o} <span class="text-blue-600 font-bold mx-1">➔</span><br>${d}</td><td class="py-4 px-5 align-top"><span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Solicitado</span><span class="text-sm font-medium text-slate-700">${formatarData(p.created)}</span></td><td class="py-4 px-5 align-top max-w-xs">${badgeStatusHtml}</td><td class="py-4 px-5 align-top text-center">${btnObs}</td>${tdAcoesHtml}</tr>`;
             });
             if (htmlTotal === '') htmlTotal = '<tr><td colspan="6" class="py-8 text-center text-slate-500 italic">Nenhum pedido encontrado.</td></tr>'; tbody.innerHTML = htmlTotal;
         } catch (e) { document.getElementById('listaPedidos').innerHTML = '<tr><td colspan="6" class="py-8 text-center text-red-500 font-bold">Erro de conexão.</td></tr>'; }
@@ -627,7 +665,7 @@
                 
                 let badgeStatusFinal = `<span class="bg-emerald-100 text-emerald-800 font-bold text-[11px] px-3 py-1 rounded-full uppercase tracking-wider border border-emerald-200">Concluído</span>`;
 
-                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition-colors"><td class="py-4 px-5 font-bold text-slate-800 align-top leading-relaxed"><div class="text-[10px] text-slate-400 font-mono mb-1">#${p.protocolo || p.id}</div>${p.nome_casal} ${infoEtapa}</td><td class="py-4 px-5 text-sm text-slate-600 align-top leading-relaxed">${o} <span class="text-blue-600 font-bold mx-1">➔</span><br>${d}</td><td class="py-4 px-5 align-top whitespace-nowrap"><div class="mb-1"><span class="text-xs text-slate-400 font-bold uppercase mr-2">Solicitado:</span><span class="text-sm font-medium text-slate-700">${formatarData(p.created)}</span></div><div><span class="text-xs text-emerald-500 font-bold uppercase mr-2">Concluído:</span><span class="text-sm font-bold text-emerald-700">${formatarData(p.updated)}</span></div></td><td class="py-4 px-5 align-top">${badgeStatusFinal}</td><td class="py-4 px-5 align-top text-center">${btnObs}</td><td class="py-4 px-5 text-right align-top"><button onclick="buscarComprovante('${p.id}')" class="bg-blue-600 text-white text-xs px-4 py-1.5 rounded-md hover:bg-blue-700 transition shadow font-bold">Ver Doc</button></td></tr>`;
+                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition-colors group"><td class="py-4 px-5 font-bold text-slate-800 align-top leading-relaxed"><div class="text-[10px] text-slate-400 font-mono mb-1">#${p.protocolo || p.id}</div>${p.nome_casal} ${infoEtapa}</td><td class="py-4 px-5 text-sm text-slate-600 align-top leading-relaxed">${o} <span class="text-blue-600 font-bold mx-1">➔</span><br>${d}</td><td class="py-4 px-5 align-top whitespace-nowrap"><div class="mb-1"><span class="text-xs text-slate-400 font-bold uppercase mr-2">Solicitado:</span><span class="text-sm font-medium text-slate-700">${formatarData(p.created)}</span></div><div><span class="text-xs text-emerald-500 font-bold uppercase mr-2">Concluído:</span><span class="text-sm font-bold text-emerald-700">${formatarData(p.updated)}</span></div></td><td class="py-4 px-5 align-top">${badgeStatusFinal}</td><td class="py-4 px-5 align-top text-center">${btnObs}</td><td class="py-4 px-5 text-right align-top sticky right-0 bg-white group-hover:bg-slate-50 transition-colors border-l border-slate-200 z-10"><button onclick="buscarComprovante('${p.id}')" class="bg-blue-600 text-white text-xs px-4 py-1.5 rounded-md hover:bg-blue-700 transition shadow font-bold">Ver Doc</button></td></tr>`;
             });
         } catch (e) {}
     }
@@ -685,7 +723,6 @@
 
     document.getElementById('formMudarStatus').addEventListener('submit', async function(e) { e.preventDefault(); const pId = document.getElementById('update_pedido_id').value; const novoAndamento = document.getElementById('select_novo_status').value; const recadoExtra = document.getElementById('texto_obs_update').value; const btn = document.getElementById('btnSalvarStatus'); const autor = pb.authStore.model.nome_casal || 'Admin'; const pAtual = await pb.collection('pedidos').getOne(pId); let statusBanco = novoAndamento; let isTerminal = STATUS_TERMINAIS.includes(novoAndamento); if (isTerminal) { statusBanco = 'Concluido'; } let obsAntiga = pAtual.observacao || ''; let blocoObs = `[${getDataHoraAtual()}] ${autor}:\n${isTerminal ? '✅ FINALIZADO:' : '🔄 STATUS ALTERADO:'} ${novoAndamento}`; if (recadoExtra.trim() !== '') blocoObs += `\nNota: ${recadoExtra}`; blocoObs += `\n\n`; let obsFinal = blocoObs + obsAntiga; btn.disabled = true; btn.textContent = 'Salvando...'; try { if (isTerminal) { const arq = document.getElementById('arquivo_anexo_final'); if (arq.files.length > 0) { const fdHist = new FormData(); fdHist.append('pedido_id', pId); fdHist.append('usuario_id', pb.authStore.model.id); fdHist.append('acao', 'Concluir Documento'); fdHist.append('anexo', arq.files[0]); await pb.collection('historico').create(fdHist); } } await pb.collection('pedidos').update(pId, { status: statusBanco, observacao: obsFinal }); fecharModalStatus(); aplicarFiltrosAtuais(); carregarDashboard(); } catch(e) { alert("Erro ao atualizar status."); } finally { btn.disabled = false; btn.textContent = 'Salvar Andamento'; } });
 
-    // Aceita um terceiro parametro 'podeEditarObs' que define se o botao Salvar vai aparecer
     function abrirModalObsLeitura(id, obsEncodada, podeEditarObs = false) { 
         document.getElementById('obs_pedido_id').value = id; 
         let textoDecodado = decodeURIComponent(obsEncodada); 
@@ -720,10 +757,10 @@
             setores.forEach(s => { 
                 const btnEditar = isMaster ? `<button onclick="abrirModalEdicao('setor', '${s.id}', '${s.nome}', '', '', '${s.contato || ''}')" class="text-blue-600 text-sm font-bold hover:text-blue-800 transition mr-4">Editar</button>` : ''; 
                 const btnExcluir = isMaster ? `<button onclick="excluirBase('setores', '${s.id}')" class="text-red-500 text-sm font-bold hover:text-red-700 transition">Excluir</button>` : ''; 
-                tSetores.innerHTML += `<tr class="hover:bg-slate-50 transition-colors"><td class="py-4 px-5 font-bold text-slate-700">${s.nome}</td><td class="py-4 px-5 text-slate-500">${s.contato || '-'}</td><td class="py-4 px-5 text-right whitespace-nowrap">${btnEditar}${btnExcluir}</td></tr>`; 
+                tSetores.innerHTML += `<tr class="hover:bg-slate-50 transition-colors group"><td class="py-4 px-5 font-bold text-slate-700">${s.nome}</td><td class="py-4 px-5 text-slate-500">${s.contato || '-'}</td><td class="py-4 px-5 text-right whitespace-nowrap sticky right-0 bg-white group-hover:bg-slate-50 transition-colors border-l border-slate-200 z-10">${btnEditar}${btnExcluir}</td></tr>`; 
             }); 
         } catch (e) {}
-        try { const paroquias = await pb.collection('paroquias').getFullList({ sort: 'nome', expand: 'setor_id', requestKey: null }); const tParoquias = document.getElementById('listaParoquiasAdmin'); tParoquias.innerHTML = ''; if (paroquias.length === 0) tParoquias.innerHTML = '<tr><td colspan="4" class="py-8 text-center text-slate-500 italic">Nenhuma paróquia.</td></tr>'; paroquias.forEach(p => { const sNome = p.expand?.setor_id?.nome || '-'; const btnEditar = isMaster ? `<button onclick="abrirModalEdicao('paroquia', '${p.id}', '${p.nome}', '${p.setor_id}', '${p.cidade || ''}')" class="text-blue-600 text-sm font-bold hover:text-blue-800 transition mr-4">Editar</button>` : ''; const btnExcluir = isMaster ? `<button onclick="excluirBase('paroquias', '${p.id}')" class="text-red-500 text-sm font-bold hover:text-red-700 transition">Excluir</button>` : ''; tParoquias.innerHTML += `<tr class="hover:bg-slate-50 transition-colors"><td class="py-4 px-5 font-bold text-slate-700">${p.nome}</td><td class="py-4 px-5 text-slate-500">${p.cidade || '-'}</td><td class="py-4 px-5 text-slate-500 font-medium">${sNome}</td><td class="py-4 px-5 text-right whitespace-nowrap">${btnEditar}${btnExcluir}</td></tr>`; }); } catch (e) {}
+        try { const paroquias = await pb.collection('paroquias').getFullList({ sort: 'nome', expand: 'setor_id', requestKey: null }); const tParoquias = document.getElementById('listaParoquiasAdmin'); tParoquias.innerHTML = ''; if (paroquias.length === 0) tParoquias.innerHTML = '<tr><td colspan="4" class="py-8 text-center text-slate-500 italic">Nenhuma paróquia.</td></tr>'; paroquias.forEach(p => { const sNome = p.expand?.setor_id?.nome || '-'; const btnEditar = isMaster ? `<button onclick="abrirModalEdicao('paroquia', '${p.id}', '${p.nome}', '${p.setor_id}', '${p.cidade || ''}')" class="text-blue-600 text-sm font-bold hover:text-blue-800 transition mr-4">Editar</button>` : ''; const btnExcluir = isMaster ? `<button onclick="excluirBase('paroquias', '${p.id}')" class="text-red-500 text-sm font-bold hover:text-red-700 transition">Excluir</button>` : ''; tParoquias.innerHTML += `<tr class="hover:bg-slate-50 transition-colors group"><td class="py-4 px-5 font-bold text-slate-700">${p.nome}</td><td class="py-4 px-5 text-slate-500">${p.cidade || '-'}</td><td class="py-4 px-5 text-slate-500 font-medium">${sNome}</td><td class="py-4 px-5 text-right whitespace-nowrap sticky right-0 bg-white group-hover:bg-slate-50 transition-colors border-l border-slate-200 z-10">${btnEditar}${btnExcluir}</td></tr>`; }); } catch (e) {}
     }
     document.getElementById('formNovoSetor').addEventListener('submit', async function(e) { e.preventDefault(); try { await pb.collection('setores').create({ nome: document.getElementById('nome_setor').value, contato: document.getElementById('contato_setor').value }); document.getElementById('formNovoSetor').reset(); carregarListasCadastros(); inicializarFiltros(); carregarDashboard(); } catch (e) { alert("Erro ao salvar."); } });
     document.getElementById('formNovaParoquia').addEventListener('submit', async function(e) { e.preventDefault(); try { await pb.collection('paroquias').create({ nome: document.getElementById('nome_paroquia').value, cidade: document.getElementById('cidade_paroquia').value, setor_id: document.getElementById('select_setor_paroquia').value }); document.getElementById('formNovaParoquia').reset(); carregarListasCadastros(); inicializarFiltros(); carregarDashboard(); } catch (e) { alert("Erro ao salvar."); } });
@@ -767,7 +804,7 @@
     
     async function carregarTabelaAdmins() { 
         const u = pb.authStore.model; const pLogado = getPapelSeguro(u); let optUsers = { sort: '-created', expand: 'setor_id, paroquia_id', requestKey: null }; if (pLogado === 'Admin_Setor') optUsers.filter = `setor_id = "${u.setor_id}" || paroquia_id.setor_id = "${u.setor_id}"`; 
-        try { const users = await pb.collection('users').getFullList(optUsers); const tb = document.getElementById('listaUsuariosAdmin'); tb.innerHTML = ''; if (users.length === 0) tb.innerHTML = '<tr><td colspan="5" class="py-8 text-center text-slate-500 italic">Nenhum usuário cadastrado.</td></tr>'; users.forEach(us => { const pLido = getPapelSeguro(us); let l = '-'; let sIdForEdit = us.setor_id || ''; if (pLido === 'Admin_Setor') { l = us.expand?.setor_id?.nome || '-'; } else if (pLido === 'Admin_Paroquia') { l = us.expand?.paroquia_id?.nome || '-'; sIdForEdit = us.expand?.paroquia_id?.setor_id || ''; } const btnEditar = pLogado === 'Master' ? `<button onclick="abrirModalEdicaoUsuario('${us.id}', '${us.nome_casal || ''}', '${us.celular || ''}', '${pLido}', '${sIdForEdit}', '${us.paroquia_id || ''}')" class="text-blue-600 font-bold text-sm hover:text-blue-800 transition mr-4">Editar</button>` : ''; const btnExcluir = pLogado === 'Master' ? `<button onclick="excluirAdmin('${us.id}')" class="text-red-500 font-bold text-sm hover:text-red-700 transition">Excluir</button>` : ''; tb.innerHTML += `<tr class="hover:bg-slate-50 transition-colors"><td class="py-4 px-5 font-bold text-slate-800">${us.nome_casal || '-'}</td><td class="py-4 px-5 text-slate-600"><div>${us.email}</div><div class="text-xs text-slate-400 font-medium mt-0.5">${us.celular || 'Sem celular'}</div></td><td class="py-4 px-5"><span class="bg-blue-100 text-blue-800 font-bold text-xs px-3 py-1 rounded-full">${pLido.replace(/_/g, ' ')}</span></td><td class="py-4 px-5 text-slate-600 font-medium">${l}</td><td class="py-4 px-5 text-right whitespace-nowrap">${btnEditar}${btnExcluir}</td></tr>`; }); } catch (e) {} 
+        try { const users = await pb.collection('users').getFullList(optUsers); const tb = document.getElementById('listaUsuariosAdmin'); tb.innerHTML = ''; if (users.length === 0) tb.innerHTML = '<tr><td colspan="5" class="py-8 text-center text-slate-500 italic">Nenhum usuário cadastrado.</td></tr>'; users.forEach(us => { const pLido = getPapelSeguro(us); let l = '-'; let sIdForEdit = us.setor_id || ''; if (pLido === 'Admin_Setor') { l = us.expand?.setor_id?.nome || '-'; } else if (pLido === 'Admin_Paroquia') { l = us.expand?.paroquia_id?.nome || '-'; sIdForEdit = us.expand?.paroquia_id?.setor_id || ''; } const btnEditar = pLogado === 'Master' ? `<button onclick="abrirModalEdicaoUsuario('${us.id}', '${us.nome_casal || ''}', '${us.celular || ''}', '${pLido}', '${sIdForEdit}', '${us.paroquia_id || ''}')" class="text-blue-600 font-bold text-sm hover:text-blue-800 transition mr-4">Editar</button>` : ''; const btnExcluir = pLogado === 'Master' ? `<button onclick="excluirAdmin('${us.id}')" class="text-red-500 font-bold text-sm hover:text-red-700 transition">Excluir</button>` : ''; tb.innerHTML += `<tr class="hover:bg-slate-50 transition-colors group"><td class="py-4 px-5 font-bold text-slate-800">${us.nome_casal || '-'}</td><td class="py-4 px-5 text-slate-600"><div>${us.email}</div><div class="text-xs text-slate-400 font-medium mt-0.5">${us.celular || 'Sem celular'}</div></td><td class="py-4 px-5"><span class="bg-blue-100 text-blue-800 font-bold text-xs px-3 py-1 rounded-full">${pLido.replace(/_/g, ' ')}</span></td><td class="py-4 px-5 text-slate-600 font-medium">${l}</td><td class="py-4 px-5 text-right whitespace-nowrap sticky right-0 bg-white group-hover:bg-slate-50 transition-colors border-l border-slate-200 z-10">${btnEditar}${btnExcluir}</td></tr>`; }); } catch (e) {} 
     }
 
     async function carregarParoquiasEditUser() { const setorId = document.getElementById('edit_user_setor_id').value; const selParoquia = document.getElementById('edit_user_paroquia_id'); if (!setorId) { selParoquia.innerHTML = '<option value="">Selecione um Setor primeiro...</option>'; selParoquia.disabled = true; selParoquia.classList.add('bg-slate-100', 'text-slate-400', 'cursor-not-allowed'); selParoquia.classList.remove('bg-white'); return; } selParoquia.innerHTML = '<option value="">Buscando...</option>'; selParoquia.disabled = true; try { const paroquias = await pb.collection('paroquias').getFullList({ filter: `setor_id = "${setorId}"`, sort: 'nome', requestKey: null }); let opt = '<option value="">Selecione a Paróquia</option>'; paroquias.forEach(p => opt += `<option value="${p.id}">${p.nome}</option>`); selParoquia.innerHTML = opt; selParoquia.disabled = false; selParoquia.classList.remove('bg-slate-100', 'text-slate-400', 'cursor-not-allowed'); selParoquia.classList.add('bg-white'); } catch (e) {} }
