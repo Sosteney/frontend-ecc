@@ -508,7 +508,7 @@
                 const setores = await pb.collection('setores').getFullList({ sort: 'nome', requestKey: null }); 
                 let opt = '<option value="">Todos os Setores</option>'; 
                 setores.forEach(s => opt += `<option value="${s.id}">${s.nome}</option>`); 
-                opt += '<option value="EXTERNO">🌍 Transferências Externas</option>';
+                opt += '<option value="EXTERNO">Transferências Externas</option>';
                 selSetor.innerHTML = opt; 
             } catch (e) {}
             selParoquia.innerHTML = '<option value="">Selecione um Setor primeiro...</option>'; selParoquia.disabled = true; selParoquia.classList.add('bg-slate-100', 'text-slate-400', 'cursor-not-allowed');
@@ -567,7 +567,7 @@
         try {
             const records = await pb.collection('pedidos').getFullList({ filter: filtroFinal, expand: 'origem_paroquia_id, destino_paroquia_id', sort: '-created', requestKey: null });
             const tbody = document.getElementById('listaPedidos'); tbody.innerHTML = ''; let htmlTotal = '';
-            const badgeExterna = `<span class="bg-indigo-100 text-indigo-800 text-[10px] px-2 py-0.5 rounded font-extrabold uppercase mr-1 border border-indigo-200">🌍 Externa</span>`;
+            const badgeExterna = `<span class="bg-indigo-100 text-indigo-800 text-[10px] px-2 py-0.5 rounded font-extrabold uppercase mr-1 border border-indigo-200">Externa</span>`;
             
             records.forEach(p => {
                 const classif = classificarTipoTransferencia(p); 
