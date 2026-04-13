@@ -222,7 +222,7 @@
     </main>
 
     <footer class="bg-slate-900 text-slate-400 py-8 text-center text-sm mt-auto shadow-inner w-full">
-        <p>&copy; 2026 Encontro de Casais com Cristo (ECC) - Arquidiocese de Natal ®</p>
+        <p>&copy; 2026 Encontro de Casais com Cristo (ECC) - Arquidiocese de Natal</p>
     </footer>
 
     <div id="modalAcao" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
@@ -533,7 +533,7 @@
         let baseFiltro = getFiltroVisibilidadeBase(usuario, papel);
         let filtroFinal = `(${baseFiltro}) && status != 'Concluido' && status != 'Rejeitado'` + gerarStringFiltroDinamico(); 
         
-        // APENAS Master e Admin_Setor podem enxergar a coluna "Ações" e editar status.
+        // APENAS Master e Admin_Setor podem enxergar a coluna "Ações"
         const mostrarAcoes = (papel === 'Master' || papel === 'Admin_Setor'); 
         document.getElementById('thAcoesPedidos').style.display = mostrarAcoes ? '' : 'none';
 
@@ -556,54 +556,47 @@
                 let podeEditar = false;
                 let msgBloqueio = 'Apenas Leitura';
                 
-                // MÁQUINA DE PERMISSÕES REESCRITA
+                // MÁQUINA DE PERMISSÕES REESCRITA E BLINDADA
                 if (papel === 'Master') {
                     podeEditar = true;
                 } else if (papel === 'Admin_Setor') {
                     if (p.status === 'Aceite pendente') {
-                        // Aceite Pendente: Origem pode aceitar. Se Origem é externa (tipo 3), Destino pode aceitar.
-                        if (isOrigem || (classif.tipo === 3 && isDestino)) {
+                        if (isOrigem || (!!p.origem_externa && isDestino)) {
                             podeEditar = true;
                         } else {
-                            msgBloqueio = 'Aguardando Aceite da Origem';
+                            msgBloqueio = 'Aguardando Origem';
                         }
                     } else {
-                        // Fluxos em Andamento
+                        let isFaseDestino = p.status.startsWith('Destino -');
                         if (classif.tipo === 1 || classif.tipo === 2) {
-                            let isFaseDestino = p.status.startsWith('Destino -');
-                            if (isFaseDestino && isDestino) podeEditar = true;
-                            else if (!isFaseDestino && isOrigem) podeEditar = true;
-                            else msgBloqueio = isFaseDestino ? 'Em andamento no Destino' : 'Em andamento na Origem';
+                            if (!isFaseDestino && isOrigem) podeEditar = true;
+                            else if (isFaseDestino && isDestino) podeEditar = true;
+                            else msgBloqueio = isFaseDestino ? 'No Destino' : 'Na Origem';
                         } else if (classif.tipo === 3) {
-                            if (isDestino) podeEditar = true;
-                            else msgBloqueio = 'Controlado pelo Destino';
+                            if (isDestino) podeEditar = true; else msgBloqueio = 'Apenas Leitura';
                         } else if (classif.tipo === 4) {
-                            if (isOrigem) podeEditar = true;
-                            else msgBloqueio = 'Controlado pela Origem';
+                            if (isOrigem) podeEditar = true; else msgBloqueio = 'Apenas Leitura';
                         }
                     }
                 }
 
-                let botoesHtml = '';
-                if (podeEditar) {
-                    if (p.status === 'Aceite pendente') { 
-                        botoesHtml = `<button onclick="abrirModalInicial('${p.id}', 'Aceitar')" class="bg-emerald-600 text-white text-xs px-3 py-1.5 rounded-md hover:bg-emerald-700 transition shadow font-bold w-full mb-2">✅ Aceitar</button><button onclick="abrirModalInicial('${p.id}', 'Rejeitar')" class="bg-red-600 text-white text-xs px-3 py-1.5 rounded-md hover:bg-red-700 transition shadow font-bold w-full">❌ Rejeitar</button>`; 
-                    } else { 
-                        botoesHtml = `<button onclick="abrirModalMudarStatus('${p.id}', ${classif.tipo}, '${p.status}', '${classif.nome}')" class="bg-blue-600 text-white text-xs px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow font-bold">Mudar Status</button>`; 
-                    }
-                } else {
-                    botoesHtml = `<div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider pt-6 leading-tight text-right w-full">${msgBloqueio}</div>`;
-                }
-
-                // A coluna de ações e o envio de novas obs só existem se a pessoa for Master ou Admin_Setor.
                 let tdAcoesHtml = '';
                 if (mostrarAcoes) {
+                    let botoesHtml = '';
+                    if (podeEditar) {
+                        if (p.status === 'Aceite pendente') { 
+                            botoesHtml = `<button onclick="abrirModalInicial('${p.id}', 'Aceitar')" class="bg-emerald-600 text-white text-xs px-3 py-1.5 rounded-md hover:bg-emerald-700 transition shadow font-bold w-full mb-2">✅ Aceitar</button><button onclick="abrirModalInicial('${p.id}', 'Rejeitar')" class="bg-red-600 text-white text-xs px-3 py-1.5 rounded-md hover:bg-red-700 transition shadow font-bold w-full">❌ Rejeitar</button>`; 
+                        } else { 
+                            botoesHtml = `<button onclick="abrirModalMudarStatus('${p.id}', ${classif.tipo}, '${p.status}', '${classif.nome}')" class="bg-blue-600 text-white text-xs px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow font-bold">Mudar Status</button>`; 
+                        }
+                    } else {
+                        botoesHtml = `<div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider pt-2 leading-tight">${msgBloqueio}</div>`;
+                    }
                     tdAcoesHtml = `<td class="py-4 px-5 whitespace-nowrap text-right align-top">${botoesHtml}</td>`;
                 }
 
                 let corObs = p.observacao ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'; 
                 let txtObs = p.observacao ? 'Ler Obs' : '+ Obs'; 
-                // Passa o 'podeEditar' pro modal, pra esconder o input de nova obs pra quem nao tem acesso
                 let btnObs = `<button onclick="abrirModalObsLeitura('${p.id}', \`${encodeURIComponent(p.observacao || '')}\`, ${podeEditar})" class="${corObs} text-xs px-3 py-1.5 rounded-md font-bold transition shadow-sm w-full">${txtObs}</button>`;
                 
                 htmlTotal += `<tr class="hover:bg-slate-50 transition-colors"><td class="py-4 px-5 font-bold text-slate-800 align-top leading-relaxed"><div class="text-[10px] text-slate-400 font-mono mb-1">#${p.protocolo || p.id}</div>${p.nome_casal} ${infoEtapa} ${linkAnexo}</td><td class="py-4 px-5 text-sm text-slate-600 align-top leading-relaxed">${o} <span class="text-blue-600 font-bold mx-1">➔</span><br>${d}</td><td class="py-4 px-5 align-top"><span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Solicitado</span><span class="text-sm font-medium text-slate-700">${formatarData(p.created)}</span></td><td class="py-4 px-5 align-top max-w-xs">${badgeStatusHtml}</td><td class="py-4 px-5 align-top text-center">${btnObs}</td>${tdAcoesHtml}</tr>`;
