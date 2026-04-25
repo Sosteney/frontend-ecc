@@ -120,7 +120,7 @@
                         </div>
 
                         <div id="subAbaAndamento" class="sub-aba-pedidos w-full">
-                            <div class="overflow-x-auto rounded-xl border border-slate-200 w-full">
+                            <div class="overflow-x-auto rounded-xl border border-slate-200 w-full relative">
                                 <table class="w-full text-left text-sm min-w-max">
                                     <thead class="bg-slate-100 text-slate-600 uppercase tracking-wider text-xs font-bold">
                                         <tr>
@@ -696,7 +696,80 @@
     
     function abrirModalInicial(pId, acao) { document.getElementById('pedido_id_modal').value = pId; document.getElementById('tipo_acao_modal').value = acao; document.getElementById('tituloModal').textContent = acao === 'Aceitar' ? 'Aprovar Pedido Inicial' : 'Rejeitar Pedido'; const btn = document.getElementById('btnConfirmar'); btn.className = acao === 'Aceitar' ? 'bg-emerald-600 text-white px-6 py-2.5 rounded-lg font-bold hover:bg-emerald-700 transition shadow-md' : 'bg-red-600 text-white px-6 py-2.5 rounded-lg font-bold hover:bg-red-700 transition shadow-md'; document.getElementById('modalAcao').classList.remove('hidden'); }
     function fecharModal() { document.getElementById('modalAcao').classList.add('hidden'); document.getElementById('formAcao').reset(); }
-    document.getElementById('formAcao').addEventListener('submit', async function(e) { e.preventDefault(); const pId = document.getElementById('pedido_id_modal').value; const acao = document.getElementById('tipo_acao_modal').value; const txtUser = document.getElementById('mensagem_texto').value; const autor = pb.authStore.model.nome_casal || 'Admin'; let novoStatus = acao === 'Rejeitar' ? 'Rejeitado' : 'Envio pendente'; const pAtual = await pb.collection('pedidos').getOne(pId); let obsAntiga = pAtual.observacao || ''; let obsNova = `[${getDataHoraAtual()}] ${autor} (SISTEMA):\nPedido ${acao === 'Aceitar' ? 'ACEITO INICIALMENTE' : 'REJEITADO'}.\nMotivo/Recado: ${txtUser}\n\n`; let obsFinal = obsNova + obsAntiga; try { await pb.collection('pedidos').update(pId, { status: novoStatus, observacao: obsFinal }); fecharModal(); aplicarFiltrosAtuais(); carregarDashboard(); } catch (e) { alert("Erro ao alterar pedido."); } });
+    
+    document.getElementById('formAcao').addEventListener('submit', async function(e) { 
+        e.preventDefault(); 
+        const pId = document.getElementById('pedido_id_modal').value; 
+        const acao = document.getElementById('tipo_acao_modal').value; 
+        const txtUser = document.getElementById('mensagem_texto').value; 
+        const autor = pb.authStore.model.nome_casal || 'Admin'; 
+        let novoStatus = acao === 'Rejeitar' ? 'Rejeitado' : 'Envio pendente'; 
+        
+        // Puxa o pedido completo para podermos avisar o destino
+        const pAtual = await pb.collection('pedidos').getOne(pId, { expand: 'origem_paroquia_id,destino_paroquia_id.setor_id' }); 
+        
+        let obsAntiga = pAtual.observacao || ''; 
+        let obsNova = `[${getDataHoraAtual()}] ${autor} (SISTEMA):\nPedido ${acao === 'Aceitar' ? 'ACEITO INICIALMENTE' : 'REJEITADO'}.\nMotivo/Recado: ${txtUser}\n\n`; 
+        let obsFinal = obsNova + obsAntiga; 
+        
+        try { 
+            await pb.collection('pedidos').update(pId, { status: novoStatus, observacao: obsFinal }); 
+            
+            // --- INÍCIO LÓGICA WHATSAPP: AVISAR O DESTINO ---
+            if (acao === 'Aceitar') {
+                try {
+                    let idSetorDestino = null;
+                    let nomeOrigem = pAtual.origem_externa || 'N/A';
+                    let nomeDestino = pAtual.destino_externa || 'N/A';
+
+                    if (pAtual.expand?.origem_paroquia_id) {
+                        nomeOrigem = pAtual.expand.origem_paroquia_id.nome;
+                    }
+                    if (pAtual.expand?.destino_paroquia_id) {
+                        nomeDestino = pAtual.expand.destino_paroquia_id.nome;
+                        idSetorDestino = pAtual.destino_paroquia_id;
+                    }
+
+                    // Notifica apenas se for uma paróquia de destino cadastrada internamente
+                    if (idSetorDestino && pAtual.expand?.destino_paroquia_id?.expand?.setor_id) {
+                        const setorDestino = pAtual.expand.destino_paroquia_id.expand.setor_id;
+                        
+                        if (setorDestino && setorDestino.contato) {
+                            let numLimpo = setorDestino.contato.replace(/\D/g, '');
+                            let numEvo = (!numLimpo.startsWith('55')) ? '55' + numLimpo : numLimpo;
+                            const numeroFinal = '+' + numEvo;
+                            const protocoloFormatado = pAtual.protocolo || pAtual.id;
+
+                            const msgTexto = `🚨 *NOVO PEDIDO DE TRANSFERÊNCIA - ECC*\n\nO Casal *${pAtual.nome_casal}* registrou um pedido de transferência que foi aceito pelo casal setorial da origem.\n\n📍 *De:* ${nomeOrigem}\n🎯 *Para:* ${nomeDestino}\n\n*Protocolo:* #${protocoloFormatado}\n\nAcesse o painel administrativo para analisar.`;
+
+                            fetch('https://evolution.eccnatal.com.br/message/sendText/Agente', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'apikey': 'zV0Gan6hAKit0GOU3MRFgbOcihiUVjRK'
+                                },
+                                body: JSON.stringify({
+                                    "number": numeroFinal,
+                                    "text": msgTexto,
+                                    "delay": 1200,
+                                    "linkPreview": true
+                                })
+                            }).catch(e => console.error('Aviso: Falha silenciosa no envio do WhatsApp', e));
+                        }
+                    }
+                } catch (errWpp) {
+                    console.error('Aviso: Erro na notificação do WhatsApp para o destino', errWpp);
+                }
+            }
+            // --- FIM LÓGICA WHATSAPP ---
+
+            fecharModal(); 
+            aplicarFiltrosAtuais(); 
+            carregarDashboard(); 
+        } catch (e) { 
+            alert("Erro ao alterar pedido."); 
+        } 
+    });
 
     function abrirModalMudarStatus(id, tipo, statusAtual, nomeFluxo) { 
         document.getElementById('update_pedido_id').value = id; document.getElementById('subtitulo_tipo_fluxo').textContent = `Fluxo Atual: ${nomeFluxo}`; 
