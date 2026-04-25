@@ -125,7 +125,7 @@
                                     <thead class="bg-slate-100 text-slate-600 uppercase tracking-wider text-xs font-bold">
                                         <tr>
                                             <th class="py-4 px-5">Casal / Etapa</th>
-                                            <th class="py-4 px-5">Origem ➔ Destino</th>
+                                            <th class="py-4 px-5">Origem ➔ Destino (Paróquia - Setor)</th>
                                             <th class="py-4 px-5">Data</th>
                                             <th class="py-4 px-5">Status Atual</th>
                                             <th class="py-4 px-5 text-center">Obs</th>
@@ -179,7 +179,7 @@
                                 <form id="formNovoSetor" class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
                                     <div class="md:col-span-2">
                                         <label class="block text-xs font-bold text-slate-600 mb-1">Nome do Setor</label>
-                                        <input type="text" id="nome_setor" required placeholder="Ex: Setor Sul" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow">
+                                        <input type="text" id="nome_setor" required placeholder="Ex: Setor Sul" class="flex-1 p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow">
                                     </div>
                                     <div class="md:col-span-2">
                                         <label class="block text-xs font-bold text-slate-600 mb-1">Contato WhatsApp (Opcional)</label>
@@ -214,7 +214,7 @@
                                     <div class="md:col-span-4 flex justify-end mt-2"><button type="submit" class="bg-blue-600 text-white font-bold py-2.5 px-8 rounded-lg hover:bg-blue-700 transition shadow">Adicionar Paróquia</button></div>
                                 </form>
                             </div>
-                            <div class="overflow-x-auto rounded-xl border border-slate-200 w-full">
+                            <div class="overflow-x-auto rounded-xl border border-slate-200 w-full relative">
                                 <table class="w-full text-left text-sm min-w-max">
                                     <thead class="bg-slate-100 text-slate-600 uppercase tracking-wider text-xs font-bold">
                                         <tr>
@@ -301,7 +301,7 @@
                 </div>
                 <div class="flex justify-end space-x-3 mt-8">
                     <button type="button" onclick="fecharModalStatus()" class="bg-slate-200 text-slate-700 px-5 py-2.5 rounded-lg font-bold hover:bg-slate-300 transition">Cancelar</button>
-                    <button type="submit" id="btnSalvarStatus" class="bg-blue-600 text-white px-6 py-2.5 rounded-lg font-bold shadow-md hover:bg-blue-700 transition">Salvar Andamento</button>
+                    <button type="submit" id="btnSalvarStatus" class="bg-blue-600 text-white px-6 py-2.5 rounded-lg font-bold shadow-md hover:bg-blue-700 transition">Salvando...</button>
                 </div>
             </form>
         </div>
@@ -332,34 +332,6 @@
 
     <div id="modalEdicao" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
         <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md transform transition-all"><h3 id="tituloModalEdicao" class="text-xl font-extrabold mb-5 text-slate-800">Editar Local</h3><form id="formEdicao" class="space-y-5"><input type="hidden" id="edit_id"><input type="hidden" id="edit_tipo"><div><label class="block text-sm font-bold text-slate-600 mb-1">Nome</label><input type="text" id="edit_nome" required class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition"></div><div id="div_edit_contato_setor" class="hidden"><label class="block text-sm font-bold text-slate-600 mb-1">Contato (WhatsApp)</label><input type="tel" id="edit_contato_setor" maxlength="15" placeholder="(00) 00000-0000" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition"></div><div id="div_edit_cidade" class="hidden"><label class="block text-sm font-bold text-slate-600 mb-1">Cidade</label><input type="text" id="edit_cidade" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition"></div><div id="div_edit_setor" class="hidden"><label class="block text-sm font-bold text-slate-600 mb-1">Setor</label><select id="edit_setor_id" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition"></select></div><div class="flex justify-end space-x-3 mt-8"><button type="button" onclick="fecharModalEdicao()" class="bg-slate-200 text-slate-700 px-5 py-2.5 rounded-lg font-bold hover:bg-slate-300 transition">Cancelar</button><button type="submit" id="btnSalvarEdicao" class="bg-blue-600 text-white px-6 py-2.5 rounded-lg font-bold shadow hover:bg-blue-700 transition">Salvar</button></div></form></div>
-    </div>
-
-    <div id="modalEdicaoUsuario" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md transform transition-all">
-            <h3 class="text-xl font-extrabold mb-5 text-slate-800">Editar Usuário</h3>
-            <form id="formEdicaoUsuario" class="space-y-5">
-                <input type="hidden" id="edit_user_id">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div><label class="block text-sm font-bold text-slate-600 mb-1">Nome</label><input type="text" id="edit_user_nome" required class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition"></div>
-                    <div><label class="block text-sm font-bold text-slate-600 mb-1">Celular</label><input type="tel" id="edit_user_celular" required maxlength="15" placeholder="(00) 00000-0000" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition"></div>
-                </div>
-                <div><label class="block text-sm font-bold text-slate-600 mb-1">Papel</label><select id="edit_user_papel" required onchange="alternarCamposEditAdmin()" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition"><option value="Master">Master</option><option value="Arquidiocesano">Arquidiocesano</option><option value="Admin_Setor">Admin. de Setor</option><option value="Admin_Paroquia">Admin. de Paróquia</option></select></div>
-                
-                <div id="div_edit_user_setor" class="hidden">
-                    <label class="block text-sm font-bold text-slate-600 mb-1" id="label_edit_user_setor">Travar no Setor</label>
-                    <select id="edit_user_setor_id" onchange="carregarParoquiasEditUser()" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition"></select>
-                </div>
-                
-                <div id="div_edit_user_paroquia" class="hidden">
-                    <label class="block text-sm font-bold text-slate-600 mb-1">Travar na Paróquia</label>
-                    <select id="edit_user_paroquia_id" class="w-full p-2.5 bg-slate-100 text-slate-400 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 transition cursor-not-allowed" disabled>
-                        <option value="">Selecione um Setor primeiro...</option>
-                    </select>
-                </div>
-
-                <div class="flex justify-end space-x-3 mt-8"><button type="button" onclick="fecharModalEdicaoUsuario()" class="bg-slate-200 text-slate-700 px-5 py-2.5 rounded-lg font-bold hover:bg-slate-300 transition">Cancelar</button><button type="submit" id="btnSalvarEdicaoUsuario" class="bg-blue-600 text-white px-6 py-2.5 rounded-lg font-bold shadow hover:bg-blue-700 transition">Salvar</button></div>
-            </form>
-        </div>
     </div>
 
 <script>
@@ -487,7 +459,6 @@
 
     async function carregarDashboard() {
         const usuario = pb.authStore.model; const papel = getPapelSeguro(usuario); 
-        
         let baseFiltro = getFiltroVisibilidadeBase(usuario, papel);
         let filterParoquias = ''; 
         if (papel === 'Admin_Setor') { filterParoquias = `setor_id = "${usuario.setor_id}"`; } else if (papel === 'Admin_Paroquia') { filterParoquias = `id = "${usuario.paroquia_id}"`; } else if (papel !== 'Master' && papel !== 'Arquidiocesano') { filterParoquias = `id = "null"`; }
@@ -574,7 +545,8 @@
         document.getElementById('thAcoesPedidos').style.display = mostrarAcoes ? '' : 'none';
 
         try {
-            const records = await pb.collection('pedidos').getFullList({ filter: filtroFinal, expand: 'origem_paroquia_id, destino_paroquia_id', sort: '-created', requestKey: null });
+            // BUSCA AVANÇADA: Expande Paróquias e o Setor de cada Paróquia
+            const records = await pb.collection('pedidos').getFullList({ filter: filtroFinal, expand: 'origem_paroquia_id.setor_id, destino_paroquia_id.setor_id', sort: '-created', requestKey: null });
             const tbody = document.getElementById('listaPedidos'); tbody.innerHTML = ''; let htmlTotal = '';
             const badgeExterna = `<span class="bg-indigo-100 text-indigo-800 text-[10px] px-2 py-0.5 rounded font-extrabold uppercase mr-1 border border-indigo-200">🌍 Externa</span>`;
             
@@ -583,7 +555,15 @@
                 const isOrigem = (p.origem_paroquia_id && p.expand?.origem_paroquia_id?.setor_id === usuario.setor_id); 
                 const isDestino = (p.destino_paroquia_id && p.expand?.destino_paroquia_id?.setor_id === usuario.setor_id);
 
-                const o = p.expand?.origem_paroquia_id?.nome || (p.origem_externa ? `${badgeExterna} ${p.origem_externa}` : 'N/A'); const d = p.expand?.destino_paroquia_id?.nome || (p.destino_externa ? `${badgeExterna} ${p.destino_externa}` : 'N/A');
+                // LÓGICA DE EXIBIÇÃO: Paróquia - Setor
+                const oPar = p.expand?.origem_paroquia_id?.nome;
+                const oSet = p.expand?.origem_paroquia_id?.expand?.setor_id?.nome;
+                const o = oPar ? (oSet ? `${oPar} - ${oSet}` : oPar) : (p.origem_externa ? `${badgeExterna} ${p.origem_externa}` : 'N/A');
+
+                const dPar = p.expand?.destino_paroquia_id?.nome;
+                const dSet = p.expand?.destino_paroquia_id?.expand?.setor_id?.nome;
+                const d = dPar ? (dSet ? `${dPar} - ${dSet}` : dPar) : (p.destino_externa ? `${badgeExterna} ${p.destino_externa}` : 'N/A');
+
                 let linkAnexo = (p.anexo && p.anexo.length > 0) ? `<div class="mt-2.5"><a href="${pb.files.getUrl(p, p.anexo)}" target="_blank" class="inline-flex items-center justify-center bg-slate-200 text-slate-700 text-xs px-3 py-1.5 rounded-md hover:bg-slate-300 transition-colors shadow-sm font-bold border border-slate-300"><svg class="w-3.5 h-3.5 mr-1.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>Ver Documento</a></div>` : '';
                 let infoEtapa = p.etapas ? `<span class="block text-xs font-bold text-indigo-600 mt-1 uppercase tracking-wider">${p.etapas}</span>` : `<span class="block text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider">Etapa não informada</span>`;
                 
@@ -596,11 +576,7 @@
                     podeEditar = true;
                 } else if (papel === 'Admin_Setor') {
                     if (p.status === 'Aceite pendente') {
-                        if (isOrigem || (!!p.origem_externa && isDestino)) {
-                            podeEditar = true;
-                        } else {
-                            msgBloqueio = 'Aguardando Origem';
-                        }
+                        if (isOrigem || (!!p.origem_externa && isDestino)) { podeEditar = true; } else { msgBloqueio = 'Aguardando Origem'; }
                     } else {
                         let isFaseDestino = p.status.startsWith('Destino -');
                         if (classif.tipo === 1 || classif.tipo === 2) {
@@ -646,14 +622,21 @@
         let filtroFinal = `(${baseFiltro}) && status = 'Concluido'` + (papel !== 'Admin_Paroquia' ? gerarStringFiltroDinamico() : '');
         
         try {
-            const records = await pb.collection('pedidos').getFullList({ filter: filtroFinal, expand: 'origem_paroquia_id, destino_paroquia_id', sort: '-updated', requestKey: null });
+            const records = await pb.collection('pedidos').getFullList({ filter: filtroFinal, expand: 'origem_paroquia_id.setor_id, destino_paroquia_id.setor_id', sort: '-updated', requestKey: null });
             const tbody = document.getElementById('listaConcluidos'); tbody.innerHTML = '';
             if (records.length === 0) { tbody.innerHTML = '<tr><td colspan="6" class="py-8 text-center text-slate-500 italic">Nenhum pedido concluído.</td></tr>'; return; }
             
             const badgeExterna = `<span class="bg-indigo-100 text-indigo-800 text-[10px] px-2 py-0.5 rounded font-extrabold uppercase mr-1 border border-indigo-200">🌍 Externa</span>`;
             
             records.forEach(p => {
-                const o = p.expand?.origem_paroquia_id?.nome || (p.origem_externa ? `${badgeExterna} ${p.origem_externa}` : 'N/A'); const d = p.expand?.destino_paroquia_id?.nome || (p.destino_externa ? `${badgeExterna} ${p.destino_externa}` : 'N/A');
+                const oPar = p.expand?.origem_paroquia_id?.nome;
+                const oSet = p.expand?.origem_paroquia_id?.expand?.setor_id?.nome;
+                const o = oPar ? (oSet ? `${oPar} - ${oSet}` : oPar) : (p.origem_externa ? `${badgeExterna} ${p.origem_externa}` : 'N/A');
+
+                const dPar = p.expand?.destino_paroquia_id?.nome;
+                const dSet = p.expand?.destino_paroquia_id?.expand?.setor_id?.nome;
+                const d = dPar ? (dSet ? `${dPar} - ${dSet}` : dPar) : (p.destino_externa ? `${badgeExterna} ${p.destino_externa}` : 'N/A');
+
                 let infoEtapa = p.etapas ? `<span class="block text-xs font-bold text-indigo-600 mt-1 uppercase tracking-wider">${p.etapas}</span>` : `<span class="block text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider">Etapa não informada</span>`;
                 
                 let corObs = p.observacao ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'; let txtObs = p.observacao ? 'Ler Obs' : '+ Obs'; 
@@ -672,14 +655,21 @@
         let filtroFinal = `(${baseFiltro}) && status = 'Rejeitado'` + (papel !== 'Admin_Paroquia' ? gerarStringFiltroDinamico() : '');
         
         try {
-            const records = await pb.collection('pedidos').getFullList({ filter: filtroFinal, expand: 'origem_paroquia_id, destino_paroquia_id', sort: '-updated', requestKey: null });
+            const records = await pb.collection('pedidos').getFullList({ filter: filtroFinal, expand: 'origem_paroquia_id.setor_id, destino_paroquia_id.setor_id', sort: '-updated', requestKey: null });
             const tbody = document.getElementById('listaRejeitados'); tbody.innerHTML = '';
             if (records.length === 0) { tbody.innerHTML = '<tr><td colspan="5" class="py-8 text-center text-slate-500 italic">Nenhum pedido rejeitado.</td></tr>'; return; }
             
             const badgeExterna = `<span class="bg-indigo-100 text-indigo-800 text-[10px] px-2 py-0.5 rounded font-extrabold uppercase mr-1 border border-indigo-200">🌍 Externa</span>`;
             
             records.forEach(p => {
-                const o = p.expand?.origem_paroquia_id?.nome || (p.origem_externa ? `${badgeExterna} ${p.origem_externa}` : 'N/A'); const d = p.expand?.destino_paroquia_id?.nome || (p.destino_externa ? `${badgeExterna} ${p.destino_externa}` : 'N/A');
+                const oPar = p.expand?.origem_paroquia_id?.nome;
+                const oSet = p.expand?.origem_paroquia_id?.expand?.setor_id?.nome;
+                const o = oPar ? (oSet ? `${oPar} - ${oSet}` : oPar) : (p.origem_externa ? `${badgeExterna} ${p.origem_externa}` : 'N/A');
+
+                const dPar = p.expand?.destino_paroquia_id?.nome;
+                const dSet = p.expand?.destino_paroquia_id?.expand?.setor_id?.nome;
+                const d = dPar ? (dSet ? `${dPar} - ${dSet}` : dPar) : (p.destino_externa ? `${badgeExterna} ${p.destino_externa}` : 'N/A');
+
                 let infoEtapa = p.etapas ? `<span class="block text-xs font-bold text-indigo-600 mt-1 uppercase tracking-wider">${p.etapas}</span>` : `<span class="block text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider">Etapa não informada</span>`;
                 
                 let corObs = p.observacao ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'; let txtObs = p.observacao ? 'Ler Obs' : '+ Obs'; 
@@ -705,7 +695,6 @@
         const autor = pb.authStore.model.nome_casal || 'Admin'; 
         let novoStatus = acao === 'Rejeitar' ? 'Rejeitado' : 'Envio pendente'; 
         
-        // Puxa o pedido completo para podermos avisar o destino
         const pAtual = await pb.collection('pedidos').getOne(pId, { expand: 'origem_paroquia_id,destino_paroquia_id.setor_id' }); 
         
         let obsAntiga = pAtual.observacao || ''; 
@@ -715,25 +704,20 @@
         try { 
             await pb.collection('pedidos').update(pId, { status: novoStatus, observacao: obsFinal }); 
             
-            // --- INÍCIO LÓGICA WHATSAPP: AVISAR O DESTINO ---
             if (acao === 'Aceitar') {
                 try {
                     let idSetorDestino = null;
                     let nomeOrigem = pAtual.origem_externa || 'N/A';
                     let nomeDestino = pAtual.destino_externa || 'N/A';
 
-                    if (pAtual.expand?.origem_paroquia_id) {
-                        nomeOrigem = pAtual.expand.origem_paroquia_id.nome;
-                    }
+                    if (pAtual.expand?.origem_paroquia_id) { nomeOrigem = pAtual.expand.origem_paroquia_id.nome; }
                     if (pAtual.expand?.destino_paroquia_id) {
                         nomeDestino = pAtual.expand.destino_paroquia_id.nome;
                         idSetorDestino = pAtual.destino_paroquia_id;
                     }
 
-                    // Notifica apenas se for uma paróquia de destino cadastrada internamente
                     if (idSetorDestino && pAtual.expand?.destino_paroquia_id?.expand?.setor_id) {
                         const setorDestino = pAtual.expand.destino_paroquia_id.expand.setor_id;
-                        
                         if (setorDestino && setorDestino.contato) {
                             let numLimpo = setorDestino.contato.replace(/\D/g, '');
                             let numEvo = (!numLimpo.startsWith('55')) ? '55' + numLimpo : numLimpo;
@@ -744,44 +728,23 @@
 
                             fetch('https://evolution.eccnatal.com.br/message/sendText/Agente', {
                                 method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'apikey': 'zV0Gan6hAKit0GOU3MRFgbOcihiUVjRK'
-                                },
-                                body: JSON.stringify({
-                                    "number": numeroFinal,
-                                    "text": msgTexto,
-                                    "delay": 1200,
-                                    "linkPreview": true
-                                })
-                            }).catch(e => console.error('Aviso: Falha silenciosa no envio do WhatsApp', e));
+                                headers: { 'Content-Type': 'application/json', 'apikey': 'zV0Gan6hAKit0GOU3MRFgbOcihiUVjRK' },
+                                body: JSON.stringify({ "number": numeroFinal, "text": msgTexto, "delay": 1200, "linkPreview": true })
+                            }).catch(e => console.error('Falha silenciosa no WhatsApp', e));
                         }
                     }
-                } catch (errWpp) {
-                    console.error('Aviso: Erro na notificação do WhatsApp para o destino', errWpp);
-                }
+                } catch (errWpp) { console.error('Erro na notificação do WhatsApp', errWpp); }
             }
-            // --- FIM LÓGICA WHATSAPP ---
-
-            fecharModal(); 
-            aplicarFiltrosAtuais(); 
-            carregarDashboard(); 
-        } catch (e) { 
-            alert("Erro ao alterar pedido."); 
-        } 
+            fecharModal(); aplicarFiltrosAtuais(); carregarDashboard(); 
+        } catch (e) { alert("Erro ao alterar pedido."); } 
     });
 
     function abrirModalMudarStatus(id, tipo, statusAtual, nomeFluxo) { 
         document.getElementById('update_pedido_id').value = id; document.getElementById('subtitulo_tipo_fluxo').textContent = `Fluxo Atual: ${nomeFluxo}`; 
         const select = document.getElementById('select_novo_status'); select.innerHTML = `<option value="">Escolha o novo andamento...</option>`; 
-        
         if (OPCOES_FLUXO[tipo]) { 
             let idxAtual = OPCOES_FLUXO[tipo].indexOf(statusAtual);
-            OPCOES_FLUXO[tipo].forEach((op, i) => { 
-                if (i >= idxAtual) {
-                    let isSelected = (op === statusAtual) ? 'selected' : ''; select.innerHTML += `<option value="${op}" ${isSelected}>${op}</option>`; 
-                }
-            }); 
+            OPCOES_FLUXO[tipo].forEach((op, i) => { if (i >= idxAtual) { let isSelected = (op === statusAtual) ? 'selected' : ''; select.innerHTML += `<option value="${op}" ${isSelected}>${op}</option>`; } }); 
         } 
         document.getElementById('modalMudarStatus').classList.remove('hidden'); verificarStatusFinal(); 
     }
@@ -796,17 +759,9 @@
         let textoDecodado = decodeURIComponent(obsEncodada); 
         const divHist = document.getElementById('historico_obs_leitura'); 
         if(textoDecodado.trim() === '') { divHist.innerHTML = `<span class="italic text-slate-400">Nenhum histórico registrado ainda.</span>`; } else { divHist.innerHTML = textoDecodado; } 
-        
         const blocoForm = document.getElementById('formObservacao');
         const blocoApenasLeitura = document.getElementById('blocoFecharObsApenasLeitura');
-        if (podeEditarObs) {
-            blocoForm.classList.remove('hidden');
-            blocoApenasLeitura.classList.add('hidden');
-        } else {
-            blocoForm.classList.add('hidden');
-            blocoApenasLeitura.classList.remove('hidden');
-        }
-
+        if (podeEditarObs) { blocoForm.classList.remove('hidden'); blocoApenasLeitura.classList.add('hidden'); } else { blocoForm.classList.add('hidden'); blocoApenasLeitura.classList.remove('hidden'); }
         document.getElementById('modalObservacao').classList.remove('hidden'); 
     }
     
@@ -835,10 +790,7 @@
     async function excluirBase(col, id) { if(confirm("Tem certeza que deseja excluir?")) { try { if (col === 'setores') { const paroquiasVinculadas = await pb.collection('paroquias').getList(1, 1, { filter: `setor_id = "${id}"` }); if (paroquiasVinculadas.totalItems > 0) { alert(`⛔ Bloqueado!\nExistem paróquias neste Setor.`); return; } } await pb.collection(col).delete(id); carregarListasCadastros(); inicializarFiltros(); carregarDashboard(); } catch(e) { alert("Erro ao tentar excluir."); } } }
 
     function abrirModalEdicao(tipo, id, nome, setorId = '', cidade = '', contato = '') { 
-        document.getElementById('edit_id').value = id; 
-        document.getElementById('edit_tipo').value = tipo; 
-        document.getElementById('edit_nome').value = nome; 
-        
+        document.getElementById('edit_id').value = id; document.getElementById('edit_tipo').value = tipo; document.getElementById('edit_nome').value = nome; 
         if (tipo === 'paroquia') { 
             document.getElementById('tituloModalEdicao').textContent = 'Editar Paróquia'; 
             document.getElementById('div_edit_setor').classList.remove('hidden'); document.getElementById('edit_setor_id').innerHTML = document.getElementById('select_setor_paroquia').innerHTML; document.getElementById('edit_setor_id').value = setorId; document.getElementById('edit_setor_id').required = true; 
@@ -872,7 +824,7 @@
     
     async function carregarTabelaAdmins() { 
         const u = pb.authStore.model; const pLogado = getPapelSeguro(u); let optUsers = { sort: '-created', expand: 'setor_id, paroquia_id', requestKey: null }; if (pLogado === 'Admin_Setor') optUsers.filter = `setor_id = "${u.setor_id}" || paroquia_id.setor_id = "${u.setor_id}"`; 
-        try { const users = await pb.collection('users').getFullList(optUsers); const tb = document.getElementById('listaUsuariosAdmin'); tb.innerHTML = ''; if (users.length === 0) tb.innerHTML = '<tr><td colspan="5" class="py-8 text-center text-slate-500 italic">Nenhum usuário cadastrado.</td></tr>'; users.forEach(us => { const pLido = getPapelSeguro(us); let l = '-'; let sIdForEdit = us.setor_id || ''; if (pLido === 'Admin_Setor') { l = us.expand?.setor_id?.nome || '-'; } else if (pLido === 'Admin_Paroquia') { l = us.expand?.paroquia_id?.nome || '-'; sIdForEdit = us.expand?.paroquia_id?.setor_id || ''; } const btnEditar = pLogado === 'Master' ? `<button onclick="abrirModalEdicaoUsuario('${us.id}', '${us.nome_casal || ''}', '${us.celular || ''}', '${pLido}', '${sIdForEdit}', '${us.paroquia_id || ''}')" class="text-blue-600 font-bold text-sm hover:text-blue-800 transition mr-4">Editar</button>` : ''; const btnExcluir = pLogado === 'Master' ? `<button onclick="excluirAdmin('${us.id}')" class="text-red-500 font-bold text-sm hover:text-red-700 transition">Excluir</button>` : ''; tb.innerHTML += `<tr class="hover:bg-slate-50 transition-colors border-b border-slate-100"><td class="py-4 px-5 font-bold text-slate-800">${us.nome_casal || '-'}</td><td class="py-4 px-5 text-slate-600"><div>${us.email}</div><div class="text-xs text-slate-400 font-medium mt-0.5">${us.celular || 'Sem celular'}</div></td><td class="py-4 px-5"><span class="bg-blue-100 text-blue-800 font-bold text-xs px-3 py-1 rounded-full">${pLido.replace(/_/g, ' ')}</span></td><td class="py-4 px-5 text-slate-600 font-medium">${l}</td><td class="py-4 px-5 text-right whitespace-nowrap">${btnEditar}${btnExcluir}</td></tr>`; }); } catch (e) {} 
+        try { const users = await pb.collection('users').getFullList(optUsers); const tb = document.getElementById('listaUsuariosAdmin'); tb.innerHTML = ''; if (users.length === 0) tb.innerHTML = '<tr><td colspan="5" class="py-8 text-center text-slate-500 italic">Nenhum usuário cadastrado.</td></tr>'; users.forEach(us => { const pLido = getPapelSeguro(us); let l = '-'; let sIdForEdit = us.setor_id || ''; if (pLido === 'Admin_Setor') { l = us.expand?.setor_id?.nome || '-'; } else if (pLido === 'Admin_Paroquia') { l = us.expand?.paroquia_id?.nome || '-'; sIdForEdit = us.expand?.paroquia_id?.setor_id || ''; } const btnEditar = pLogado === 'Master' ? `<button onclick="abrirModalEdicaoUsuario('${us.id}', '${us.nome_casal || ''}', '${us.celular || ''}', '${pLido}', '${sIdForEdit}', '${us.paroquia_id || ''}')" class="text-blue-600 font-bold text-sm hover:text-blue-800 transition mr-4">Editar</button>` : ''; const btnExcluir = pLogado === 'Master' ? `<button onclick="excluirAdmin('${us.id}')" class="text-red-500 font-bold text-sm hover:text-red-700 transition">Excluir</button>` : ''; tb.innerHTML += `<tr class="hover:bg-slate-50 transition-colors border-b border-slate-100 group"><td class="py-4 px-5 font-bold text-slate-800">${us.nome_casal || '-'}</td><td class="py-4 px-5 text-slate-600"><div>${us.email}</div><div class="text-xs text-slate-400 font-medium mt-0.5">${us.celular || 'Sem celular'}</div></td><td class="py-4 px-5"><span class="bg-blue-100 text-blue-800 font-bold text-xs px-3 py-1 rounded-full">${pLido.replace(/_/g, ' ')}</span></td><td class="py-4 px-5 text-slate-600 font-medium">${l}</td><td class="py-4 px-5 text-right whitespace-nowrap sticky right-0 bg-white group-hover:bg-slate-50 transition-colors border-l border-slate-200 z-10">${btnEditar}${btnExcluir}</td></tr>`; }); } catch (e) {} 
     }
 
     async function carregarParoquiasEditUser() { const setorId = document.getElementById('edit_user_setor_id').value; const selParoquia = document.getElementById('edit_user_paroquia_id'); if (!setorId) { selParoquia.innerHTML = '<option value="">Selecione um Setor primeiro...</option>'; selParoquia.disabled = true; selParoquia.classList.add('bg-slate-100', 'text-slate-400', 'cursor-not-allowed'); selParoquia.classList.remove('bg-white'); return; } selParoquia.innerHTML = '<option value="">Buscando...</option>'; selParoquia.disabled = true; try { const paroquias = await pb.collection('paroquias').getFullList({ filter: `setor_id = "${setorId}"`, sort: 'nome', requestKey: null }); let opt = '<option value="">Selecione a Paróquia</option>'; paroquias.forEach(p => opt += `<option value="${p.id}">${p.nome}</option>`); selParoquia.innerHTML = opt; selParoquia.disabled = false; selParoquia.classList.remove('bg-slate-100', 'text-slate-400', 'cursor-not-allowed'); selParoquia.classList.add('bg-white'); } catch (e) {} }
@@ -886,14 +838,16 @@
         const usuario = pb.authStore.model; const papel = getPapelSeguro(usuario);
         const baseFiltro = getFiltroVisibilidadeBase(usuario, papel);
         const dynFiltro = gerarStringFiltroDinamico();
-        
         try { 
-            const records = await pb.collection('pedidos').getFullList({ filter: baseFiltro + dynFiltro, expand: 'origem_paroquia_id, destino_paroquia_id', sort: '-created', requestKey: null }); 
-            let csv = "Protocolo,Data de Solicitacao,Nome do Casal,Etapas,Celular,Paroquia Origem,Paroquia Destino,Status\n"; 
+            const records = await pb.collection('pedidos').getFullList({ filter: baseFiltro + dynFiltro, expand: 'origem_paroquia_id.setor_id, destino_paroquia_id.setor_id', sort: '-created', requestKey: null }); 
+            let csv = "Protocolo,Data de Solicitacao,Nome do Casal,Etapas,Celular,Paroquia Origem,Setor Origem,Paroquia Destino,Setor Destino,Status\n"; 
             records.forEach(p => { 
                 const dataObj = new Date(p.created); const dataFormatada = dataObj.toLocaleDateString('pt-BR') + ' ' + dataObj.toLocaleTimeString('pt-BR'); 
-                const origem = p.expand?.origem_paroquia_id?.nome || p.origem_externa || 'N/A'; const destino = p.expand?.destino_paroquia_id?.nome || p.destino_externa || 'N/A'; 
-                csv += `"${p.protocolo || p.id}",${dataFormatada},"${p.nome_casal.replace(/"/g, '""')}","${p.etapas || ''}","${p.celular}","${origem.replace(/"/g, '""')}","${destino.replace(/"/g, '""')}","${p.status.replace(/_/g, ' ')}"\n`; 
+                const oPar = p.expand?.origem_paroquia_id?.nome || p.origem_externa || 'N/A';
+                const oSet = p.expand?.origem_paroquia_id?.expand?.setor_id?.nome || 'EXTERNO';
+                const dPar = p.expand?.destino_paroquia_id?.nome || p.destino_externa || 'N/A';
+                const dSet = p.expand?.destino_paroquia_id?.expand?.setor_id?.nome || 'EXTERNO';
+                csv += `"${p.protocolo || p.id}",${dataFormatada},"${p.nome_casal.replace(/"/g, '""')}","${p.etapas || ''}","${p.celular}","${oPar.replace(/"/g, '""')}","${oSet.replace(/"/g, '""')}","${dPar.replace(/"/g, '""')}","${dSet.replace(/"/g, '""')}","${p.status.replace(/_/g, ' ')}"\n`; 
             }); 
             baixarArquivoCSV(csv, 'relatorio_transferencias.csv'); 
         } catch (error) { alert("Erro ao exportar pedidos."); } 
