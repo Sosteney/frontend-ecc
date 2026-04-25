@@ -121,15 +121,15 @@
 
                         <div id="subAbaAndamento" class="sub-aba-pedidos w-full">
                             <div class="overflow-x-auto rounded-xl border border-slate-200 w-full relative">
-                                <table class="w-full text-left text-sm min-w-max">
+                                <table class="w-full text-left text-sm">
                                     <thead class="bg-slate-100 text-slate-600 uppercase tracking-wider text-xs font-bold">
                                         <tr>
-                                            <th class="py-4 px-5">Casal / Etapa</th>
+                                            <th class="py-4 px-5 min-w-[150px]">Casal / Etapa</th>
                                             <th class="py-4 px-5">Origem ➔ Destino (Paróquia - Setor)</th>
                                             <th class="py-4 px-5">Data</th>
-                                            <th class="py-4 px-5">Status Atual</th>
+                                            <th class="py-4 px-5 min-w-[140px]">Status Atual</th>
                                             <th class="py-4 px-5 text-center">Obs</th>
-                                            <th id="thAcoesPedidos" class="py-4 px-5 text-right w-32">Ações</th>
+                                            <th id="thAcoesPedidos" class="py-4 px-5 text-right min-w-[160px]">Ações</th>
                                         </tr>
                                     </thead>
                                     <tbody id="listaPedidos" class="divide-y divide-slate-100"><tr><td colspan="6" class="py-8 text-center text-slate-500 italic">Buscando pedidos...</td></tr></tbody>
@@ -139,15 +139,15 @@
 
                         <div id="subAbaConcluidos" class="sub-aba-pedidos hidden w-full">
                             <div class="overflow-x-auto rounded-xl border border-slate-200 w-full">
-                                <table class="w-full text-left text-sm min-w-max">
+                                <table class="w-full text-left text-sm">
                                     <thead class="bg-slate-100 text-slate-600 uppercase tracking-wider text-xs font-bold">
                                         <tr>
-                                            <th class="py-4 px-5">Casal / Etapa</th>
+                                            <th class="py-4 px-5 min-w-[150px]">Casal / Etapa</th>
                                             <th class="py-4 px-5">Origem ➔ Destino</th>
                                             <th class="py-4 px-5">Datas</th>
-                                            <th class="py-4 px-5">Status Final</th>
+                                            <th class="py-4 px-5 min-w-[140px]">Status Final</th>
                                             <th class="py-4 px-5 text-center">Obs</th>
-                                            <th class="py-4 px-5 text-right w-32">Comprovante</th>
+                                            <th class="py-4 px-5 text-right min-w-[140px]">Comprovante</th>
                                         </tr>
                                     </thead>
                                     <tbody id="listaConcluidos" class="divide-y divide-slate-100"><tr><td colspan="6" class="py-8 text-center text-slate-500 italic">Buscando concluídos...</td></tr></tbody>
@@ -157,9 +157,15 @@
 
                         <div id="subAbaRejeitados" class="sub-aba-pedidos hidden w-full">
                             <div class="overflow-x-auto rounded-xl border border-slate-200 w-full">
-                                <table class="w-full text-left text-sm min-w-max">
+                                <table class="w-full text-left text-sm">
                                     <thead class="bg-slate-100 text-slate-600 uppercase tracking-wider text-xs font-bold">
-                                        <tr><th class="py-4 px-5">Casal / Etapa</th><th class="py-4 px-5">Origem ➔ Destino</th><th class="py-4 px-5">Datas</th><th class="py-4 px-5">Status Final</th><th class="py-4 px-5 text-center">Motivo / Obs</th></tr>
+                                        <tr>
+                                            <th class="py-4 px-5 min-w-[150px]">Casal / Etapa</th>
+                                            <th class="py-4 px-5">Origem ➔ Destino</th>
+                                            <th class="py-4 px-5">Datas</th>
+                                            <th class="py-4 px-5 min-w-[140px]">Status Final</th>
+                                            <th class="py-4 px-5 text-center">Motivo / Obs</th>
+                                        </tr>
                                     </thead>
                                     <tbody id="listaRejeitados" class="divide-y divide-slate-100"><tr><td colspan="5" class="py-8 text-center text-slate-500 italic">Buscando rejeitadas...</td></tr></tbody>
                                 </table>
@@ -179,7 +185,7 @@
                                 <form id="formNovoSetor" class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
                                     <div class="md:col-span-2">
                                         <label class="block text-xs font-bold text-slate-600 mb-1">Nome do Setor</label>
-                                        <input type="text" id="nome_setor" required placeholder="Ex: Setor Sul" class="flex-1 p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow">
+                                        <input type="text" id="nome_setor" required placeholder="Ex: Setor Sul" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow">
                                     </div>
                                     <div class="md:col-span-2">
                                         <label class="block text-xs font-bold text-slate-600 mb-1">Contato WhatsApp (Opcional)</label>
@@ -191,7 +197,7 @@
                                 </form>
                             </div>
                             <div class="overflow-x-auto rounded-xl border border-slate-200 w-full">
-                                <table class="w-full text-left text-sm min-w-max">
+                                <table class="w-full text-left text-sm">
                                     <thead class="bg-slate-100 text-slate-600 uppercase tracking-wider text-xs font-bold">
                                         <tr>
                                             <th class="py-4 px-5">Nome do Setor</th>
@@ -215,7 +221,7 @@
                                 </form>
                             </div>
                             <div class="overflow-x-auto rounded-xl border border-slate-200 w-full relative">
-                                <table class="w-full text-left text-sm min-w-max">
+                                <table class="w-full text-left text-sm">
                                     <thead class="bg-slate-100 text-slate-600 uppercase tracking-wider text-xs font-bold">
                                         <tr>
                                             <th class="py-4 px-5">Nome da Paróquia</th>
@@ -233,7 +239,7 @@
                     <div id="abaPrincipalAdmins" class="aba-principal hidden w-full">
                         <div class="bg-slate-50 rounded-xl border border-slate-200 p-6 mb-8 w-full"><h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-5">Conceder Novo Acesso</h3><form id="formNovoAdmin" class="space-y-4"><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div><label class="block text-xs font-bold text-slate-600 mb-1">Nome do Casal</label><input type="text" id="admin_nome" required class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"></div><div><label class="block text-xs font-bold text-slate-600 mb-1">Celular (WhatsApp)</label><input type="tel" id="admin_celular" required maxlength="15" placeholder="(00) 00000-0000" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"></div><div><label class="block text-xs font-bold text-slate-600 mb-1">E-mail (Login)</label><input type="email" id="admin_email" required class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"></div><div><label class="block text-xs font-bold text-slate-600 mb-1">Senha (mín 8)</label><input type="password" id="admin_senha" required minlength="8" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"></div><div class="md:col-span-2"><label class="block text-xs font-bold text-slate-600 mb-1">Papel / Nível</label><select id="admin_papel" required onchange="alternarCamposAdmin()" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"></select></div></div><div id="div_admin_setor" class="hidden mt-4"><label class="block text-xs font-bold text-slate-600 mb-1" id="label_admin_setor">Travar no Setor</label><select id="admin_setor_id" onchange="carregarParoquiasAdminUser()" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"></select></div><div id="div_admin_paroquia" class="hidden mt-4"><label class="block text-xs font-bold text-slate-600 mb-1">Travar na Paróquia</label><select id="admin_paroquia_id" class="w-full p-2.5 bg-slate-100 text-slate-400 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 transition-shadow cursor-not-allowed" disabled><option value="">Selecione um Setor primeiro...</option></select></div><div class="flex justify-end pt-4"><button type="submit" id="btnSalvarAdmin" class="bg-blue-600 text-white font-bold py-2.5 px-8 rounded-lg hover:bg-blue-700 transition shadow">Cadastrar Usuário</button></div></form></div>
                         <div class="overflow-x-auto rounded-xl border border-slate-200 w-full">
-                            <table class="w-full text-left text-sm min-w-max">
+                            <table class="w-full text-left text-sm">
                                 <thead class="bg-slate-100 text-slate-600 uppercase tracking-wider text-xs font-bold">
                                     <tr>
                                         <th class="py-4 px-5">Casal</th>
@@ -301,7 +307,7 @@
                 </div>
                 <div class="flex justify-end space-x-3 mt-8">
                     <button type="button" onclick="fecharModalStatus()" class="bg-slate-200 text-slate-700 px-5 py-2.5 rounded-lg font-bold hover:bg-slate-300 transition">Cancelar</button>
-                    <button type="submit" id="btnSalvarStatus" class="bg-blue-600 text-white px-6 py-2.5 rounded-lg font-bold shadow-md hover:bg-blue-700 transition">Salvando...</button>
+                    <button type="submit" id="btnSalvarStatus" class="bg-blue-600 text-white px-6 py-2.5 rounded-lg font-bold shadow-md hover:bg-blue-700 transition">Salvar Andamento</button>
                 </div>
             </form>
         </div>
@@ -332,6 +338,34 @@
 
     <div id="modalEdicao" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
         <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md transform transition-all"><h3 id="tituloModalEdicao" class="text-xl font-extrabold mb-5 text-slate-800">Editar Local</h3><form id="formEdicao" class="space-y-5"><input type="hidden" id="edit_id"><input type="hidden" id="edit_tipo"><div><label class="block text-sm font-bold text-slate-600 mb-1">Nome</label><input type="text" id="edit_nome" required class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition"></div><div id="div_edit_contato_setor" class="hidden"><label class="block text-sm font-bold text-slate-600 mb-1">Contato (WhatsApp)</label><input type="tel" id="edit_contato_setor" maxlength="15" placeholder="(00) 00000-0000" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition"></div><div id="div_edit_cidade" class="hidden"><label class="block text-sm font-bold text-slate-600 mb-1">Cidade</label><input type="text" id="edit_cidade" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition"></div><div id="div_edit_setor" class="hidden"><label class="block text-sm font-bold text-slate-600 mb-1">Setor</label><select id="edit_setor_id" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition"></select></div><div class="flex justify-end space-x-3 mt-8"><button type="button" onclick="fecharModalEdicao()" class="bg-slate-200 text-slate-700 px-5 py-2.5 rounded-lg font-bold hover:bg-slate-300 transition">Cancelar</button><button type="submit" id="btnSalvarEdicao" class="bg-blue-600 text-white px-6 py-2.5 rounded-lg font-bold shadow hover:bg-blue-700 transition">Salvar</button></div></form></div>
+    </div>
+
+    <div id="modalEdicaoUsuario" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md transform transition-all">
+            <h3 class="text-xl font-extrabold mb-5 text-slate-800">Editar Usuário</h3>
+            <form id="formEdicaoUsuario" class="space-y-5">
+                <input type="hidden" id="edit_user_id">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div><label class="block text-sm font-bold text-slate-600 mb-1">Nome</label><input type="text" id="edit_user_nome" required class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition"></div>
+                    <div><label class="block text-sm font-bold text-slate-600 mb-1">Celular</label><input type="tel" id="edit_user_celular" required maxlength="15" placeholder="(00) 00000-0000" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition"></div>
+                </div>
+                <div><label class="block text-sm font-bold text-slate-600 mb-1">Papel</label><select id="edit_user_papel" required onchange="alternarCamposEditAdmin()" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition"><option value="Master">Master</option><option value="Arquidiocesano">Arquidiocesano</option><option value="Admin_Setor">Admin. de Setor</option><option value="Admin_Paroquia">Admin. de Paróquia</option></select></div>
+                
+                <div id="div_edit_user_setor" class="hidden">
+                    <label class="block text-sm font-bold text-slate-600 mb-1" id="label_edit_user_setor">Travar no Setor</label>
+                    <select id="edit_user_setor_id" onchange="carregarParoquiasEditUser()" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition"></select>
+                </div>
+                
+                <div id="div_edit_user_paroquia" class="hidden">
+                    <label class="block text-sm font-bold text-slate-600 mb-1">Travar na Paróquia</label>
+                    <select id="edit_user_paroquia_id" class="w-full p-2.5 bg-slate-100 text-slate-400 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 transition cursor-not-allowed" disabled>
+                        <option value="">Selecione um Setor primeiro...</option>
+                    </select>
+                </div>
+
+                <div class="flex justify-end space-x-3 mt-8"><button type="button" onclick="fecharModalEdicaoUsuario()" class="bg-slate-200 text-slate-700 px-5 py-2.5 rounded-lg font-bold hover:bg-slate-300 transition">Cancelar</button><button type="submit" id="btnSalvarEdicaoUsuario" class="bg-blue-600 text-white px-6 py-2.5 rounded-lg font-bold shadow hover:bg-blue-700 transition">Salvar</button></div>
+            </form>
+        </div>
     </div>
 
 <script>
@@ -459,6 +493,7 @@
 
     async function carregarDashboard() {
         const usuario = pb.authStore.model; const papel = getPapelSeguro(usuario); 
+        
         let baseFiltro = getFiltroVisibilidadeBase(usuario, papel);
         let filterParoquias = ''; 
         if (papel === 'Admin_Setor') { filterParoquias = `setor_id = "${usuario.setor_id}"`; } else if (papel === 'Admin_Paroquia') { filterParoquias = `id = "${usuario.paroquia_id}"`; } else if (papel !== 'Master' && papel !== 'Arquidiocesano') { filterParoquias = `id = "null"`; }
@@ -555,7 +590,7 @@
                 const isOrigem = (p.origem_paroquia_id && p.expand?.origem_paroquia_id?.setor_id === usuario.setor_id); 
                 const isDestino = (p.destino_paroquia_id && p.expand?.destino_paroquia_id?.setor_id === usuario.setor_id);
 
-                // LÓGICA DE EXIBIÇÃO: Paróquia - Setor
+                // LÓGICA DE EXIBIÇÃO COM QUEBRA DE LINHA PERMITIDA
                 const oPar = p.expand?.origem_paroquia_id?.nome;
                 const oSet = p.expand?.origem_paroquia_id?.expand?.setor_id?.nome;
                 const o = oPar ? (oSet ? `${oPar} - ${oSet}` : oPar) : (p.origem_externa ? `${badgeExterna} ${p.origem_externa}` : 'N/A');
@@ -598,19 +633,26 @@
                         if (p.status === 'Aceite pendente') { 
                             botoesHtml = `<div class="flex flex-col space-y-2"><button onclick="abrirModalInicial('${p.id}', 'Aceitar')" class="bg-emerald-600 text-white text-xs px-4 py-2 rounded-md hover:bg-emerald-700 transition shadow font-bold w-full">✅ Aceitar</button><button onclick="abrirModalInicial('${p.id}', 'Rejeitar')" class="bg-red-600 text-white text-xs px-4 py-2 rounded-md hover:bg-red-700 transition shadow font-bold w-full">❌ Rejeitar</button></div>`; 
                         } else { 
-                            botoesHtml = `<button onclick="abrirModalMudarStatus('${p.id}', ${classif.tipo}, '${p.status}', '${classif.nome}')" class="bg-blue-600 text-white text-xs px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow font-bold w-full sm:w-auto">Mudar Status</button>`; 
+                            botoesHtml = `<button onclick="abrirModalMudarStatus('${p.id}', ${classif.tipo}, '${p.status}', '${classif.nome}')" class="bg-blue-600 text-white text-xs px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow font-bold w-full">Mudar Status</button>`; 
                         }
                     } else {
                         botoesHtml = `<div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider pt-2 leading-tight">${msgBloqueio}</div>`;
                     }
-                    tdAcoesHtml = `<td class="py-4 px-5 align-top min-w-[120px]">${botoesHtml}</td>`;
+                    tdAcoesHtml = `<td class="py-4 px-5 align-top min-w-[140px] w-36 text-right">${botoesHtml}</td>`;
                 }
 
                 let corObs = p.observacao ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'; 
                 let txtObs = p.observacao ? 'Ler Obs' : '+ Obs'; 
                 let btnObs = `<button onclick="abrirModalObsLeitura('${p.id}', \`${encodeURIComponent(p.observacao || '')}\`, ${podeEditar})" class="${corObs} text-xs px-3 py-1.5 rounded-md font-bold transition shadow-sm w-full">${txtObs}</button>`;
                 
-                htmlTotal += `<tr class="hover:bg-slate-50 transition-colors border-b border-slate-100"><td class="py-4 px-5 font-bold text-slate-800 align-top leading-relaxed"><div class="text-[10px] text-slate-400 font-mono mb-1">#${p.protocolo || p.id}</div>${p.nome_casal} ${infoEtapa} ${linkAnexo}</td><td class="py-4 px-5 text-sm text-slate-600 align-top leading-relaxed">${o} <span class="text-blue-600 font-bold mx-1">➔</span><br>${d}</td><td class="py-4 px-5 align-top"><span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Solicitado</span><span class="text-sm font-medium text-slate-700">${formatarData(p.created)}</span></td><td class="py-4 px-5 align-top max-w-xs">${badgeStatusHtml}</td><td class="py-4 px-5 align-top text-center">${btnObs}</td>${tdAcoesHtml}</tr>`;
+                htmlTotal += `<tr class="hover:bg-slate-50 transition-colors border-b border-slate-100">
+                    <td class="py-4 px-5 font-bold text-slate-800 align-top leading-relaxed min-w-[150px]"><div class="text-[10px] text-slate-400 font-mono mb-1">#${p.protocolo || p.id}</div>${p.nome_casal} ${infoEtapa} ${linkAnexo}</td>
+                    <td class="py-4 px-5 text-sm text-slate-600 align-top leading-relaxed whitespace-normal break-words w-1/3 min-w-[250px]">${o} <span class="text-blue-600 font-bold mx-1">➔</span><br>${d}</td>
+                    <td class="py-4 px-5 align-top whitespace-nowrap"><span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Solicitado</span><span class="text-sm font-medium text-slate-700">${formatarData(p.created)}</span></td>
+                    <td class="py-4 px-5 align-top min-w-[140px]">${badgeStatusHtml}</td>
+                    <td class="py-4 px-5 align-top text-center min-w-[100px]">${btnObs}</td>
+                    ${tdAcoesHtml}
+                </tr>`;
             });
             if (htmlTotal === '') htmlTotal = '<tr><td colspan="6" class="py-8 text-center text-slate-500 italic">Nenhum pedido encontrado.</td></tr>'; tbody.innerHTML = htmlTotal;
         } catch (e) { document.getElementById('listaPedidos').innerHTML = '<tr><td colspan="6" class="py-8 text-center text-red-500 font-bold">Erro de conexão.</td></tr>'; }
@@ -644,7 +686,14 @@
                 
                 let badgeStatusFinal = `<span class="bg-emerald-100 text-emerald-800 font-bold text-[11px] px-3 py-1 rounded-full uppercase tracking-wider border border-emerald-200">Concluído</span>`;
 
-                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition-colors border-b border-slate-100"><td class="py-4 px-5 font-bold text-slate-800 align-top leading-relaxed"><div class="text-[10px] text-slate-400 font-mono mb-1">#${p.protocolo || p.id}</div>${p.nome_casal} ${infoEtapa}</td><td class="py-4 px-5 text-sm text-slate-600 align-top leading-relaxed">${o} <span class="text-blue-600 font-bold mx-1">➔</span><br>${d}</td><td class="py-4 px-5 align-top whitespace-nowrap"><div class="mb-1"><span class="text-xs text-slate-400 font-bold uppercase mr-2">Solicitado:</span><span class="text-sm font-medium text-slate-700">${formatarData(p.created)}</span></div><div><span class="text-xs text-emerald-500 font-bold uppercase mr-2">Concluído:</span><span class="text-sm font-bold text-emerald-700">${formatarData(p.updated)}</span></div></td><td class="py-4 px-5 align-top">${badgeStatusFinal}</td><td class="py-4 px-5 align-top text-center">${btnObs}</td><td class="py-4 px-5 text-right align-top"><button onclick="buscarComprovante('${p.id}')" class="bg-blue-600 text-white text-xs px-4 py-1.5 rounded-md hover:bg-blue-700 transition shadow font-bold w-full sm:w-auto">Ver Doc</button></td></tr>`;
+                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition-colors border-b border-slate-100">
+                    <td class="py-4 px-5 font-bold text-slate-800 align-top leading-relaxed min-w-[150px]"><div class="text-[10px] text-slate-400 font-mono mb-1">#${p.protocolo || p.id}</div>${p.nome_casal} ${infoEtapa}</td>
+                    <td class="py-4 px-5 text-sm text-slate-600 align-top leading-relaxed whitespace-normal break-words w-1/3 min-w-[250px]">${o} <span class="text-blue-600 font-bold mx-1">➔</span><br>${d}</td>
+                    <td class="py-4 px-5 align-top whitespace-nowrap"><div class="mb-1"><span class="text-xs text-slate-400 font-bold uppercase mr-2">Solicitado:</span><span class="text-sm font-medium text-slate-700">${formatarData(p.created)}</span></div><div><span class="text-xs text-emerald-500 font-bold uppercase mr-2">Concluído:</span><span class="text-sm font-bold text-emerald-700">${formatarData(p.updated)}</span></div></td>
+                    <td class="py-4 px-5 align-top min-w-[140px]">${badgeStatusFinal}</td>
+                    <td class="py-4 px-5 align-top text-center min-w-[100px]">${btnObs}</td>
+                    <td class="py-4 px-5 text-right align-top min-w-[140px] w-36"><button onclick="buscarComprovante('${p.id}')" class="bg-blue-600 text-white text-xs px-4 py-2 rounded-md hover:bg-blue-700 transition shadow font-bold w-full">Ver Doc</button></td>
+                </tr>`;
             });
         } catch (e) {}
     }
@@ -677,7 +726,13 @@
                 
                 let badgeStatusFinal = `<span class="bg-red-100 text-red-800 font-bold text-[11px] px-3 py-1 rounded-full uppercase tracking-wider border border-red-200">Rejeitado</span>`;
 
-                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition-colors border-b border-slate-100"><td class="py-4 px-5 font-bold text-slate-800 align-top leading-relaxed"><div class="text-[10px] text-slate-400 font-mono mb-1">#${p.protocolo || p.id}</div>${p.nome_casal} ${infoEtapa}</td><td class="py-4 px-5 text-sm text-slate-600 align-top leading-relaxed">${o} <span class="text-blue-600 font-bold mx-1">➔</span><br>${d}</td><td class="py-4 px-5 align-top whitespace-nowrap"><div class="mb-1"><span class="text-xs text-slate-400 font-bold uppercase mr-2">Solicitado:</span><span class="text-sm font-medium text-slate-700">${formatarData(p.created)}</span></div><div><span class="text-xs text-red-500 font-bold uppercase mr-2">Rejeitado:</span><span class="text-sm font-bold text-red-700">${formatarData(p.updated)}</span></div></td><td class="py-4 px-5 align-top">${badgeStatusFinal}</td><td class="py-4 px-5 align-top text-center">${btnObs}</td></tr>`;
+                tbody.innerHTML += `<tr class="hover:bg-slate-50 transition-colors border-b border-slate-100">
+                    <td class="py-4 px-5 font-bold text-slate-800 align-top leading-relaxed min-w-[150px]"><div class="text-[10px] text-slate-400 font-mono mb-1">#${p.protocolo || p.id}</div>${p.nome_casal} ${infoEtapa}</td>
+                    <td class="py-4 px-5 text-sm text-slate-600 align-top leading-relaxed whitespace-normal break-words w-1/3 min-w-[250px]">${o} <span class="text-blue-600 font-bold mx-1">➔</span><br>${d}</td>
+                    <td class="py-4 px-5 align-top whitespace-nowrap"><div class="mb-1"><span class="text-xs text-slate-400 font-bold uppercase mr-2">Solicitado:</span><span class="text-sm font-medium text-slate-700">${formatarData(p.created)}</span></div><div><span class="text-xs text-red-500 font-bold uppercase mr-2">Rejeitado:</span><span class="text-sm font-bold text-red-700">${formatarData(p.updated)}</span></div></td>
+                    <td class="py-4 px-5 align-top min-w-[140px]">${badgeStatusFinal}</td>
+                    <td class="py-4 px-5 align-top text-center min-w-[100px]">${btnObs}</td>
+                </tr>`;
             });
         } catch (e) {}
     }
@@ -824,7 +879,7 @@
     
     async function carregarTabelaAdmins() { 
         const u = pb.authStore.model; const pLogado = getPapelSeguro(u); let optUsers = { sort: '-created', expand: 'setor_id, paroquia_id', requestKey: null }; if (pLogado === 'Admin_Setor') optUsers.filter = `setor_id = "${u.setor_id}" || paroquia_id.setor_id = "${u.setor_id}"`; 
-        try { const users = await pb.collection('users').getFullList(optUsers); const tb = document.getElementById('listaUsuariosAdmin'); tb.innerHTML = ''; if (users.length === 0) tb.innerHTML = '<tr><td colspan="5" class="py-8 text-center text-slate-500 italic">Nenhum usuário cadastrado.</td></tr>'; users.forEach(us => { const pLido = getPapelSeguro(us); let l = '-'; let sIdForEdit = us.setor_id || ''; if (pLido === 'Admin_Setor') { l = us.expand?.setor_id?.nome || '-'; } else if (pLido === 'Admin_Paroquia') { l = us.expand?.paroquia_id?.nome || '-'; sIdForEdit = us.expand?.paroquia_id?.setor_id || ''; } const btnEditar = pLogado === 'Master' ? `<button onclick="abrirModalEdicaoUsuario('${us.id}', '${us.nome_casal || ''}', '${us.celular || ''}', '${pLido}', '${sIdForEdit}', '${us.paroquia_id || ''}')" class="text-blue-600 font-bold text-sm hover:text-blue-800 transition mr-4">Editar</button>` : ''; const btnExcluir = pLogado === 'Master' ? `<button onclick="excluirAdmin('${us.id}')" class="text-red-500 font-bold text-sm hover:text-red-700 transition">Excluir</button>` : ''; tb.innerHTML += `<tr class="hover:bg-slate-50 transition-colors border-b border-slate-100 group"><td class="py-4 px-5 font-bold text-slate-800">${us.nome_casal || '-'}</td><td class="py-4 px-5 text-slate-600"><div>${us.email}</div><div class="text-xs text-slate-400 font-medium mt-0.5">${us.celular || 'Sem celular'}</div></td><td class="py-4 px-5"><span class="bg-blue-100 text-blue-800 font-bold text-xs px-3 py-1 rounded-full">${pLido.replace(/_/g, ' ')}</span></td><td class="py-4 px-5 text-slate-600 font-medium">${l}</td><td class="py-4 px-5 text-right whitespace-nowrap sticky right-0 bg-white group-hover:bg-slate-50 transition-colors border-l border-slate-200 z-10">${btnEditar}${btnExcluir}</td></tr>`; }); } catch (e) {} 
+        try { const users = await pb.collection('users').getFullList(optUsers); const tb = document.getElementById('listaUsuariosAdmin'); tb.innerHTML = ''; if (users.length === 0) tb.innerHTML = '<tr><td colspan="5" class="py-8 text-center text-slate-500 italic">Nenhum usuário cadastrado.</td></tr>'; users.forEach(us => { const pLido = getPapelSeguro(us); let l = '-'; let sIdForEdit = us.setor_id || ''; if (pLido === 'Admin_Setor') { l = us.expand?.setor_id?.nome || '-'; } else if (pLido === 'Admin_Paroquia') { l = us.expand?.paroquia_id?.nome || '-'; sIdForEdit = us.expand?.paroquia_id?.setor_id || ''; } const btnEditar = pLogado === 'Master' ? `<button onclick="abrirModalEdicaoUsuario('${us.id}', '${us.nome_casal || ''}', '${us.celular || ''}', '${pLido}', '${sIdForEdit}', '${us.paroquia_id || ''}')" class="text-blue-600 font-bold text-sm hover:text-blue-800 transition mr-4">Editar</button>` : ''; const btnExcluir = pLogado === 'Master' ? `<button onclick="excluirAdmin('${us.id}')" class="text-red-500 font-bold text-sm hover:text-red-700 transition">Excluir</button>` : ''; tb.innerHTML += `<tr class="hover:bg-slate-50 transition-colors border-b border-slate-100 group"><td class="py-4 px-5 font-bold text-slate-800">${us.nome_casal || '-'}</td><td class="py-4 px-5 text-slate-600"><div>${us.email}</div><div class="text-xs text-slate-400 font-medium mt-0.5">${us.celular || 'Sem celular'}</div></td><td class="py-4 px-5"><span class="bg-blue-100 text-blue-800 font-bold text-xs px-3 py-1 rounded-full">${pLido.replace(/_/g, ' ')}</span></td><td class="py-4 px-5 text-slate-600 font-medium">${l}</td><td class="py-4 px-5 text-right whitespace-nowrap">${btnEditar}${btnExcluir}</td></tr>`; }); } catch (e) {} 
     }
 
     async function carregarParoquiasEditUser() { const setorId = document.getElementById('edit_user_setor_id').value; const selParoquia = document.getElementById('edit_user_paroquia_id'); if (!setorId) { selParoquia.innerHTML = '<option value="">Selecione um Setor primeiro...</option>'; selParoquia.disabled = true; selParoquia.classList.add('bg-slate-100', 'text-slate-400', 'cursor-not-allowed'); selParoquia.classList.remove('bg-white'); return; } selParoquia.innerHTML = '<option value="">Buscando...</option>'; selParoquia.disabled = true; try { const paroquias = await pb.collection('paroquias').getFullList({ filter: `setor_id = "${setorId}"`, sort: 'nome', requestKey: null }); let opt = '<option value="">Selecione a Paróquia</option>'; paroquias.forEach(p => opt += `<option value="${p.id}">${p.nome}</option>`); selParoquia.innerHTML = opt; selParoquia.disabled = false; selParoquia.classList.remove('bg-slate-100', 'text-slate-400', 'cursor-not-allowed'); selParoquia.classList.add('bg-white'); } catch (e) {} }
