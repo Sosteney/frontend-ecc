@@ -139,7 +139,7 @@
 
                         <div id="subAbaConcluidos" class="sub-aba-pedidos hidden w-full">
                             <div class="overflow-x-auto rounded-xl border border-slate-200 w-full">
-                                <table class="w-full text-left text-sm">
+                                <table class="w-full text-left text-sm min-w-max">
                                     <thead class="bg-slate-100 text-slate-600 uppercase tracking-wider text-xs font-bold">
                                         <tr>
                                             <th class="py-4 px-5 min-w-[150px]">Casal / Etapa</th>
@@ -157,7 +157,7 @@
 
                         <div id="subAbaRejeitados" class="sub-aba-pedidos hidden w-full">
                             <div class="overflow-x-auto rounded-xl border border-slate-200 w-full">
-                                <table class="w-full text-left text-sm">
+                                <table class="w-full text-left text-sm min-w-max">
                                     <thead class="bg-slate-100 text-slate-600 uppercase tracking-wider text-xs font-bold">
                                         <tr>
                                             <th class="py-4 px-5 min-w-[150px]">Casal / Etapa</th>
@@ -185,7 +185,7 @@
                                 <form id="formNovoSetor" class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
                                     <div class="md:col-span-2">
                                         <label class="block text-xs font-bold text-slate-600 mb-1">Nome do Setor</label>
-                                        <input type="text" id="nome_setor" required placeholder="Ex: Setor Sul" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow">
+                                        <input type="text" id="nome_setor" required placeholder="Ex: Setor Sul" class="flex-1 p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow">
                                     </div>
                                     <div class="md:col-span-2">
                                         <label class="block text-xs font-bold text-slate-600 mb-1">Contato WhatsApp (Opcional)</label>
@@ -197,7 +197,7 @@
                                 </form>
                             </div>
                             <div class="overflow-x-auto rounded-xl border border-slate-200 w-full">
-                                <table class="w-full text-left text-sm">
+                                <table class="w-full text-left text-sm min-w-max">
                                     <thead class="bg-slate-100 text-slate-600 uppercase tracking-wider text-xs font-bold">
                                         <tr>
                                             <th class="py-4 px-5">Nome do Setor</th>
@@ -221,7 +221,7 @@
                                 </form>
                             </div>
                             <div class="overflow-x-auto rounded-xl border border-slate-200 w-full relative">
-                                <table class="w-full text-left text-sm">
+                                <table class="w-full text-left text-sm min-w-max">
                                     <thead class="bg-slate-100 text-slate-600 uppercase tracking-wider text-xs font-bold">
                                         <tr>
                                             <th class="py-4 px-5">Nome da Paróquia</th>
@@ -239,7 +239,7 @@
                     <div id="abaPrincipalAdmins" class="aba-principal hidden w-full">
                         <div class="bg-slate-50 rounded-xl border border-slate-200 p-6 mb-8 w-full"><h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-5">Conceder Novo Acesso</h3><form id="formNovoAdmin" class="space-y-4"><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div><label class="block text-xs font-bold text-slate-600 mb-1">Nome do Casal</label><input type="text" id="admin_nome" required class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"></div><div><label class="block text-xs font-bold text-slate-600 mb-1">Celular (WhatsApp)</label><input type="tel" id="admin_celular" required maxlength="15" placeholder="(00) 00000-0000" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"></div><div><label class="block text-xs font-bold text-slate-600 mb-1">E-mail (Login)</label><input type="email" id="admin_email" required class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"></div><div><label class="block text-xs font-bold text-slate-600 mb-1">Senha (mín 8)</label><input type="password" id="admin_senha" required minlength="8" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"></div><div class="md:col-span-2"><label class="block text-xs font-bold text-slate-600 mb-1">Papel / Nível</label><select id="admin_papel" required onchange="alternarCamposAdmin()" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"></select></div></div><div id="div_admin_setor" class="hidden mt-4"><label class="block text-xs font-bold text-slate-600 mb-1" id="label_admin_setor">Travar no Setor</label><select id="admin_setor_id" onchange="carregarParoquiasAdminUser()" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"></select></div><div id="div_admin_paroquia" class="hidden mt-4"><label class="block text-xs font-bold text-slate-600 mb-1">Travar na Paróquia</label><select id="admin_paroquia_id" class="w-full p-2.5 bg-slate-100 text-slate-400 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 transition-shadow cursor-not-allowed" disabled><option value="">Selecione um Setor primeiro...</option></select></div><div class="flex justify-end pt-4"><button type="submit" id="btnSalvarAdmin" class="bg-blue-600 text-white font-bold py-2.5 px-8 rounded-lg hover:bg-blue-700 transition shadow">Cadastrar Usuário</button></div></form></div>
                         <div class="overflow-x-auto rounded-xl border border-slate-200 w-full">
-                            <table class="w-full text-left text-sm">
+                            <table class="w-full text-left text-sm min-w-max">
                                 <thead class="bg-slate-100 text-slate-600 uppercase tracking-wider text-xs font-bold">
                                     <tr>
                                         <th class="py-4 px-5">Casal</th>
@@ -427,7 +427,7 @@
         return `<span class="bg-amber-100 text-amber-800 font-bold text-[11px] px-3 py-1 rounded-lg block leading-tight border border-amber-200">${statusTexto}</span>`;
     }
 
-    // LÓGICA DE VISIBILIDADE MESTRE
+    // LÓGICA DE VISIBILIDADE MESTRE - ATUALIZADA (O Destino vê assim que sai do "Aceite pendente")
     function getFiltroVisibilidadeBase(usuario, papel) {
         if (papel === 'Master' || papel === 'Arquidiocesano') return `(id != "")`; 
         let prefO = papel === 'Admin_Setor' ? 'origem_paroquia_id.setor_id' : 'origem_paroquia_id';
@@ -439,7 +439,8 @@
         let cBoth = `(${prefO} != "" && ${prefO} ?= "${idLoc}" && ${prefD} != "" && ${prefD} ?= "${idLoc}")`;
 
         let visOrigem = `(${cONotD} && status != 'Concluido' && status !~ 'Destino -')`;
-        let visDestino = `(${cDNotO} && (status = 'Concluido' || status = 'Rejeitado' || status ~ 'Destino -' || status = 'Origem - Documentos da paróquia de origem entregues para o setor de destino' || status = 'Origem - Recebido integral dos documentos' || (origem_externa != "" && status = 'Aceite pendente')) )`;
+        // NOVA REGRA: Destino vê se o status não for "Aceite pendente" OU se for uma Origem Externa.
+        let visDestino = `(${cDNotO} && (status != 'Aceite pendente' || origem_externa != ""))`;
 
         return `(${visOrigem} || ${visDestino} || ${cBoth})`;
     }
@@ -580,7 +581,6 @@
         document.getElementById('thAcoesPedidos').style.display = mostrarAcoes ? '' : 'none';
 
         try {
-            // BUSCA AVANÇADA: Expande Paróquias e o Setor de cada Paróquia
             const records = await pb.collection('pedidos').getFullList({ filter: filtroFinal, expand: 'origem_paroquia_id.setor_id, destino_paroquia_id.setor_id', sort: '-created', requestKey: null });
             const tbody = document.getElementById('listaPedidos'); tbody.innerHTML = ''; let htmlTotal = '';
             const badgeExterna = `<span class="bg-indigo-100 text-indigo-800 text-[10px] px-2 py-0.5 rounded font-extrabold uppercase mr-1 border border-indigo-200">🌍 Externa</span>`;
@@ -590,7 +590,6 @@
                 const isOrigem = (p.origem_paroquia_id && p.expand?.origem_paroquia_id?.setor_id === usuario.setor_id); 
                 const isDestino = (p.destino_paroquia_id && p.expand?.destino_paroquia_id?.setor_id === usuario.setor_id);
 
-                // LÓGICA DE EXIBIÇÃO COM QUEBRA DE LINHA PERMITIDA
                 const oPar = p.expand?.origem_paroquia_id?.nome;
                 const oSet = p.expand?.origem_paroquia_id?.expand?.setor_id?.nome;
                 const o = oPar ? (oSet ? `${oPar} - ${oSet}` : oPar) : (p.origem_externa ? `${badgeExterna} ${p.origem_externa}` : 'N/A');
@@ -633,7 +632,7 @@
                         if (p.status === 'Aceite pendente') { 
                             botoesHtml = `<div class="flex flex-col space-y-2"><button onclick="abrirModalInicial('${p.id}', 'Aceitar')" class="bg-emerald-600 text-white text-xs px-4 py-2 rounded-md hover:bg-emerald-700 transition shadow font-bold w-full">✅ Aceitar</button><button onclick="abrirModalInicial('${p.id}', 'Rejeitar')" class="bg-red-600 text-white text-xs px-4 py-2 rounded-md hover:bg-red-700 transition shadow font-bold w-full">❌ Rejeitar</button></div>`; 
                         } else { 
-                            botoesHtml = `<button onclick="abrirModalMudarStatus('${p.id}', ${classif.tipo}, '${p.status}', '${classif.nome}')" class="bg-blue-600 text-white text-xs px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow font-bold w-full">Mudar Status</button>`; 
+                            botoesHtml = `<button onclick="abrirModalMudarStatus('${p.id}', ${classif.tipo}, '${p.status}', '${classif.nome}')" class="bg-blue-600 text-white text-xs px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow font-bold w-full sm:w-auto">Mudar Status</button>`; 
                         }
                     } else {
                         botoesHtml = `<div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider pt-2 leading-tight">${msgBloqueio}</div>`;
@@ -874,15 +873,6 @@
     function alternarCamposAdmin() { const p = document.getElementById('admin_papel').value; const divSetor = document.getElementById('div_admin_setor'); const divParoquia = document.getElementById('div_admin_paroquia'); const lblSetor = document.getElementById('label_admin_setor'); const selParoquia = document.getElementById('admin_paroquia_id'); divSetor.classList.add('hidden'); divParoquia.classList.add('hidden'); document.getElementById('admin_setor_id').required = false; selParoquia.required = false; if (p === 'Admin_Setor') { divSetor.classList.remove('hidden'); lblSetor.textContent = 'Travar no Setor'; document.getElementById('admin_setor_id').required = true; } else if (p === 'Admin_Paroquia') { divSetor.classList.remove('hidden'); lblSetor.textContent = 'Filtrar por Setor'; document.getElementById('admin_setor_id').required = true; divParoquia.classList.remove('hidden'); selParoquia.required = true; if (!document.getElementById('admin_setor_id').value) { selParoquia.innerHTML = '<option value="">Selecione um Setor primeiro...</option>'; selParoquia.disabled = true; selParoquia.classList.add('bg-slate-100', 'text-slate-400', 'cursor-not-allowed'); selParoquia.classList.remove('bg-white'); } } }
     function alternarCamposEditAdmin() { const p = document.getElementById('edit_user_papel').value; const divSetor = document.getElementById('div_edit_user_setor'); const divParoquia = document.getElementById('div_edit_user_paroquia'); const lblSetor = document.getElementById('label_edit_user_setor'); const selParoquia = document.getElementById('edit_user_paroquia_id'); divSetor.classList.add('hidden'); divParoquia.classList.add('hidden'); document.getElementById('edit_user_setor_id').required = false; selParoquia.required = false; if (p === 'Admin_Setor') { divSetor.classList.remove('hidden'); lblSetor.textContent = 'Travar no Setor'; document.getElementById('edit_user_setor_id').required = true; } else if (p === 'Admin_Paroquia') { divSetor.classList.remove('hidden'); lblSetor.textContent = 'Filtrar por Setor'; document.getElementById('edit_user_setor_id').required = true; divParoquia.classList.remove('hidden'); selParoquia.required = true; if (!document.getElementById('edit_user_setor_id').value) { selParoquia.innerHTML = '<option value="">Selecione um Setor primeiro...</option>'; selParoquia.disabled = true; selParoquia.classList.add('bg-slate-100', 'text-slate-400', 'cursor-not-allowed'); selParoquia.classList.remove('bg-white'); } } }
     async function carregarParoquiasAdminUser() { const setorId = document.getElementById('admin_setor_id').value; const selParoquia = document.getElementById('admin_paroquia_id'); if (!setorId) { selParoquia.innerHTML = '<option value="">Selecione um Setor primeiro...</option>'; selParoquia.disabled = true; selParoquia.classList.add('bg-slate-100', 'text-slate-400', 'cursor-not-allowed'); selParoquia.classList.remove('bg-white'); return; } selParoquia.innerHTML = '<option value="">Buscando...</option>'; selParoquia.disabled = true; try { const paroquias = await pb.collection('paroquias').getFullList({ filter: `setor_id = "${setorId}"`, sort: 'nome', requestKey: null }); let opt = '<option value="">Selecione a Paróquia</option>'; paroquias.forEach(p => opt += `<option value="${p.id}">${p.nome}</option>`); selParoquia.innerHTML = opt; selParoquia.disabled = false; selParoquia.classList.remove('bg-slate-100', 'text-slate-400', 'cursor-not-allowed'); selParoquia.classList.add('bg-white'); } catch (e) {} }
-
-    document.getElementById('formNovoAdmin').addEventListener('submit', async function(e) { e.preventDefault(); const btn = document.getElementById('btnSalvarAdmin'); btn.disabled = true; btn.textContent = "Salvando..."; const criador = pb.authStore.model; const p = getPapelSeguro(criador); let sId = document.getElementById('admin_setor_id').value || null; if (p === 'Admin_Setor') sId = criador.setor_id; const dados = { nome_casal: document.getElementById('admin_nome').value, celular: document.getElementById('admin_celular').value, email: document.getElementById('admin_email').value, password: document.getElementById('admin_senha').value, passwordConfirm: document.getElementById('admin_senha').value, papel: document.getElementById('admin_papel').value, setor_id: sId, paroquia_id: document.getElementById('admin_paroquia_id').value || null }; try { await pb.collection('users').create(dados); document.getElementById('formNovoAdmin').reset(); alternarCamposAdmin(); carregarTabelaAdmins(); alert("Usuário cadastrado com sucesso!"); } catch (e) { alert("Erro: Email já em uso ou dados inválidos."); } finally { btn.disabled = false; btn.textContent = "Cadastrar Usuário"; } });
-    
-    async function carregarTabelaAdmins() { 
-        const u = pb.authStore.model; const pLogado = getPapelSeguro(u); let optUsers = { sort: '-created', expand: 'setor_id, paroquia_id', requestKey: null }; if (pLogado === 'Admin_Setor') optUsers.filter = `setor_id = "${u.setor_id}" || paroquia_id.setor_id = "${u.setor_id}"`; 
-        try { const users = await pb.collection('users').getFullList(optUsers); const tb = document.getElementById('listaUsuariosAdmin'); tb.innerHTML = ''; if (users.length === 0) tb.innerHTML = '<tr><td colspan="5" class="py-8 text-center text-slate-500 italic">Nenhum usuário cadastrado.</td></tr>'; users.forEach(us => { const pLido = getPapelSeguro(us); let l = '-'; let sIdForEdit = us.setor_id || ''; if (pLido === 'Admin_Setor') { l = us.expand?.setor_id?.nome || '-'; } else if (pLido === 'Admin_Paroquia') { l = us.expand?.paroquia_id?.nome || '-'; sIdForEdit = us.expand?.paroquia_id?.setor_id || ''; } const btnEditar = pLogado === 'Master' ? `<button onclick="abrirModalEdicaoUsuario('${us.id}', '${us.nome_casal || ''}', '${us.celular || ''}', '${pLido}', '${sIdForEdit}', '${us.paroquia_id || ''}')" class="text-blue-600 font-bold text-sm hover:text-blue-800 transition mr-4">Editar</button>` : ''; const btnExcluir = pLogado === 'Master' ? `<button onclick="excluirAdmin('${us.id}')" class="text-red-500 font-bold text-sm hover:text-red-700 transition">Excluir</button>` : ''; tb.innerHTML += `<tr class="hover:bg-slate-50 transition-colors border-b border-slate-100 group"><td class="py-4 px-5 font-bold text-slate-800">${us.nome_casal || '-'}</td><td class="py-4 px-5 text-slate-600"><div>${us.email}</div><div class="text-xs text-slate-400 font-medium mt-0.5">${us.celular || 'Sem celular'}</div></td><td class="py-4 px-5"><span class="bg-blue-100 text-blue-800 font-bold text-xs px-3 py-1 rounded-full">${pLido.replace(/_/g, ' ')}</span></td><td class="py-4 px-5 text-slate-600 font-medium">${l}</td><td class="py-4 px-5 text-right whitespace-nowrap">${btnEditar}${btnExcluir}</td></tr>`; }); } catch (e) {} 
-    }
-
-    async function carregarParoquiasEditUser() { const setorId = document.getElementById('edit_user_setor_id').value; const selParoquia = document.getElementById('edit_user_paroquia_id'); if (!setorId) { selParoquia.innerHTML = '<option value="">Selecione um Setor primeiro...</option>'; selParoquia.disabled = true; selParoquia.classList.add('bg-slate-100', 'text-slate-400', 'cursor-not-allowed'); selParoquia.classList.remove('bg-white'); return; } selParoquia.innerHTML = '<option value="">Buscando...</option>'; selParoquia.disabled = true; try { const paroquias = await pb.collection('paroquias').getFullList({ filter: `setor_id = "${setorId}"`, sort: 'nome', requestKey: null }); let opt = '<option value="">Selecione a Paróquia</option>'; paroquias.forEach(p => opt += `<option value="${p.id}">${p.nome}</option>`); selParoquia.innerHTML = opt; selParoquia.disabled = false; selParoquia.classList.remove('bg-slate-100', 'text-slate-400', 'cursor-not-allowed'); selParoquia.classList.add('bg-white'); } catch (e) {} }
     async function abrirModalEdicaoUsuario(id, nome, celular, papel, setorId, paroquiaId) { document.getElementById('edit_user_id').value = id; document.getElementById('edit_user_nome').value = nome; document.getElementById('edit_user_celular').value = celular; document.getElementById('edit_user_papel').value = papel; const pLogado = getPapelSeguro(pb.authStore.model); if (pLogado === 'Admin_Setor') { document.getElementById('edit_user_setor_id').value = pb.authStore.model.setor_id; document.getElementById('edit_user_setor_id').disabled = true; document.getElementById('edit_user_setor_id').classList.add('bg-slate-100', 'cursor-not-allowed'); } else { document.getElementById('edit_user_setor_id').value = setorId; document.getElementById('edit_user_setor_id').disabled = false; document.getElementById('edit_user_setor_id').classList.remove('bg-slate-100', 'cursor-not-allowed'); } alternarCamposEditAdmin(); if (papel === 'Admin_Paroquia') { await carregarParoquiasEditUser(); document.getElementById('edit_user_paroquia_id').value = paroquiaId; } document.getElementById('modalEdicaoUsuario').classList.remove('hidden'); }
     function fecharModalEdicaoUsuario() { document.getElementById('modalEdicaoUsuario').classList.add('hidden'); document.getElementById('formEdicaoUsuario').reset(); }
     document.getElementById('formEdicaoUsuario').addEventListener('submit', async function(e) { e.preventDefault(); const id = document.getElementById('edit_user_id').value; const btn = document.getElementById('btnSalvarEdicaoUsuario'); const papel = document.getElementById('edit_user_papel').value; let sId = null; let pId = null; if (papel === 'Admin_Setor') sId = document.getElementById('edit_user_setor_id').value; if (papel === 'Admin_Paroquia') pId = document.getElementById('edit_user_paroquia_id').value; const dados = { nome_casal: document.getElementById('edit_user_nome').value, celular: document.getElementById('edit_user_celular').value, papel: papel, setor_id: sId, paroquia_id: pId }; btn.disabled = true; btn.textContent = 'Salvando...'; try { await pb.collection('users').update(id, dados); fecharModalEdicaoUsuario(); carregarTabelaAdmins(); alert('Acesso atualizado com sucesso!'); } catch (error) { alert('Erro ao atualizar usuário.'); } finally { btn.disabled = false; btn.textContent = 'Salvar Alterações'; } });
